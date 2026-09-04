@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import uvicorn
 import uuid
 import random
-from routes import users, cameras, events, health, maintenance, audit, zones, opencv
+from routes import users, cameras, events, health, maintenance, audit, zones, opencv, access_requests
 from supabase_client import supabase
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,7 +12,11 @@ app = FastAPI(title="Gujarat Police Hackathon API", description="Extended Backen
 # Enable CORS for frontend integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "*"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -29,6 +33,7 @@ def get_departments():
 # Mount Routers precisely as requested
 app.include_router(users.app, prefix="/users", tags=["Users"])
 app.include_router(cameras.app, prefix="/cameras", tags=["Cameras"])
+app.include_router(access_requests.router, prefix="/access-requests", tags=["Access Requests"])
 
 # Keep the remaining modular endpoints
 app.include_router(events.router)

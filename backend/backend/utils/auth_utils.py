@@ -6,7 +6,14 @@ import bcrypt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-SECRET_KEY = os.getenv("JWT_SECRET", "super-secret-hackathon-key")
+from dotenv import load_dotenv
+
+load_dotenv()
+
+SECRET_KEY = os.getenv("JWT_SECRET")
+if not SECRET_KEY:
+    raise RuntimeError("JWT_SECRET environment variable is missing or empty. Please set it in .env")
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
@@ -47,3 +54,32 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         return employee_id
     except jwt.PyJWTError:
         raise credentials_exception
+
+def get_current_admin_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        employee_id: str = payload.get("sub")
+        if employee_id is None:
+            raise credentials_exception
+        
+        role: str = payload.get("role", "")
+        if role != "Admin":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Administrative privilege required for this action"
+            )
+        return {
+            "employee_id": employee_id,
+            "id": payload.get("id"),
+            "role": role
+        }
+    except HTTPException:
+        raise
+    except jwt.PyJWTError:
+        raise credentials_exception
+

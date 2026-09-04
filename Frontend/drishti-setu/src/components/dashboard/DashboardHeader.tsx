@@ -3,7 +3,7 @@
 import { Calendar, Clock, RotateCw } from "lucide-react";
 import { format } from "date-fns";
 import { useState, useEffect } from "react";
-import { authService } from "@/services/mock/auth.service";
+import { authService } from "@/services/auth.service";
 import { AuthSession } from "@/types/auth";
 
 export function DashboardHeader() {
@@ -22,7 +22,7 @@ export function DashboardHeader() {
 
   const hour = time?.getHours() || 9;
   const greeting = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
-  const userName = session?.user?.name || "Inspector Rajveer Singh";
+  const userName = session?.user?.username || session?.user?.name || "Officer";
 
   return (
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">

@@ -1,4 +1,5 @@
 import { AppShell } from "@/components/layout/AppShell";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 import { ReactNode } from "react";
 
 export default function AuthenticatedLayout({
@@ -6,5 +7,9 @@ export default function AuthenticatedLayout({
 }: {
   children: ReactNode;
 }) {
-  return <AppShell>{children}</AppShell>;
+  return (
+    <AuthGuard>
+      <AppShell>{children}</AppShell>
+    </AuthGuard>
+  );
 }
