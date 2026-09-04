@@ -145,14 +145,17 @@ class AuthService {
 
       return updatedSession;
     } catch (err: unknown) {
-      if (err instanceof ApiError && (err.status === 401 || err.status === 404)) {
-        // Token expired or user deleted
+      if (err instanceof ApiError && err.status === 401) {
+        // Token truly invalid or expired - log out
         this.logout();
         return null;
       }
-      // If network temporarily unavailable but we have a valid cached session, allow transient offline
+      // If network temporarily unavailable, endpoint 404, or backend reloaded,
+      // allow active cached session to persist so officer is not interrupted
       const cached = this.getCurrentSession();
-      if (cached) return cached;
+      if (cached && cached.token) {
+        return cached;
+      }
 
       this.logout();
       return null;

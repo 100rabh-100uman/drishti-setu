@@ -15,8 +15,10 @@ import axios, {
 } from 'axios';
 
 // ── Environment Configuration ────────────────────────────────
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const RAW_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+const BASE_URL = RAW_URL.replace(/\/+$/, '');
 const DEFAULT_TIMEOUT = 30000; // 30 seconds
+
 
 // ── Token Storage Keys ────────────────────────────────────────
 const AUTH_TOKEN_KEY = 'drishti_auth_token';

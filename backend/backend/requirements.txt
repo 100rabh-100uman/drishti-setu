@@ -3,5 +3,11 @@ uvicorn
 supabase
 python-dotenv
 passlib[bcrypt]
+bcrypt
 PyJWT
 python-multipart
+SQLAlchemy
+geoalchemy2
+psycopg2-binary
+opencv-python
+numpy

@@ -1,15 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, Loader2, Lock, Moon, Sun, ShieldCheck, Network, User2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Moon, Sun, ShieldCheck, Network, User2, AlertTriangle, KeyRound } from "lucide-react";
 import { authService } from "@/services/auth.service";
 import { ApiError } from "@/services/api";
 import { SecureLoginOverlay } from "@/components/auth/SecureLoginOverlay";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const errorParam = searchParams.get("error");
+  const redirectParam = searchParams.get("redirect") || "/dashboard";
 
   const [employeeId, setEmployeeId] = useState("");
   const [password, setPassword] = useState("");
@@ -25,16 +28,14 @@ export function LoginForm() {
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAuth = async (id: string, pass: string) => {
     setError("");
-
-    const trimmedId = employeeId.trim();
+    const trimmedId = id.trim();
     if (!trimmedId) {
       setError("Please enter your Employee ID.");
       return;
     }
-    if (!password) {
+    if (!pass) {
       setError("Please enter your password.");
       return;
     }
@@ -43,7 +44,7 @@ export function LoginForm() {
     setLoadingStep("Authenticating credentials...");
 
     try {
-      const session = await authService.login(trimmedId, password);
+      const session = await authService.login(trimmedId, pass);
       setAuthenticatedUser({
         username: session.user.username || session.user.name || "Officer",
         departmentName: session.user.department_name || session.department?.name || "Gujarat Police",
@@ -61,6 +62,17 @@ export function LoginForm() {
         setError("Unable to connect to DRISHTI SETU services.");
       }
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleAuth(employeeId, password);
+  };
+
+  const handleQuickLogin = async (id: string, pass: string) => {
+    setEmployeeId(id);
+    setPassword(pass);
+    await handleAuth(id, pass);
   };
 
   return (
@@ -123,6 +135,15 @@ export function LoginForm() {
             Access the DRISHTI SETU operational platform
           </p>
         </div>
+
+        {errorParam === "session_expired" && !error && (
+          <div className="mb-4 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 font-medium flex items-start gap-2 shadow-sm animate-in fade-in">
+            <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1 leading-snug">
+              Session expired. Please log in again or click a quick demo account below.
+            </div>
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-medium flex items-start gap-2 shadow-sm animate-in fade-in">
@@ -255,6 +276,37 @@ export function LoginForm() {
             )}
           </button>
 
+          {/* Quick Demo Login Helper */}
+          <div className="pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                <KeyRound className="w-3.5 h-3.5 text-blue-600" />
+                Quick Demo Access
+              </span>
+              <span className="text-[10px] text-slate-400 font-semibold">1-Click Login</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => handleQuickLogin("EMP001", "admin123")}
+                disabled={isLoading}
+                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 font-bold text-xs transition-colors shadow-sm disabled:opacity-50"
+              >
+                <span>👑</span>
+                <span>Admin (EMP001)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickLogin("EMP002", "admin123")}
+                disabled={isLoading}
+                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-800 font-bold text-xs transition-colors shadow-sm disabled:opacity-50"
+              >
+                <span>👮</span>
+                <span>Inspector (EMP002)</span>
+              </button>
+            </div>
+          </div>
+
           <div className="pt-2 text-center">
             <span className="text-xs text-slate-500 font-medium">Need platform credentials? </span>
             <Link
@@ -304,7 +356,7 @@ export function LoginForm() {
         isVisible={showSecureTransition}
         officerName={authenticatedUser?.username}
         departmentName={authenticatedUser?.departmentName}
-        onComplete={() => router.push("/dashboard")}
+        onComplete={() => router.push(redirectParam)}
       />
     </div>
   );

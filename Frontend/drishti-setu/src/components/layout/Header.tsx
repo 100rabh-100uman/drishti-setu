@@ -14,6 +14,7 @@ export function Header() {
                   src="/gov_of_guj_logo.svg" 
                   alt="Government of Gujarat Logo" 
                   fill 
+                  sizes="(max-width: 768px) 40px, 48px"
                   className="object-contain" 
                 />
               </div>
@@ -31,6 +32,7 @@ export function Header() {
                   src="/gpolicelogo.png" 
                   alt="Gujarat Police Logo" 
                   fill 
+                  sizes="(max-width: 768px) 40px, 48px"
                   className="object-contain" 
                 />
               </div>

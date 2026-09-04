@@ -79,7 +79,8 @@ export default function CameraDetailsClient({ id }: CameraDetailsClientProps) {
     fetchCameraData();
   }, [id]);
 
-  const copyToClipboard = (text: string, fieldName: string) => {
+  const copyToClipboard = (text: string | undefined | null, fieldName: string) => {
+    if (!text) return;
     navigator.clipboard.writeText(text);
     setCopiedField(fieldName);
     setTimeout(() => setCopiedField(null), 2000);

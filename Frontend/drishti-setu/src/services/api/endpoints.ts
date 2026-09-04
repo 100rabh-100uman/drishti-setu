@@ -20,7 +20,8 @@ export const API_ENDPOINTS = {
     ALIAS_LIST: '/departments/get_departments/',
   },
   ZONES: {
-    LIST: '/get_zones/',
+    LIST: '/zones/get_zones/',
+    ALIAS_LIST: '/get_zones/',
     GAP_ANALYSIS: '/gap_analysis/',
   },
   USERS: {
@@ -51,7 +52,10 @@ export const API_ENDPOINTS = {
   OPENCV: {
     ANALYZE_FRAME: '/cameras/analyze_frame/',
     PROCESS_FEED: (cameraId: string) => `/cameras/process_feed/${encodeURIComponent(cameraId)}`,
+    PROCESS_FEED_POST: '/cameras/process_feed/',
     STORE_EVENT: '/cameras/store_event/',
+    HEALTH_CHECK: (cameraId: string) => `/cameras/health_check/${encodeURIComponent(cameraId)}`,
+    HEALTH_CHECK_POST: '/cameras/health_check/',
   },
   ACCESS_REQUESTS: {
     SUBMIT: '/access-requests/',
@@ -61,6 +65,18 @@ export const API_ENDPOINTS = {
     REJECT: (requestId: string) => `/access-requests/${encodeURIComponent(requestId)}/reject`,
     VERIFY_TOKEN: '/access-requests/verify-token',
     ACTIVATE: '/access-requests/activate',
+  },
+  CRIME_PEOPLE: {
+    LIST: '/crime_people/get_all/',
+    ADD: '/crime_people/add/',
+    UPDATE: (personId: string) => `/crime_people/update/${encodeURIComponent(personId)}`,
+    DELETE: (personId: string) => `/crime_people/delete/${encodeURIComponent(personId)}`,
+  },
+  ALERTS: {
+    LIST: '/alerts/get_danger_actions/',
+    CREATE: '/alerts/create_danger_action/',
+    UPDATE_STATUS: (alertId: string) => `/alerts/update_status/${encodeURIComponent(alertId)}`,
+    SIMULATE: (cameraId: string) => `/cameras/simulate_danger_detection/${encodeURIComponent(cameraId)}`,
   },
 } as const;
 

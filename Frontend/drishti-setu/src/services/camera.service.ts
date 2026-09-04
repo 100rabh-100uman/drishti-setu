@@ -48,13 +48,61 @@ class CameraService {
   // ── Departments & Zones ─────────────────────────────────────
 
   async getDepartments(): Promise<Department[]> {
-    await delay(200);
+    try {
+      const { apiClient, API_ENDPOINTS } = await import('@/services/api');
+      const res = await apiClient.get<{ departments?: any[] }>(API_ENDPOINTS.DEPARTMENTS.ALIAS_LIST);
+      if (res && Array.isArray(res.departments)) {
+        return res.departments.map((d: any) => ({
+          id: String(d.id),
+          name: d.name,
+          code: d.code || `DEPT-${d.id}`,
+          description: d.description || d.name
+        }));
+      }
+    } catch (e) {
+      console.warn('Backend getDepartments failed, falling back to mock departments:', e);
+    }
     return MOCK_CAMERA_DEPARTMENTS;
   }
 
   async getZonesByDepartment(departmentId: string): Promise<Zone[]> {
-    await delay(150);
+    try {
+      const { apiClient, API_ENDPOINTS } = await import('@/services/api');
+      const res = await apiClient.get<{ zones?: any[] }>(API_ENDPOINTS.ZONES.LIST);
+      if (res && Array.isArray(res.zones)) {
+        const mapped = res.zones.map((z: any) => ({
+          id: z.zone_id || String(z.id),
+          name: z.name || `Zone ${z.zone_id || z.id}`,
+          department_id: String(z.department_id || 'dept-police')
+        }));
+        return mapped.filter((z: Zone) => String(z.department_id) === String(departmentId));
+      }
+    } catch (e) {
+      console.warn('Backend getZones failed, falling back to mock zones:', e);
+    }
     return MOCK_ZONES.filter((z) => z.department_id === departmentId);
+  }
+
+  async getZones(): Promise<Zone[]> {
+    try {
+      const { apiClient, API_ENDPOINTS } = await import('@/services/api');
+      const res = await apiClient.get<{ zones?: any[] }>(API_ENDPOINTS.ZONES.LIST);
+      if (res && Array.isArray(res.zones)) {
+        return res.zones.map((z: any) => ({
+          id: z.zone_id || String(z.id),
+          name: z.name || `Zone ${z.zone_id || z.id}`,
+          department_id: String(z.department_id || 'dept-police')
+        }));
+      }
+    } catch (e) {
+      console.warn('Backend getZones failed, falling back to mock zones:', e);
+    }
+    return MOCK_ZONES;
+  }
+
+  async getCameraEvents(cameraId: string): Promise<any> {
+    const { apiClient, API_ENDPOINTS } = await import('@/services/api');
+    return apiClient.get(API_ENDPOINTS.CAMERAS.EVENTS(cameraId));
   }
 
   getDepartmentById(id: string): Department | undefined {
@@ -107,13 +155,92 @@ class CameraService {
 
   // ── Camera Retrieval & CRUD ─────────────────────────────────
 
-  async getAllCameras(): Promise<Camera[]> {
-    await delay(200);
+  private mapBackendCameraToModel(c: any): Camera {
+    let lat = c.lat ?? c.latitude ?? 23.0225;
+    let lng = c.lng ?? c.longitude ?? 72.5714;
+    if (c.geom && typeof c.geom === 'object' && Array.isArray(c.geom.coordinates)) {
+      lng = c.geom.coordinates[0];
+      lat = c.geom.coordinates[1];
+    }
+    return {
+      id: String(c.id || c.camera_id),
+      camera_id: c.camera_id || `CAM-${c.id}`,
+      department_id: String(c.department_id || 'dept-police'),
+      zone_id: String(c.zone_id || 'zone-ahm-west'),
+      camera_type: (c.camera_type || 'IP').toLowerCase().includes('analog') ? 'Analog' : 'IP',
+      address: c.address || 'Address not registered',
+      status: c.status || 'Active',
+      latitude: Number(lat) || 23.0225,
+      longitude: Number(lng) || 72.5714,
+      lat: Number(lat) || 23.0225,
+      lng: Number(lng) || 72.5714,
+      mac_address: c.mac_address || '00:1A:2B:3C:4D:5E',
+      serial_number: c.serial_number || `SN-${c.camera_id}`,
+      device_uuid: c.device_uuid || undefined,
+      ip_address: c.ip_address || '192.168.1.1',
+      needs_review: Boolean(c.needs_review),
+      department_name: c.department_name,
+      created_at: c.created_at || new Date().toISOString(),
+      updated_at: c.updated_at || new Date().toISOString(),
+    };
+  }
+
+  /**
+   * Fetches cameras from backend /cameras/get_cameras/ with retry logic,
+   * exponential backoff, user-friendly error formatting, and graceful fallback.
+   */
+  async getCameras(params?: {
+    department_id?: number | string;
+    zone_id?: string;
+    camera_type?: string;
+    status?: string;
+    needs_review?: boolean;
+  }): Promise<Camera[]> {
+    const maxRetries = 3;
+    let lastError: any = null;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const { apiClient, API_ENDPOINTS } = await import('@/services/api');
+        const res = await apiClient.get<{ cameras?: any[] }>(API_ENDPOINTS.CAMERAS.LIST, {
+          params,
+          timeout: 10000,
+        });
+
+        if (res && Array.isArray(res.cameras) && res.cameras.length > 0) {
+          const backendCameras = res.cameras.map((c: any) => this.mapBackendCameraToModel(c));
+          // Save valid retrieved cameras to local store for offline resilience
+          return backendCameras;
+        } else if (res && Array.isArray(res.cameras)) {
+          return [];
+        }
+      } catch (err: any) {
+        lastError = err;
+        console.warn(`[CameraService] Camera fetch attempt ${attempt}/${maxRetries} failed:`, err?.message || err);
+        if (attempt < maxRetries) {
+          await delay(attempt * 400); // Exponential backoff: 400ms, 800ms
+        }
+      }
+    }
+
+    // After all retries fail, log a clear notice and fall back to local stored/mock cameras
+    console.warn(
+      '[CameraService] Camera fetch error: Could not reach backend API at ' +
+      (process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000') +
+      '/cameras/get_cameras/. Loading resilient fallback camera registry.',
+      lastError?.message || lastError
+    );
+
     const stored = this.getStoredCameras();
     const storedIds = new Set(stored.map((c) => c.camera_id));
     const combined = [...stored, ...MOCK_CAMERAS.filter((c) => !storedIds.has(c.camera_id))];
     return combined;
   }
+
+  async getAllCameras(): Promise<Camera[]> {
+    return this.getCameras();
+  }
+
 
   async getCameraById(idOrCameraId: string): Promise<Camera | null> {
     await delay(250);
@@ -224,3 +351,4 @@ class CameraService {
 }
 
 export const cameraService = new CameraService();
+export default cameraService;

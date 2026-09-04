@@ -10,6 +10,7 @@ export function LoginBrandPanel() {
           src="/login_background.webp"
           alt="Command Center Background"
           fill
+          sizes="(max-width: 1024px) 100vw, 58vw"
           className="object-cover object-center opacity-70"
           priority
         />
@@ -91,6 +92,7 @@ export function LoginBrandPanel() {
                   src="/gov_of_guj_logo.svg" 
                   alt="Government of Gujarat" 
                   fill 
+                  sizes="40px"
                   className="object-contain filter brightness-0 invert opacity-90" 
                 />
               </div>
@@ -109,6 +111,7 @@ export function LoginBrandPanel() {
                   src="/gpolicelogo.png" 
                   alt="Gujarat Police" 
                   fill 
+                  sizes="40px"
                   className="object-contain" 
                 />
               </div>
@@ -127,6 +130,7 @@ export function LoginBrandPanel() {
                     src="/drishti_setu_logo.svg" 
                     alt="Drishti Setu" 
                     fill 
+                    sizes="28px"
                     className="object-contain drop-shadow-[0_0_5px_rgba(59,130,246,0.5)]" 
                  />
                </div>

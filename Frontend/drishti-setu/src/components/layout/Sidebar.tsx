@@ -21,7 +21,9 @@ import {
   Users, 
   Building2, 
   Settings,
-  ChevronLeft
+  ChevronLeft,
+  BookOpen,
+  AlertOctagon
 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -32,6 +34,7 @@ const navGroups = [
     label: "MAIN",
     items: [
       { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+      { label: "Sentinel Resources", href: "/resources", icon: BookOpen },
     ]
   },
   {
@@ -47,6 +50,7 @@ const navGroups = [
   {
     label: "OPERATIONS",
     items: [
+      { label: "Danger Actions", href: "/danger-actions", icon: AlertOctagon, badge: "ACTIVE" },
       { label: "GIS Map", href: "/gis", icon: MapIcon },
       { label: "Health Monitoring", href: "/health", icon: Activity },
       { label: "Maintenance", href: "/maintenance", icon: Wrench },
@@ -115,7 +119,13 @@ export function Sidebar() {
                       )}
                     >
                       <item.icon className={cn("w-4 h-4", isActive ? "text-white" : "text-slate-400")} />
-                      {item.label}
+                      <span className="flex-1">{item.label}</span>
+                      {(item as any).badge && (
+                        <span className="px-1.5 py-0.5 text-[9px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/40 rounded-full flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+                          {(item as any).badge}
+                        </span>
+                      )}
                     </Link>
                   </li>
                 );
