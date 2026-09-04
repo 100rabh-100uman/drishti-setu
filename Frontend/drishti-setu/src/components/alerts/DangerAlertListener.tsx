@@ -25,9 +25,9 @@ import { DangerAction, dangerActionService } from '@/services/danger-action.serv
  */
 function playEmergencyChime() {
   try {
-    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-    if (!AudioContext) return;
-    const ctx = new AudioContext();
+    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
 
     const now = ctx.currentTime;
     
@@ -94,7 +94,26 @@ export function DangerAlertListener() {
     if (!isMuted) {
       playEmergencyChime();
     }
+
+    // Trigger browser Desktop Notification if permission is granted
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+      try {
+        new Notification(`🚨 CRITICAL ALERT: ${alert.event_type || 'Threat Detected'}`, {
+          body: `${alert.person_name || 'Suspect'} flagged at camera ${alert.camera_id} (${alert.camera_address || 'Corridor'}). Quick response dispatch requested.`,
+          icon: alert.person_photo || '/drishti_setu_logo.svg',
+        });
+      } catch (e) {
+        // Suppress browser notification error
+      }
+    }
   }, [getUserContext, isMuted]);
+
+  // Request browser notification permission once on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().catch(() => {});
+    }
+  }, []);
 
   // 1. WebSocket Connection Lifecycle
   useEffect(() => {
@@ -115,6 +134,24 @@ export function DangerAlertListener() {
             const data = JSON.parse(event.data);
             if (data.type === 'DANGER_ACTION_ALERT' && data.alert) {
               handleIncomingAlert(data.alert);
+            } else if (data.type === 'INCIDENT_ALERT' && data.incident) {
+              const raw = data.incident;
+              const normalized: DangerAction = {
+                id: raw.id,
+                person_id: raw.person_id || 'UNIDENTIFIED',
+                person_name: raw.person_name || 'Suspect Sighted',
+                person_photo: raw.person_photo,
+                crime_type: raw.crime_type,
+                camera_id: raw.camera_id,
+                camera_address: raw.location_name || raw.camera_address,
+                event_type: raw.title || 'Incident Triggered',
+                timestamp: raw.timestamp,
+                department_id: raw.department_id || 1,
+                department_name: raw.department_name,
+                alert_status: raw.status || 'ACTIVE',
+                metadata: raw.metadata,
+              };
+              handleIncomingAlert(normalized);
             }
           } catch {
             // Ignore parse err

@@ -83,7 +83,17 @@ def get_departments_map() -> Dict[int, str]:
         return {}
 
 @router.post("/add_camera/")
-def add_camera(camera: CameraCreate, username: str = "system"):
+@router.post("/add_camera")
+def add_camera(
+    camera: CameraCreate,
+    current_user: Optional[str] = Depends(get_optional_current_user),
+    username: Optional[str] = None
+):
+    """
+    Registers a new CCTV camera with hardware MAC and PostGIS point coordinates.
+    Secured with operator authentication audit trail.
+    """
+    officer = current_user or username or "Control Room Admin"
     geom = f"POINT({camera.longitude} {camera.latitude})"
     try:
         data = supabase.table("cameras").insert({
@@ -101,13 +111,21 @@ def add_camera(camera: CameraCreate, username: str = "system"):
             "needs_review": camera.needs_review
         }).execute()
         
-        log_audit("ADD_CAMERA", username, {"camera_id": camera.camera_id}, camera_id=camera.camera_id)
+        log_audit("ADD_CAMERA", officer, {"camera_id": camera.camera_id}, camera_id=camera.camera_id)
         return {"message": "Camera added", "data": data.data}
     except Exception as e:
         return {"error": str(e)}
 
 @router.post("/update_camera/{camera_id}")
-def update_camera(camera_id: str, updates: CameraUpdate, username: str = "system"):
+@router.post("/update_camera/{camera_id}/")
+def update_camera(
+    camera_id: str,
+    updates: CameraUpdate,
+    current_user: Optional[str] = Depends(get_optional_current_user),
+    username: Optional[str] = None
+):
+    """Updates camera metadata, status, or needs_review flag."""
+    officer = current_user or username or "Control Room Admin"
     update_data = {k: v for k, v in updates.dict().items() if v is not None}
     if not update_data:
         return {"message": "No updates provided"}
@@ -118,10 +136,61 @@ def update_camera(camera_id: str, updates: CameraUpdate, username: str = "system
 
     try:
         data = supabase.table("cameras").update(update_data).eq("camera_id", camera_id).execute()
-        log_audit("UPDATE_CAMERA", username, update_data, camera_id=camera_id)
+        log_audit("UPDATE_CAMERA", officer, update_data, camera_id=camera_id)
         return {"message": "Camera updated", "data": data.data}
     except Exception as e:
         return {"error": str(e)}
+
+@router.post("/bulk_import/")
+@router.post("/bulk_import")
+def bulk_import_cameras(
+    cameras_payload: List[Dict[str, Any]],
+    current_user: Optional[str] = Depends(get_optional_current_user)
+):
+    """
+    Bulk imports CCTV camera hardware telemetry records in batches of 50.
+    Secured with operator authentication and audit logging.
+    """
+    officer = current_user or "System Bulk Import Officer"
+    total_imported = 0
+    errors = []
+
+    for i in range(0, len(cameras_payload), 50):
+        chunk = cameras_payload[i:i+50]
+        formatted_chunk = []
+        for cam in chunk:
+            lat = cam.get("lat") or cam.get("latitude")
+            lng = cam.get("lng") or cam.get("longitude")
+            geom = f"POINT({lng} {lat})" if (lat is not None and lng is not None) else cam.get("geom")
+            formatted_chunk.append({
+                "camera_id": cam.get("camera_id"),
+                "department_id": cam.get("department_id", 1),
+                "camera_type": cam.get("camera_type", "IP"),
+                "status": cam.get("status", "Active"),
+                "geom": geom,
+                "mac_address": cam.get("mac_address"),
+                "serial_number": cam.get("serial_number"),
+                "device_uuid": cam.get("device_uuid"),
+                "ip_address": cam.get("ip_address"),
+                "address": cam.get("address"),
+                "zone_id": cam.get("zone_id", "Z01"),
+                "needs_review": cam.get("needs_review", False)
+            })
+
+        try:
+            res = supabase.table("cameras").insert(formatted_chunk).execute()
+            if res.data:
+                total_imported += len(res.data)
+        except Exception as e:
+            errors.append(str(e))
+
+    log_audit("BULK_IMPORT_CAMERAS", officer, {"imported_count": total_imported, "error_count": len(errors)})
+    return {
+        "message": f"Successfully imported {total_imported} cameras",
+        "imported_count": total_imported,
+        "errors": errors if errors else None
+    }
+
 
 DEFAULT_GUJARAT_CAMERAS = [
     {

@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # ============================================================
+  # 1. FastAPI Backend (AI Neural Engine & PostGIS Gateway)
+  # ============================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: drishti-setu-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL:-https://placeholder.supabase.co}
+      - SUPABASE_KEY=${SUPABASE_KEY:-placeholder-anon-key}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-}
+      - JWT_SECRET=${JWT_SECRET:-drishti-setu-secure-jwt-key-2026-gujarat-police}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/drishti}
+      - DEMO_MODE=${DEMO_MODE:-false}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - drishti-net
+
+  # ============================================================
+  # 2. Next.js Frontend (Command & Control Web Dashboard)
+  # ============================================================
+  frontend:
+    build:
+      context: ./Frontend/drishti-setu
+      dockerfile: Dockerfile
+    container_name: drishti-setu-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - drishti-net
+
+networks:
+  drishti-net:
+    driver: bridge

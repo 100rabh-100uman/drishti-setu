@@ -50,7 +50,7 @@ const navGroups = [
   {
     label: "OPERATIONS",
     items: [
-      { label: "Danger Actions", href: "/danger-actions", icon: AlertOctagon, badge: "ACTIVE" },
+      { label: "Incident Corner", href: "/danger-actions", icon: AlertOctagon, badge: "LIVE" },
       { label: "GIS Map", href: "/gis", icon: MapIcon },
       { label: "Health Monitoring", href: "/health", icon: Activity },
       { label: "Maintenance", href: "/maintenance", icon: Wrench },

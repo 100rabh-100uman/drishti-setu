@@ -1,9 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Dict, Any
 from datetime import timedelta
 from supabase_client import supabase
-from utils.auth_utils import get_password_hash, verify_password, create_access_token, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
+from utils.auth_utils import (
+    get_password_hash,
+    verify_password,
+    create_access_token,
+    get_current_user,
+    get_current_admin_user,
+    ACCESS_TOKEN_EXPIRE_MINUTES
+)
 from utils.audit_logger import log_audit
 
 router = APIRouter()
@@ -258,7 +265,10 @@ def get_users(department_id: Optional[int] = Query(None), current_user: str = De
         return {"error": str(e)}
 
 @router.post("/assign_role/")
-def assign_role(role_data: RoleAssign, current_user: str = Depends(get_current_user)):
+@router.post("/assign_role")
+def assign_role(role_data: RoleAssign, current_admin: Dict[str, Any] = Depends(get_current_admin_user)):
+    """Admin only: Assigns or updates a system role for an officer."""
+    admin_emp_id = current_admin.get("employee_id", "admin")
     try:
         existing = supabase.table("roles").select("*").eq("user_id", role_data.user_id).execute()
         if existing.data:
@@ -266,12 +276,13 @@ def assign_role(role_data: RoleAssign, current_user: str = Depends(get_current_u
         else:
             data = supabase.table("roles").insert({"user_id": role_data.user_id, "role": role_data.role}).execute()
             
-        log_audit("ASSIGN_ROLE", current_user, {"assigned_to": role_data.user_id, "role": role_data.role})
+        log_audit("ASSIGN_ROLE", admin_emp_id, {"assigned_to": role_data.user_id, "role": role_data.role})
         return {"message": "Role assigned successfully", "data": data.data}
     except Exception as e:
         return {"error": str(e)}
 
 @router.post("/update_user/{user_id}")
+@router.post("/update_user/{user_id}/")
 def update_user(user_id: int, updates: UserUpdate, current_user: str = Depends(get_current_user)):
     try:
         user_updates = {k: v for k, v in updates.dict().items() if v is not None}
@@ -283,10 +294,13 @@ def update_user(user_id: int, updates: UserUpdate, current_user: str = Depends(g
         return {"error": str(e)}
 
 @router.delete("/delete_user/{user_id}")
-def delete_user(user_id: int, current_user: str = Depends(get_current_user)):
+@router.delete("/delete_user/{user_id}/")
+def delete_user(user_id: int, current_admin: Dict[str, Any] = Depends(get_current_admin_user)):
+    """Admin only: Permanently removes a user account."""
+    admin_emp_id = current_admin.get("employee_id", "admin")
     try:
         supabase.table("users").delete().eq("id", user_id).execute()
-        log_audit("DELETE_USER", current_user, {"deleted_user_id": user_id})
+        log_audit("DELETE_USER", admin_emp_id, {"deleted_user_id": user_id})
         return {"message": "User deleted successfully"}
     except Exception as e:
         return {"error": str(e)}

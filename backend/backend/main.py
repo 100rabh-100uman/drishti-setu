@@ -5,7 +5,7 @@ import uvicorn
 import uuid
 import datetime
 import asyncio
-from routes import cameras, events, health, maintenance, audit, zones, roles, users, opencv, access_requests, crime_people, alerts
+from routes import cameras, events, health, maintenance, audit, zones, roles, users, opencv, access_requests, crime_people, alerts, incidents
 from supabase_client import supabase
 from utils.auth_utils import get_current_user, get_optional_current_user
 
@@ -74,8 +74,9 @@ def sync_ws_broadcast(data: Dict[str, Any]):
     except Exception:
         pass
 
-# Wire alert broadcaster to alerts router
+# Wire alert & incident broadcaster to routers
 alerts.register_ws_broadcaster(sync_ws_broadcast)
+incidents.register_ws_broadcaster(sync_ws_broadcast)
 
 DEFAULT_DEPARTMENTS = [
     {"id": 1, "name": "Gujarat Police Department", "code": "POL"},
@@ -162,7 +163,55 @@ app.include_router(access_requests.router, prefix="/access-requests", tags=["Acc
 app.include_router(opencv.router, prefix="/cameras", tags=["OpenCV Surveillance Integration"])
 app.include_router(opencv.router, tags=["OpenCV Surveillance Integration"])
 app.include_router(crime_people.router, prefix="/crime_people", tags=["Crime Bureau"])
+app.include_router(crime_people.router, prefix="/crime_bureau", tags=["Crime Bureau"])
 app.include_router(alerts.router, prefix="/alerts", tags=["Danger Alerts"])
+app.include_router(incidents.router, prefix="/incidents", tags=["Incident Corner"])
+
+@app.get("/get_incidents/", tags=["Incident Corner"])
+@app.get("/get_incidents", tags=["Incident Corner"])
+def get_incidents_alias(
+    department_id: Optional[int] = Query(None),
+    zone_id: Optional[str] = Query(None),
+    crime_type: Optional[str] = Query(None),
+    person_id: Optional[str] = Query(None),
+    status: Optional[str] = Query(None),
+    severity: Optional[str] = Query(None),
+    hours: Optional[int] = Query(None),
+    limit: int = Query(50, le=200),
+    current_user: Optional[str] = Depends(get_optional_current_user)
+):
+    return incidents.get_incidents(
+        department_id=department_id,
+        zone_id=zone_id,
+        crime_type=crime_type,
+        person_id=person_id,
+        status=status,
+        severity=severity,
+        hours=hours,
+        limit=limit,
+        current_user=current_user
+    )
+
+@app.get("/timeline/", tags=["Incident Corner"])
+@app.get("/timeline", tags=["Incident Corner"])
+def get_timeline_alias(
+    department_id: Optional[int] = Query(None),
+    zone_id: Optional[str] = Query(None),
+    crime_type: Optional[str] = Query(None),
+    person_id: Optional[str] = Query(None),
+    status: Optional[str] = Query(None),
+    limit: int = Query(100, le=300),
+    current_user: Optional[str] = Depends(get_optional_current_user)
+):
+    return incidents.get_incident_timeline(
+        department_id=department_id,
+        zone_id=zone_id,
+        crime_type=crime_type,
+        person_id=person_id,
+        status=status,
+        limit=limit,
+        current_user=current_user
+    )
 
 @app.get("/users/me/", tags=["Users"])
 @app.get("/users/me", tags=["Users"])

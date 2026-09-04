@@ -78,6 +78,13 @@ export const API_ENDPOINTS = {
     UPDATE_STATUS: (alertId: string) => `/alerts/update_status/${encodeURIComponent(alertId)}`,
     SIMULATE: (cameraId: string) => `/cameras/simulate_danger_detection/${encodeURIComponent(cameraId)}`,
   },
+  INCIDENTS: {
+    LIST: '/incidents/get_incidents/',
+    TIMELINE: '/incidents/timeline/',
+    DETAIL: (incidentId: string) => `/incidents/${encodeURIComponent(incidentId)}`,
+    CREATE: '/incidents/create/',
+    UPDATE_STATUS: (incidentId: string) => `/incidents/status/${encodeURIComponent(incidentId)}`,
+  },
 } as const;
 
 export default API_ENDPOINTS;

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP, Boolean, Text
+from sqlalchemy import Column, Integer, String, TIMESTAMP, Boolean, Text, JSON
 from geoalchemy2 import Geometry
 from database import Base
 
@@ -65,3 +65,23 @@ class AuditLog(Base):
     camera_id = Column(String, nullable=True, index=True)
     details = Column(Text, nullable=True)
     timestamp = Column(TIMESTAMP)
+
+# WHY: Incidents table stores surveillance alarms, face recognitions, and threat alerts
+class Incident(Base):
+    __tablename__ = "incidents"
+    id = Column(String, primary_key=True, index=True)
+    incident_number = Column(String, unique=True, index=True)
+    title = Column(String, nullable=False)
+    crime_type = Column(String, index=True, nullable=False)
+    severity = Column(String, default="HIGH")
+    status = Column(String, default="ACTIVE", index=True)
+    camera_id = Column(String, index=True, nullable=False)
+    person_id = Column(String, index=True, nullable=True)
+    department_id = Column(Integer, default=1, index=True)
+    zone_id = Column(String, default="Z01", index=True)
+    location_name = Column(String, nullable=True)
+    timestamp = Column(TIMESTAMP, index=True)
+    metadata = Column(JSON, nullable=True)
+    created_at = Column(TIMESTAMP)
+    updated_at = Column(TIMESTAMP)
+
