@@ -47,6 +47,7 @@ from backend.routes import (
 )
 from backend.supabase_client import supabase
 from backend.utils.auth_utils import get_current_user, get_optional_current_user
+from backend.services.data_coordinator import data_coordinator
 
 app = FastAPI(
     title="Gujarat Police Hackathon API",
@@ -266,52 +267,39 @@ def seed_200_cameras():
             response = supabase.table("cameras").insert(chunk).execute()
             if response.data:
                 inserted_count += len(response.data)
+        
+        # Propagate seeded cameras across health, maintenance, recordings, GIS, and reports
+        rep_status = data_coordinator.replicate_all_demo_data()
         return {
-            "message": "200 cameras inserted successfully with hardware identifiers",
-            "inserted_count": inserted_count
+            "message": "200 cameras inserted successfully with hardware identifiers and cross-module propagation",
+            "inserted_count": inserted_count,
+            "cross_module_sync": rep_status
         }
     except Exception as e:
-        return {"error": str(e), "hint": "Check database connection or table schema."}
+        rep_status = data_coordinator.replicate_all_demo_data()
+        return {"error": str(e), "hint": "Check database connection or table schema.", "cross_module_sync": rep_status}
+
+@app.on_event("startup")
+def startup_event():
+    """Initializes unified cross-module data coordination on server boot."""
+    try:
+        data_coordinator.replicate_all_demo_data()
+    except Exception as e:
+        print(f"[DataCoordinator Startup Warning]: {e}")
 
 # ── Dashboard Sidebar API Endpoints ─────────────────────────────
 
 @app.get("/health/get_status/", tags=["Camera Health"])
 @app.get("/health/get_status", tags=["Camera Health"])
 def get_health_status():
-    """Returns camera health status and real-time telemetry."""
-    try:
-        data = supabase.table("camera_health").select("*").execute()
-        if data.data:
-            return {"status": "ok", "cameras": data.data}
-    except Exception:
-        pass
-    sample_health = [
-        {"id": 1, "camera_id": "CAM001", "name": "SG Highway Junction A", "status": "Online", "latency_ms": 28, "uptime": "99.98%", "battery": "100%", "last_ping": "Just now"},
-        {"id": 2, "camera_id": "CAM002", "name": "Sabarmati Riverfront North", "status": "Online", "latency_ms": 34, "uptime": "99.85%", "battery": "100%", "last_ping": "1 min ago"},
-        {"id": 3, "camera_id": "CAM003", "name": "Kalupur Railway Station Gate 1", "status": "Degraded", "latency_ms": 115, "uptime": "97.40%", "battery": "78%", "last_ping": "3 mins ago"},
-        {"id": 4, "camera_id": "CAM004", "name": "Gandhinagar Secretariat Gate 2", "status": "Online", "latency_ms": 19, "uptime": "100.0%", "battery": "100%", "last_ping": "Just now"},
-        {"id": 5, "camera_id": "CAM005", "name": "Iskcon Crossroads West Flyover", "status": "Offline", "latency_ms": 0, "uptime": "88.20%", "battery": "0%", "last_ping": "2 hours ago"},
-        {"id": 6, "camera_id": "CAM006", "name": "C.G. Road Commercial Strip", "status": "Online", "latency_ms": 42, "uptime": "99.90%", "battery": "95%", "last_ping": "Just now"}
-    ]
-    return {"status": "ok", "cameras": sample_health, "total": len(sample_health), "online": 4, "degraded": 1, "offline": 1}
+    """Returns camera health status and real-time telemetry for every registered camera."""
+    return data_coordinator.get_unified_health_status()
 
 @app.get("/maintenance/get_logs/", tags=["Maintenance"])
 @app.get("/maintenance/get_logs", tags=["Maintenance"])
 def get_maintenance_logs():
-    """Returns maintenance logs and service repair tickets."""
-    try:
-        data = supabase.table("maintenance").select("*").order("created_at", desc=True).execute()
-        if data.data:
-            return {"logs": data.data}
-    except Exception:
-        pass
-    sample_logs = [
-        {"id": "MNT-101", "camera_id": "CAM005", "issue": "Optical sensor occlusion / lens cleaning required", "priority": "High", "status": "In Progress", "technician": "Rajesh Vaghela (Tech ID: 44)", "scheduled_date": "2026-03-10", "zone": "Ahmedabad West"},
-        {"id": "MNT-102", "camera_id": "CAM003", "issue": "RTSP feed packet jitter & fiber cable termination check", "priority": "Medium", "status": "Scheduled", "technician": "Pooja Trivedi (Network Eng)", "scheduled_date": "2026-03-11", "zone": "Old City Center"},
-        {"id": "MNT-103", "camera_id": "CAM012", "issue": "IR night illuminator replacement", "priority": "Low", "status": "Resolved", "technician": "Amit Solanki", "scheduled_date": "2026-03-08", "zone": "Gandhinagar"},
-        {"id": "MNT-104", "camera_id": "CAM018", "issue": "Power surge unit fuse trip", "priority": "Critical", "status": "Under Review", "technician": "Suresh Patel", "scheduled_date": "2026-03-10", "zone": "East Ring Road"}
-    ]
-    return {"logs": sample_logs, "total": len(sample_logs), "pending": 3, "resolved": 1}
+    """Returns maintenance logs and service repair tickets correlated with registered cameras."""
+    return data_coordinator.get_unified_maintenance_logs()
 
 @app.get("/gap-analysis/get_data/", tags=["Zones & Gap Analysis"])
 @app.get("/gap-analysis/get_data", tags=["Zones & Gap Analysis"])
@@ -329,14 +317,20 @@ def get_gap_analysis_data():
 @app.get("/reports/get_reports/", tags=["Reports"])
 @app.get("/reports/get_reports", tags=["Reports"])
 def get_reports():
-    """Returns generated surveillance intelligence reports."""
-    sample_reports = [
-        {"id": "REP-2026-001", "title": "Gujarat Police Weekly Surveillance Summary", "category": "General Intelligence", "period": "March 1 - March 7, 2026", "author": "State Command Intelligence Desk", "status": "Published", "format": "PDF", "file_size": "2.4 MB"},
-        {"id": "REP-2026-002", "title": "SG Highway Corridor Traffic Congestion & Speed Violations", "category": "Traffic Audit", "period": "February 2026", "author": "Gujarat Traffic Branch", "status": "Published", "format": "PDF", "file_size": "4.1 MB"},
-        {"id": "REP-2026-003", "title": "OpenCV Facial Recognition Hits & Danger Alerts Audit", "category": "Crime Bureau", "period": "March 2026 (Live)", "author": "CID Crime Gujarat", "status": "Generated", "format": "PDF", "file_size": "1.8 MB"},
-        {"id": "REP-2026-004", "title": "CCTV Hardware Uptime & Telemetry Compliance Report", "category": "Hardware & Maintenance", "period": "Q1 2026", "author": "Technical Operations Wing", "status": "Pending Review", "format": "XLSX", "file_size": "890 KB"}
-    ]
-    return {"reports": sample_reports, "total": len(sample_reports)}
+    """Returns generated surveillance intelligence reports with dynamic live metrics."""
+    return data_coordinator.get_unified_reports_data()
+
+@app.get("/dashboard/summary/", tags=["Dashboard"])
+@app.get("/dashboard/summary", tags=["Dashboard"])
+def get_dashboard_summary():
+    """Returns real-time live dashboard KPIs, health stats, and attention items matching database counts."""
+    return data_coordinator.get_dashboard_summary()
+
+@app.get("/dashboard/scroll2/", tags=["Dashboard"])
+@app.get("/dashboard/scroll2", tags=["Dashboard"])
+def get_dashboard_scroll2():
+    """Returns real-time Scroll 2 metrics for department distribution, maintenance, and trend."""
+    return data_coordinator.get_dashboard_scroll2_data()
 
 @app.get("/audit/get_audit/", tags=["Audit Trail"])
 @app.get("/audit/get_audit", tags=["Audit Trail"])

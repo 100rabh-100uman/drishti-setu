@@ -1,23 +1,57 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Video, AlertTriangle, RefreshCw, Shield, Play, CheckCircle, Cpu, Radio } from "lucide-react";
+import { Video, AlertTriangle, RefreshCw, Shield, Play, CheckCircle, Cpu, Radio, Camera as CameraIcon, MapPin } from "lucide-react";
+
+interface CameraOption {
+  camera_id: string;
+  address?: string;
+  zone_id?: string;
+  status?: string;
+  ip_address?: string;
+}
 
 export default function CameraFeedPage() {
-  const [useDemo, setUseDemo] = useState<boolean>(false);
+  const [cameras, setCameras] = useState<CameraOption[]>([]);
+  const [selectedCameraId, setSelectedCameraId] = useState<string>("CAM001");
+  const [useDemo, setUseDemo] = useState<boolean>(true);
   const [customSource, setCustomSource] = useState<string>("");
   const [feedError, setFeedError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("Camera feed not available");
   const [key, setKey] = useState<number>(0);
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
+  // Fetch available cameras from the unified registry
+  useEffect(() => {
+    fetch(`${baseUrl}/cameras/get_cameras/`)
+      .then((res) => res.json())
+      .then((data) => {
+        const list = Array.isArray(data?.cameras) ? data.cameras : [];
+        if (list.length > 0) {
+          setCameras(list);
+        }
+      })
+      .catch((err) => {
+        console.warn("Failed to load cameras list for live feed:", err);
+      });
+  }, [baseUrl]);
+
+  const selectedCam = cameras.find((c) => c.camera_id === selectedCameraId) || {
+    camera_id: selectedCameraId,
+    address: "Gujarat Police Active Sector",
+    zone_id: "Z01",
+    status: "Active"
+  };
   
   let feedUrl = `${baseUrl}/camera_feed/`;
   if (useDemo) {
-    feedUrl += "?demo=true";
+    feedUrl += `?demo=true&camera_id=${encodeURIComponent(selectedCameraId)}`;
   } else if (customSource.trim()) {
     feedUrl += `?source=${encodeURIComponent(customSource.trim())}`;
+  } else {
+    feedUrl += `?camera_id=${encodeURIComponent(selectedCameraId)}`;
   }
 
   const handleRetry = () => {
@@ -28,6 +62,13 @@ export default function CameraFeedPage() {
   const handleToggleDemo = () => {
     setFeedError(false);
     setUseDemo((prev) => !prev);
+    setKey((prev) => prev + 1);
+  };
+
+  const handleCameraChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newId = e.target.value;
+    setSelectedCameraId(newId);
+    setFeedError(false);
     setKey((prev) => prev + 1);
   };
 
@@ -66,9 +107,29 @@ export default function CameraFeedPage() {
         </div>
       </div>
 
-      {/* Stream Controls */}
+      {/* Stream Controls & Camera Selector */}
       <div className="bg-[#0d152a] border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-lg">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Unified Camera Selector */}
+          <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5">
+            <CameraIcon className="w-3.5 h-3.5 text-blue-400" />
+            <select
+              value={selectedCameraId}
+              onChange={handleCameraChange}
+              className="bg-transparent text-xs text-white focus:outline-none cursor-pointer max-w-[200px] sm:max-w-[260px] truncate"
+            >
+              {cameras.length > 0 ? (
+                cameras.map((c) => (
+                  <option key={c.camera_id} value={c.camera_id} className="bg-slate-900 text-white">
+                    {c.camera_id} — {c.address?.slice(0, 30) || "Surveillance Post"}
+                  </option>
+                ))
+              ) : (
+                <option value="CAM001" className="bg-slate-900 text-white">CAM001 — SG Highway Junction</option>
+              )}
+            </select>
+          </div>
+
           <button
             onClick={handleToggleDemo}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
@@ -97,7 +158,7 @@ export default function CameraFeedPage() {
             value={customSource}
             onChange={(e) => setCustomSource(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleRetry()}
-            className="bg-slate-900 border border-slate-700 text-xs px-3 py-1.5 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-80"
+            className="bg-slate-900 border border-slate-700 text-xs px-3 py-1.5 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-72"
           />
           <button
             onClick={handleRetry}
@@ -105,6 +166,21 @@ export default function CameraFeedPage() {
           >
             Load
           </button>
+        </div>
+      </div>
+
+      {/* Selected Camera Banner */}
+      <div className="bg-slate-900/60 border border-slate-800 rounded-lg px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 text-slate-300">
+            <span className="font-semibold text-blue-400">{selectedCam.camera_id}</span>
+            <span className="text-slate-600">|</span>
+            <span>{selectedCam.address}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-slate-400">Zone: <span className="text-slate-200 font-mono">{selectedCam.zone_id || "Z01"}</span></span>
+          <span className="text-slate-400">Status: <span className="text-emerald-400 font-semibold">{selectedCam.status || "Active"}</span></span>
         </div>
       </div>
 

@@ -83,22 +83,41 @@ export default function RecordingsPage() {
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1); // 1 for Normal, 16 for 16x
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [playerKey, setPlayerKey] = useState<number>(0);
+  const [masterCameras, setMasterCameras] = useState<string[]>([]);
 
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
+  // Fetch all registered cameras to populate unified camera filter
+  useEffect(() => {
+    fetch(`${apiBaseUrl}/cameras/get_cameras/`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data && Array.isArray(data.cameras)) {
+          const ids = data.cameras.map((c: any) => c.camera_id).filter(Boolean);
+          setMasterCameras(ids);
+        }
+      })
+      .catch((e) => console.warn("Could not load master cameras for recordings filter:", e));
+  }, [apiBaseUrl]);
+
   // Fetch recordings list and storage retention stats
-  const fetchData = async () => {
+  const fetchData = async (camFilter?: string) => {
     setLoading(true);
     setError(null);
     try {
+      const activeCam = camFilter !== undefined ? camFilter : selectedCamera;
+      const recUrl = activeCam && activeCam !== "ALL"
+        ? `${apiBaseUrl}/recordings/?camera_id=${encodeURIComponent(activeCam)}`
+        : `${apiBaseUrl}/recordings/`;
+
       const [recRes, statsRes] = await Promise.all([
-        fetch(`${apiBaseUrl}/recordings/`).then((r) => r.json()),
+        fetch(recUrl).then((r) => r.json()),
         fetch(`${apiBaseUrl}/recordings/retention-status`).then((r) => r.json())
       ]);
 
       if (recRes && recRes.recordings) {
         setRecordings(recRes.recordings);
-        if (!activeRecording && recRes.recordings.length > 0) {
+        if (recRes.recordings.length > 0) {
           setActiveRecording(recRes.recordings[0]);
         }
       }
@@ -238,7 +257,7 @@ export default function RecordingsPage() {
             Live Camera Feed
           </Link>
           <button
-            onClick={fetchData}
+            onClick={() => fetchData()}
             disabled={loading}
             className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 transition disabled:opacity-50"
           >

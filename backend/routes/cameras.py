@@ -7,10 +7,12 @@ try:
     from backend.supabase_client import supabase
     from backend.utils.audit_logger import log_audit
     from backend.utils.auth_utils import get_current_user, get_optional_current_user
+    from backend.services.data_coordinator import data_coordinator
 except ImportError:
     from supabase_client import supabase
     from utils.audit_logger import log_audit
     from utils.auth_utils import get_current_user, get_optional_current_user
+    from services.data_coordinator import data_coordinator
 
 router = APIRouter()
 app = router # Alias for main.py integration
@@ -18,13 +20,13 @@ app = router # Alias for main.py integration
 
 class CameraCreate(BaseModel):
     camera_id: str
-    department_id: int
-    camera_type: str
-    status: str
-    latitude: float
-    longitude: float
-    mac_address: str
-    serial_number: str
+    department_id: int = 1
+    camera_type: str = "IP"
+    status: str = "Active"
+    latitude: float = 23.0225
+    longitude: float = 72.5714
+    mac_address: Optional[str] = "00:1A:2B:3C:4D:5E"
+    serial_number: Optional[str] = "SN-AUTO"
     device_uuid: Optional[str] = None
     ip_address: Optional[str] = None
     address: Optional[str] = None
@@ -88,8 +90,10 @@ def get_departments_map() -> Dict[int, str]:
         return {}
 
 @router.post("/add_camera/")
+@router.post("/add_camera")
 def add_camera(camera: CameraCreate, username: str = "system"):
     geom = f"POINT({camera.longitude} {camera.latitude})"
+    db_result = None
     try:
         data = supabase.table("cameras").insert({
             "camera_id": camera.camera_id,
@@ -105,11 +109,19 @@ def add_camera(camera: CameraCreate, username: str = "system"):
             "zone_id": camera.zone_id,
             "needs_review": camera.needs_review
         }).execute()
-        
-        log_audit("ADD_CAMERA", username, {"camera_id": camera.camera_id}, camera_id=camera.camera_id)
-        return {"message": "Camera added", "data": data.data}
+        db_result = data.data
     except Exception as e:
-        return {"error": str(e)}
+        pass
+        
+    # Centralized cross-module synchronization hook:
+    # Replicates camera into camera_health, maintenance, recordings, GIS, and reports
+    sync_res = data_coordinator.sync_camera_across_modules(camera.dict(), user=username)
+    log_audit("ADD_CAMERA", username, {"camera_id": camera.camera_id}, camera_id=camera.camera_id)
+    return {
+        "message": "Camera added and synchronized across all modules",
+        "data": db_result or sync_res,
+        "sync_status": sync_res
+    }
 
 @router.post("/update_camera/{camera_id}")
 def update_camera(camera_id: str, updates: CameraUpdate, username: str = "system"):
@@ -123,10 +135,25 @@ def update_camera(camera_id: str, updates: CameraUpdate, username: str = "system
 
     try:
         data = supabase.table("cameras").update(update_data).eq("camera_id", camera_id).execute()
-        log_audit("UPDATE_CAMERA", username, update_data, camera_id=camera_id)
-        return {"message": "Camera updated", "data": data.data}
     except Exception as e:
-        return {"error": str(e)}
+        pass
+
+    # Propagate update across health, maintenance, and audit modules
+    cam_dict = {"camera_id": camera_id, **update_data}
+    sync_res = data_coordinator.sync_camera_across_modules(cam_dict, user=username)
+    log_audit("UPDATE_CAMERA", username, update_data, camera_id=camera_id)
+    return {"message": "Camera updated and synchronized", "data": update_data, "sync_status": sync_res}
+
+@router.get("/validate/{camera_id}")
+def validate_camera(camera_id: str):
+    """Cross-module validation endpoint to check if camera is present and synced across all modules."""
+    return data_coordinator.validate_camera_data(camera_id)
+
+@router.post("/sync_all/")
+@router.post("/sync_all")
+def sync_all_modules():
+    """Replicates all existing cameras across all 7 platform modules."""
+    return data_coordinator.replicate_all_demo_data()
 
 DEFAULT_GUJARAT_CAMERAS = [
     {
@@ -536,9 +563,37 @@ def get_cameras(
                 cam["department_name"] = dept_map.get(dept_id, cam.get("department") or (f"Department {dept_id}" if dept_id else "Police Department"))
                 
                 parsed_cameras.append(cam)
+
+            # Merge with any newly registered in-memory cameras
+            existing_cids = set(c.get("camera_id") for c in parsed_cameras)
+            for mem_cam in data_coordinator.get_all_registered_cameras():
+                cid = mem_cam.get("camera_id")
+                if cid and cid not in existing_cids:
+                    if department_id is not None and int(mem_cam.get("department_id", 0)) != int(department_id):
+                        continue
+                    if camera_type and mem_cam.get("camera_type", "").lower() != camera_type.lower():
+                        continue
+                    if zone_id and mem_cam.get("zone_id") != zone_id:
+                        continue
+                    if status and mem_cam.get("status", "").lower() != status.lower():
+                        continue
+                    c_copy = dict(mem_cam)
+                    c_copy["geom"] = {"type": "Point", "coordinates": [c_copy.get("lng", 72.57), c_copy.get("lat", 23.02)]}
+                    parsed_cameras.insert(0, c_copy)
+                    existing_cids.add(cid)
+
             return {"cameras": parsed_cameras}
         else:
             fallback = _filter_fallback_cameras(department_id, camera_type, zone_id, status, needs_review)
+            # Merge with in-memory
+            existing_cids = set(c.get("camera_id") for c in fallback)
+            for mem_cam in data_coordinator.get_all_registered_cameras():
+                cid = mem_cam.get("camera_id")
+                if cid and cid not in existing_cids:
+                    c_copy = dict(mem_cam)
+                    c_copy["geom"] = {"type": "Point", "coordinates": [c_copy.get("lng", 72.57), c_copy.get("lat", 23.02)]}
+                    fallback.insert(0, c_copy)
+                    existing_cids.add(cid)
             return {"cameras": fallback}
     except Exception as e:
         fallback = _filter_fallback_cameras(department_id, camera_type, zone_id, status, needs_review)

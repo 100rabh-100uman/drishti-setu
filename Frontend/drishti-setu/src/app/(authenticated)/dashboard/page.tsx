@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useEffect, useState, useCallback } from "react";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DashboardKpiGrid } from "@/components/dashboard/DashboardKpiGrid";
 import { GisCoverageCard } from "@/components/dashboard/GisCoverageCard";
@@ -5,10 +8,29 @@ import { AttentionRequired } from "@/components/dashboard/AttentionRequired";
 import { Scroll2Section } from "@/components/dashboard/Scroll2Section";
 import IncidentCorner from "@/components/dashboard/IncidentCorner";
 import { dashboardService } from "@/services/dashboard.service";
+import { mockDashboardData } from "@/mock/dashboard";
+import { DashboardData } from "@/types/dashboard";
 
-export default async function DashboardPage() {
-  // Fetch summary data server-side
-  const dashboardData = await dashboardService.getDashboardSummary();
+export default function DashboardPage() {
+  const [dashboardData, setDashboardData] = useState<DashboardData>(mockDashboardData);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchLiveSummary = useCallback(async () => {
+    try {
+      const data = await dashboardService.getDashboardSummary();
+      if (data && data.kpi) {
+        setDashboardData(data);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchLiveSummary();
+    const interval = setInterval(fetchLiveSummary, 10000); // 10s live pulse
+    return () => clearInterval(interval);
+  }, [fetchLiveSummary]);
 
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto pb-20">
@@ -38,3 +60,4 @@ export default async function DashboardPage() {
     </div>
   );
 }
+

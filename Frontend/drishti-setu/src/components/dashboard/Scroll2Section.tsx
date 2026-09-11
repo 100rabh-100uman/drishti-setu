@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { RecentActivity } from "./RecentActivity";
 import { CoverageGapCard } from "./CoverageGapCard";
 import { AgeingInfrastructure } from "./AgeingInfrastructure";
@@ -9,9 +12,17 @@ import { HealthMaintenanceTrend } from "./HealthMaintenanceTrend";
 import { MaintenanceSummary } from "./MaintenanceSummary";
 import { DashboardFooter } from "./DashboardFooter";
 import { scroll2Service } from "@/services/scroll2.service";
+import { mockScroll2Data } from "@/mock/dashboard-scroll2";
+import { Scroll2Data } from "@/types/scroll2";
 
-export async function Scroll2Section() {
-  const data = await scroll2Service.getScroll2Data();
+export function Scroll2Section({ initialData }: { initialData?: Scroll2Data } = {}) {
+  const [data, setData] = useState<Scroll2Data>(initialData || mockScroll2Data);
+
+  useEffect(() => {
+    scroll2Service.getScroll2Data().then((res) => {
+      if (res) setData(res);
+    });
+  }, []);
 
   return (
     <div className="mt-6 flex flex-col gap-6">
@@ -41,3 +52,4 @@ export async function Scroll2Section() {
     </div>
   );
 }
+

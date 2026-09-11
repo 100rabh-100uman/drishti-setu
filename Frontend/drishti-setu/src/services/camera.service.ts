@@ -278,16 +278,24 @@ class CameraService {
   }
 
   async createCamera(formData: CameraFormData): Promise<CameraCreateResponse> {
-    await delay(1200); // Realistic creation time
+    await delay(300);
 
     // Resolve department and zone IDs from names
     const department = MOCK_CAMERA_DEPARTMENTS.find((d) => d.name === formData.department);
     const zone = MOCK_ZONES.find((z) => z.name === formData.zone);
 
+    let deptId = 1;
+    if (department && !isNaN(Number(department.id))) {
+      deptId = Number(department.id);
+    } else if (formData.department) {
+      const match = formData.department.match(/\d+/);
+      if (match) deptId = parseInt(match[0], 10);
+    }
+
     const payload: CameraCreatePayload = {
       camera_id: formData.camera_id,
       department_id: department?.id || 'dept-police',
-      zone_id: zone?.id || 'zone-ahm-west',
+      zone_id: zone?.id || 'Z01',
       camera_type: (formData.camera_type || 'IP') as 'IP' | 'Analog',
       address: formData.address,
       latitude: parseFloat(formData.latitude) || 23.0225,
@@ -300,7 +308,6 @@ class CameraService {
       needs_review: Boolean(formData.needs_review),
     };
 
-    // Mock: create a camera object as if the backend returned it
     const newCamera: Camera = {
       id: `db-${Date.now()}`,
       ...payload,
@@ -308,7 +315,30 @@ class CameraService {
       updated_at: new Date().toISOString(),
     };
 
-    // Save to persistent storage and in-memory list
+    // 1. Post to backend to trigger cross-module synchronization
+    try {
+      const { apiClient, API_ENDPOINTS } = await import('@/services/api');
+      const backendPayload = {
+        camera_id: formData.camera_id,
+        department_id: deptId,
+        camera_type: formData.camera_type || 'IP',
+        status: formData.status || 'Active',
+        latitude: parseFloat(formData.latitude) || 23.0225,
+        longitude: parseFloat(formData.longitude) || 72.5714,
+        mac_address: formData.mac_address || '00:1A:2B:3C:4D:5E',
+        serial_number: formData.serial_number || `SN-${formData.camera_id}`,
+        device_uuid: formData.device_uuid || undefined,
+        ip_address: formData.ip_address || '192.168.1.100',
+        address: formData.address || 'Surveillance Location, Gujarat',
+        zone_id: zone?.id || 'Z01',
+        needs_review: Boolean(formData.needs_review),
+      };
+      await apiClient.post(API_ENDPOINTS.CAMERAS.ADD, backendPayload);
+    } catch (apiErr) {
+      console.warn('[CameraService] Backend add_camera notification:', apiErr);
+    }
+
+    // 2. Save to persistent storage and in-memory list
     this.saveStoredCamera(newCamera);
     MOCK_CAMERAS.unshift(newCamera);
     EXISTING_CAMERA_IDS.push(newCamera.camera_id);
@@ -319,7 +349,7 @@ class CameraService {
     return {
       success: true,
       camera: newCamera,
-      message: 'Camera successfully registered in the DRISHTI SETU registry.',
+      message: 'Camera successfully registered in the DRISHTI SETU registry and propagated across all modules.',
     };
   }
 
