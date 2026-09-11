@@ -42,7 +42,8 @@ os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;tcp|timeout;200000
 # Package-style imports
 from backend.routes import (
     cameras, events, health, maintenance, audit, zones, roles,
-    users, opencv, access_requests, crime_people, alerts, incidents
+    users, opencv, access_requests, crime_people, alerts, incidents,
+    recordings
 )
 from backend.supabase_client import supabase
 from backend.utils.auth_utils import get_current_user, get_optional_current_user
@@ -209,6 +210,8 @@ app.include_router(crime_people.router, prefix="/crime_people", tags=["Crime Bur
 app.include_router(alerts.router, prefix="/alerts", tags=["Danger Alerts"])
 app.include_router(incidents.router, prefix="/incidents", tags=["Incident Activity & Need Corner"])
 app.include_router(incidents.router)  # Root alias for /incidents/get_incidents/
+app.include_router(recordings.router)
+
 
 @app.get("/users/me/", tags=["Users"])
 @app.get("/users/me", tags=["Users"])

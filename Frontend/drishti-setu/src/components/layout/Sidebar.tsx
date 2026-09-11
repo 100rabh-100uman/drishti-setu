@@ -23,7 +23,8 @@ import {
   Settings,
   ChevronLeft,
   BookOpen,
-  AlertOctagon
+  AlertOctagon,
+  Film
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -50,7 +51,8 @@ const navGroups = [
   {
     label: "CCTV REGISTRY",
     items: [
-      { label: "Camera Feed", href: "/camera-feed", icon: Video },
+      { label: "Live Camera Feed", href: "/camera-feed", icon: Video },
+      { label: "Recordings", href: "/recordings", icon: Film },
       { label: "All Cameras", href: "/cameras", icon: Video },
       { label: "Add Camera", href: "/cameras/new", icon: PlusCircle },
       { label: "Bulk Import", href: "/cameras/import", icon: UploadCloud },

@@ -36,3 +36,7 @@ pnpm-debug.log*
 
 # Scratch directory
 scratch/
+
+# CCTV Local Storage recordings
+backend/storage/
+
