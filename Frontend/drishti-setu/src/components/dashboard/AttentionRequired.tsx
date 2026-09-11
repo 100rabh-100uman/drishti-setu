@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 interface AttentionRequiredProps {
   items: AttentionItem[];
   actions: QuickAction[];
+  className?: string;
 }
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -56,9 +57,9 @@ const actionIconMap: Record<string, React.ReactNode> = {
   'map': <MapPin className="w-6 h-6" />,
 };
 
-export function AttentionRequired({ items, actions }: AttentionRequiredProps) {
+export function AttentionRequired({ items, actions, className }: AttentionRequiredProps) {
   return (
-    <div className="flex flex-col gap-6 col-span-1 lg:col-span-2 h-[520px]">
+    <div className={cn("flex flex-col gap-6 col-span-1 lg:col-span-2 h-[520px]", className)}>
       
       {/* Attention Required Panel */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex-1 overflow-hidden flex flex-col">

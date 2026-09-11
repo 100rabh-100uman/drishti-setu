@@ -1,0 +1,17 @@
+[Unit]
+Description=DRISHTI SETU FastAPI Backend Surveillance Engine
+After=network.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/opt/drishti-setu/backend
+EnvironmentFile=/opt/drishti-setu/backend/.env
+ExecStart=/usr/bin/python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/drishti-backend.log
+StandardError=append:/var/log/drishti-backend.error.log
+
+[Install]
+WantedBy=multi-user.target

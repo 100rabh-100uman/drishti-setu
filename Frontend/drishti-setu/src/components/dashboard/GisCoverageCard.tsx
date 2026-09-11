@@ -17,9 +17,9 @@ const MapDashboard = dynamic(() => import("@/components/MapDashboard"), {
   ),
 });
 
-export function GisCoverageCard() {
+export function GisCoverageCard({ className }: { className?: string } = {}) {
   return (
-    <div className="col-span-1 lg:col-span-3">
+    <div className={className || "col-span-1 lg:col-span-3"}>
       <MapDashboard className="h-[620px]" />
     </div>
   );

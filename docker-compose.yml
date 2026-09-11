@@ -1,0 +1,71 @@
+# ============================================================
+# DRISHTI SETU — Multi-Container Docker Compose Orchestration
+# Gujarat Police Smart CCTV Command Platform
+# ============================================================
+# Services:
+#   - backend: FastAPI + OpenCV + Supabase (Port 8000)
+#   - frontend: Next.js 16 Production App (Port 3000)
+#
+# Usage:
+#   docker-compose up --build -d
+#   Stop: docker-compose down
+# ============================================================
+
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: drishti-setu-backend:latest
+    container_name: drishti_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      - DEMO_MODE=true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - drishti-network
+
+  frontend:
+    build:
+      context: ./Frontend/drishti-setu
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    image: drishti-setu-frontend:latest
+    container_name: drishti_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      backend:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - drishti-network
+
+networks:
+  drishti-network:
+    name: drishti-network
+    driver: bridge
