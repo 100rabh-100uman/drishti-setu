@@ -1,0 +1,11 @@
+{
+  "name": "drishti-setu-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix Frontend/drishti-setu run dev",
+    "build": "npm --prefix Frontend/drishti-setu run build",
+    "start": "npm --prefix Frontend/drishti-setu run start",
+    "lint": "npm --prefix Frontend/drishti-setu run lint"
+  }
+}
