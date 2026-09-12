@@ -24,9 +24,7 @@ import {
   ChevronLeft,
   BookOpen,
   AlertOctagon,
-  Film,
-  MessageSquare,
-  Bell
+  Film
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -47,9 +45,6 @@ const navGroups = [
     label: "MAIN",
     items: [
       { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-      { label: "Inter-Dept Messages", href: "/messages", icon: MessageSquare, badge: "2" },
-      { label: "System Notifications", href: "/notifications", icon: Bell, badge: "3" },
-      { label: "Sentinel Resources", href: "/resources", icon: BookOpen },
     ]
   },
   {
@@ -93,6 +88,7 @@ const navGroups = [
     items: [
       { label: "Users & Roles", href: "/users-roles", icon: Users },
       { label: "Departments", href: "/departments", icon: Building2 },
+      { label: "Sentinel Resources", href: "/resources", icon: BookOpen },
       { label: "Settings", href: "/settings", icon: Settings },
     ]
   }
