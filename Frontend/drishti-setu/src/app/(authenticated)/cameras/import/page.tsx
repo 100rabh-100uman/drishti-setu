@@ -24,10 +24,12 @@ import {
   ArrowRight,
   ShieldCheck,
   Plug,
-  CheckCircle
+  CheckCircle,
+  AlertTriangle
 } from "lucide-react";
 import { Camera } from "@/types/camera";
 import { cameraService } from "@/services/camera.service";
+import FileProcessingAnimation from "@/components/cameras/import/FileProcessingAnimation";
 
 // Pre-configured realistic demo dataset for Gujarat CCTV surveillance
 const DEMO_CAMERAS: Camera[] = [
@@ -182,6 +184,11 @@ export default function BulkImportPage() {
   const [importStepText, setImportStepText] = useState("");
   const [importCompleted, setImportCompleted] = useState(false);
   const [importedCount, setImportedCount] = useState(0);
+  const [newlyCreated, setNewlyCreated] = useState(0);
+  const [updatedExisting, setUpdatedExisting] = useState(0);
+  const [failedCount, setFailedCount] = useState(0);
+  const [failedRecords, setFailedRecords] = useState<any[]>([]);
+  const [isProcessingAnimation, setIsProcessingAnimation] = useState(false);
 
   // Handle Drag Events
   const handleDragOver = (e: React.DragEvent) => {
@@ -211,6 +218,7 @@ export default function BulkImportPage() {
   const processFile = (file: File) => {
     const sizeKB = (file.size / 1024).toFixed(1) + " KB";
     setSelectedFile({ name: file.name, size: sizeKB });
+    setIsProcessingAnimation(true);
 
     // Read and parse text if CSV
     const reader = new FileReader();
@@ -281,6 +289,9 @@ export default function BulkImportPage() {
     setSelectedFile({ name: "gujarat_smart_surveillance_batch_08.csv", size: "18.4 KB" });
     setParsedCameras(DEMO_CAMERAS);
     setImportCompleted(false);
+    setFailedCount(0);
+    setFailedRecords([]);
+    setIsProcessingAnimation(true);
   };
 
   // Clear File
@@ -288,6 +299,12 @@ export default function BulkImportPage() {
     setSelectedFile(null);
     setParsedCameras([]);
     setImportCompleted(false);
+    setIsProcessingAnimation(false);
+    setImportedCount(0);
+    setNewlyCreated(0);
+    setUpdatedExisting(0);
+    setFailedCount(0);
+    setFailedRecords([]);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -308,6 +325,45 @@ export default function BulkImportPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  // Download Exportable Error Log CSV
+  const handleDownloadErrorCsv = () => {
+    if (!failedRecords || failedRecords.length === 0) return;
+
+    const headers = [
+      "Row Number",
+      "Camera ID",
+      "Department ID",
+      "IP Address",
+      "Failure Reason",
+      "Suggested Fix"
+    ];
+
+    const csvRows = [
+      headers.join(","),
+      ...failedRecords.map((item, idx) => [
+        item.row_number || item.index || idx + 1,
+        `"${(item.camera_id || "").replace(/"/g, '""')}"`,
+        `"${(item.department_id || "").replace(/"/g, '""')}"`,
+        `"${(item.ip_address || "").replace(/"/g, '""')}"`,
+        `"${(item.error || "Validation / constraint failure").replace(/"/g, '""')}"`,
+        `"${(item.suggested_fix || "Check field formatting and re-upload").replace(/"/g, '""')}"`
+      ].join(","))
+    ];
+
+    const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute(
+      "download",
+      `drishti_setu_import_errors_${new Date().toISOString().slice(0, 10)}.csv`
+    );
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Run the Active Upload Process
@@ -338,6 +394,10 @@ export default function BulkImportPage() {
       setIsImporting(false);
       setImportCompleted(true);
       setImportedCount(res.count);
+      setNewlyCreated(res.newly_created || res.count);
+      setUpdatedExisting(res.updated_existing || 0);
+      setFailedCount(res.failed_count || 0);
+      setFailedRecords(res.failed_records || []);
     }, 1500);
   };
 
@@ -429,20 +489,86 @@ export default function BulkImportPage() {
             </p>
 
             {/* Quick Metrics of Imported Batch */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 max-w-3xl mx-auto mb-6">
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <div className="text-[11px] font-bold uppercase text-slate-400">Total Ingested</div>
-                <div className="text-xl font-bold text-slate-800">{importedCount} Cameras</div>
+                <div className="text-[11px] font-bold uppercase text-slate-400">Total Processed</div>
+                <div className="text-xl font-bold text-slate-800">{importedCount + failedCount} Cameras</div>
               </div>
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <div className="text-[11px] font-bold uppercase text-slate-400">Verification Status</div>
-                <div className="text-xl font-bold text-emerald-600">100% Validated</div>
+                <div className="text-[11px] font-bold uppercase text-slate-400">Successfully Ingested</div>
+                <div className="text-xl font-bold text-emerald-600">{importedCount} Active</div>
+              </div>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <div className="text-[11px] font-bold uppercase text-slate-400">Database Status</div>
+                <div className="text-xl font-bold text-blue-600">
+                  {failedCount > 0 ? `${failedCount} Failed` : "100% Validated"}
+                </div>
               </div>
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
                 <div className="text-[11px] font-bold uppercase text-slate-400">Target State</div>
-                <div className="text-xl font-bold text-blue-600">Gujarat Safe City</div>
+                <div className="text-xl font-bold text-indigo-600">Gujarat Safe City</div>
               </div>
             </div>
+
+            {/* Error Log Card (Appears if any records failed) */}
+            {failedCount > 0 && (
+              <div className="max-w-3xl mx-auto mb-8 rounded-2xl border border-rose-200 bg-rose-50/70 p-5 text-left animate-in fade-in slide-in-from-top-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-rose-200/60">
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-xl bg-rose-100 p-2 text-rose-600 flex-shrink-0">
+                      <AlertTriangle className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-rose-900 text-sm">
+                        {failedCount} Camera Records Failed Validation
+                      </h4>
+                      <p className="text-xs text-rose-700/80 mt-0.5">
+                        These entries were rejected due to invalid coordinates, duplicate IDs, or schema mismatches.
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleDownloadErrorCsv}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-600 hover:bg-rose-700 active:scale-[0.98] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-rose-600/20 transition-all flex-shrink-0"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download Error Log (CSV)
+                  </button>
+                </div>
+
+                {/* Error Preview Table */}
+                <div className="mt-4 rounded-xl bg-white border border-rose-200 overflow-hidden shadow-sm">
+                  <div className="px-4 py-2 bg-rose-100/40 border-b border-rose-200 flex items-center justify-between text-[11px] font-bold text-rose-800">
+                    <span>Quick Error Inspection</span>
+                    <span className="font-normal text-rose-600">Showing first {Math.min(5, failedRecords.length)} failures</span>
+                  </div>
+                  <div className="overflow-x-auto max-h-48">
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                        <tr>
+                          <th className="py-2 px-3">Row #</th>
+                          <th className="py-2 px-3">Camera ID</th>
+                          <th className="py-2 px-3">Reason</th>
+                          <th className="py-2 px-3">Suggested Fix</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-slate-700 font-mono text-[11px]">
+                        {failedRecords.slice(0, 5).map((err, i) => (
+                          <tr key={i} className="hover:bg-rose-50/30">
+                            <td className="py-2 px-3 text-rose-600 font-bold">#{err.row_number || err.index || i + 1}</td>
+                            <td className="py-2 px-3 font-semibold text-slate-900">{err.camera_id || "MISSING"}</td>
+                            <td className="py-2 px-3 text-rose-700 max-w-xs truncate" title={err.error}>{err.error}</td>
+                            <td className="py-2 px-3 text-emerald-700 font-sans text-xs">{err.suggested_fix || "Verify parameters"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Action buttons */}
             <div className="flex flex-wrap items-center justify-center gap-3">
@@ -514,8 +640,16 @@ export default function BulkImportPage() {
                 </div>
               </div>
 
-              {/* Drag & Drop Area */}
-              {!selectedFile ? (
+              {/* Drag & Drop Area / Processing Animation / Selected File Card */}
+              {isProcessingAnimation && selectedFile ? (
+                <FileProcessingAnimation
+                  fileName={selectedFile.name}
+                  fileSize={selectedFile.size}
+                  onComplete={() => setIsProcessingAnimation(false)}
+                  onCancel={handleClear}
+                  onChangeFile={() => fileInputRef.current?.click()}
+                />
+              ) : !selectedFile ? (
                 <div
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
@@ -589,8 +723,8 @@ export default function BulkImportPage() {
 
             </div>
 
-            {/* Validation & Preview Section (When Records are Ready) */}
-            {parsedCameras.length > 0 && (
+            {/* Validation & Preview Section (When Records are Ready and Animation Complete) */}
+            {parsedCameras.length > 0 && !isProcessingAnimation && (
               <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
                 
                 {/* 4 Summary Stat Cards */}

@@ -666,9 +666,12 @@ def bulk_import_cameras(payload: Union[Dict[str, Any], List[Dict[str, Any]]], us
         cid = str(cam.get("camera_id") or "").strip()
         if not cid:
             failed_records.append({
-                "index": idx,
-                "camera_id": "UNKNOWN",
-                "error": "camera_id is required"
+                "row_number": idx + 1,
+                "camera_id": "MISSING_ID",
+                "department_id": cam.get("department_id") or "N/A",
+                "ip_address": cam.get("ip_address") or "N/A",
+                "error": "camera_id is mandatory",
+                "suggested_fix": "Provide a unique camera_id (e.g. CAM501)"
             })
             continue
 
@@ -810,9 +813,15 @@ def bulk_import_cameras(payload: Union[Dict[str, Any], List[Dict[str, Any]]], us
                             updated_count += 1
                     except Exception as single_err:
                         cur.execute("ROLLBACK TO SAVEPOINT row_sp;")
+                        raw_err = str(single_err).split("\n")[0].strip()
+                        suggestion = "Verify coordinates format" if ("geometry" in raw_err.lower() or "point" in raw_err.lower()) else "Check for duplicate key or constraint violation"
                         failed_records.append({
+                            "row_number": row_tuple[0],
                             "camera_id": cid,
-                            "error": str(single_err)
+                            "department_id": row_tuple[1] or "N/A",
+                            "ip_address": row_tuple[10] or "N/A",
+                            "error": raw_err,
+                            "suggested_fix": suggestion
                         })
                 raw_conn.commit()
         cur.close()
@@ -829,11 +838,11 @@ def bulk_import_cameras(payload: Union[Dict[str, Any], List[Dict[str, Any]]], us
     total_succeeded = inserted_count + updated_count
 
     return {
-        "success": total_succeeded > 0,
+        "success": total_succeeded > 0 or len(raw_cameras) == 0,
         "inserted_count": total_succeeded,
         "newly_created": inserted_count,
         "updated_existing": updated_count,
         "failed_count": len(failed_records),
-        "failed_records": failed_records[:20],
+        "failed_records": failed_records,
         "message": f"Successfully processed {total_succeeded} cameras ({inserted_count} newly inserted, {updated_count} updated). {len(failed_records)} failed."
     }

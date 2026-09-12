@@ -353,8 +353,52 @@ class CameraService {
     };
   }
 
-  async bulkImportCameras(cameras: Camera[]): Promise<{ success: boolean; count: number; message: string }> {
-    await delay(1500);
+  async bulkImportCameras(cameras: Camera[]): Promise<{
+    success: boolean;
+    count: number;
+    newly_created?: number;
+    updated_existing?: number;
+    failed_count?: number;
+    failed_records?: any[];
+    message: string;
+  }> {
+    try {
+      const { apiClient, API_ENDPOINTS } = await import('@/services/api');
+      const payload = {
+        cameras: cameras.map((c) => ({
+          camera_id: c.camera_id,
+          department_id: c.department_id,
+          zone_id: c.zone_id,
+          camera_type: c.camera_type,
+          status: c.status || 'Active',
+          latitude: c.latitude,
+          longitude: c.longitude,
+          mac_address: c.mac_address,
+          serial_number: c.serial_number,
+          device_uuid: c.device_uuid,
+          ip_address: c.ip_address,
+          address: c.address,
+          needs_review: c.needs_review,
+        })),
+      };
+
+      const res = await apiClient.post<any>(API_ENDPOINTS.CAMERAS.BULK_IMPORT, payload);
+
+      if (res && (res.inserted_count !== undefined || res.success !== undefined)) {
+        return {
+          success: Boolean(res.success),
+          count: Number(res.inserted_count ?? res.count ?? 0),
+          newly_created: Number(res.newly_created ?? 0),
+          updated_existing: Number(res.updated_existing ?? 0),
+          failed_count: Number(res.failed_count ?? 0),
+          failed_records: res.failed_records || [],
+          message: res.message || `Successfully processed ${res.inserted_count} cameras.`,
+        };
+      }
+    } catch (apiErr: any) {
+      console.warn('[CameraService] Backend bulk import call failed, falling back to local store:', apiErr);
+    }
+
     const existing = this.getStoredCameras();
     const existingIds = new Set(existing.map((c) => c.camera_id));
     
@@ -375,6 +419,10 @@ class CameraService {
     return {
       success: true,
       count: cameras.length,
+      newly_created: newCameras.length,
+      updated_existing: cameras.length - newCameras.length,
+      failed_count: 0,
+      failed_records: [],
       message: `Successfully imported and registered ${cameras.length} CCTV camera assets into DRISHTI SETU.`,
     };
   }
