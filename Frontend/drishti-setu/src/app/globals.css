@@ -61,21 +61,39 @@ body {
 }
 
 .animate-page-enter {
-  animation: pageEnter 0.34s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: pageEnter 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: opacity, transform;
 }
 
 .animate-page-exit {
-  animation: pageExit 0.24s cubic-bezier(0.4, 0, 1, 1) forwards;
+  animation: pageExit 0.20s cubic-bezier(0.4, 0, 1, 1) forwards;
   will-change: opacity, transform;
+}
+
+/* Applied dynamically to the active page container during route exit */
+.page-transitioning-out {
+  opacity: 0 !important;
+  transform: translateY(-8px) scale(0.992) !important;
+  filter: blur(0.5px) !important;
+  transition: opacity 0.20s cubic-bezier(0.4, 0, 1, 1),
+              transform 0.20s cubic-bezier(0.4, 0, 1, 1),
+              filter 0.20s ease-out !important;
+  pointer-events: none !important;
+}
+
+.page-transition-content {
+  transition: opacity 0.20s ease-out, transform 0.20s ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-page-enter,
-  .animate-page-exit {
+  .animate-page-exit,
+  .page-transitioning-out {
     animation: none !important;
+    transition: none !important;
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
   }
 }
 

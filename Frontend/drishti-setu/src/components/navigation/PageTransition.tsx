@@ -13,7 +13,8 @@ export function PageTransition({ children }: PageTransitionProps) {
   return (
     <div
       key={pathname}
-      className="w-full min-h-full animate-page-enter"
+      data-page-content
+      className="w-full min-h-full page-transition-content animate-page-enter"
     >
       {children}
     </div>
