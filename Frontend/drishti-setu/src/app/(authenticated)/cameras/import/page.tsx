@@ -412,65 +412,65 @@ export default function BulkImportPage() {
   }, [parsedCameras, searchFilter]);
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-20">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-transparent pb-20">
       <div className="max-w-7xl mx-auto px-6 py-8">
         
         {/* Navigation & Breadcrumb */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2 text-sm">
-            <Link href="/dashboard" className="text-slate-500 hover:text-blue-600 transition-colors font-medium flex items-center gap-1.5">
+            <Link href="/dashboard" className="text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium flex items-center gap-1.5">
               <LayoutDashboard className="w-3.5 h-3.5" />
               Dashboard
             </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-            <Link href="/cameras" className="text-slate-500 hover:text-blue-600 transition-colors font-medium">
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+            <Link href="/cameras" className="text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
               CCTV Registry
             </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-            <span className="text-blue-600 font-semibold">Bulk Import</span>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+            <span className="text-blue-600 dark:text-blue-400 font-semibold">Bulk Import</span>
           </div>
 
           <div className="flex items-center gap-2.5">
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-sm transition-all"
+              className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xs transition-all"
             >
-              <LayoutDashboard className="w-3.5 h-3.5 text-blue-600" />
+              <LayoutDashboard className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
               Back to Dashboard
             </Link>
             <Link
               href="/cameras"
-              className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-sm transition-all"
+              className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xs transition-all"
             >
-              <Video className="w-3.5 h-3.5 text-slate-500" />
+              <Video className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
               All Cameras
             </Link>
             <Link
               href="/cameras/api-onboarding"
-              className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 border border-teal-200 rounded-xl shadow-sm transition-all"
+              className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 hover:bg-teal-100 dark:hover:bg-teal-900/60 border border-teal-200 dark:border-teal-800 rounded-xl shadow-xs transition-all"
             >
-              <Plug className="w-3.5 h-3.5 text-teal-600" />
+              <Plug className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
               API Onboarding
             </Link>
           </div>
         </div>
 
         {/* Page Banner */}
-        <div className="bg-white/80 backdrop-blur-md border border-white/60 rounded-2xl p-6 shadow-sm mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-white/80 dark:bg-[#0c162d] backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-xs mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center shadow-md shadow-blue-500/25">
               <UploadCloud className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-[#0a1b3f]">Bulk CCTV Camera Import</h1>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Bulk CCTV Camera Import</h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Batch onboarding engine for state-wide surveillance registries
               </p>
             </div>
           </div>
           
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800">
               <ShieldCheck className="w-3.5 h-3.5" />
               Geo-Validation Active
             </span>
@@ -479,50 +479,50 @@ export default function BulkImportPage() {
 
         {/* If Import Completed: Show Celebration Success View */}
         {importCompleted ? (
-          <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm text-center animate-in fade-in zoom-in-95 duration-300">
-            <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 ring-8 ring-emerald-50/60 shadow-sm">
+          <div className="bg-white dark:bg-[#0c162d] rounded-2xl border border-slate-200/80 dark:border-slate-800 p-8 shadow-xs text-center animate-in fade-in zoom-in-95 duration-300">
+            <div className="w-20 h-20 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4 ring-8 ring-emerald-50/60 dark:ring-emerald-900/30 shadow-xs">
               <CheckCircle2 className="w-10 h-10 stroke-[2.5]" />
             </div>
-            <h2 className="text-2xl font-bold text-[#0a1b3f] mb-2">Batch Import Completed Successfully!</h2>
-            <p className="text-sm text-slate-500 max-w-lg mx-auto mb-6">
-              All <strong className="text-slate-800 font-bold">{importedCount} CCTV cameras</strong> have been validated, mapped to their respective jurisdictions, and successfully recorded into the DRISHTI SETU registry.
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Batch Import Completed Successfully!</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-lg mx-auto mb-6">
+              All <strong className="text-slate-800 dark:text-white font-bold">{importedCount} CCTV cameras</strong> have been validated, mapped to their respective jurisdictions, and successfully recorded into the DRISHTI SETU registry.
             </p>
 
             {/* Quick Metrics of Imported Batch */}
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 max-w-3xl mx-auto mb-6">
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <div className="text-[11px] font-bold uppercase text-slate-400">Total Processed</div>
-                <div className="text-xl font-bold text-slate-800">{importedCount + failedCount} Cameras</div>
+              <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                <div className="text-[11px] font-bold uppercase text-slate-400 dark:text-slate-500">Total Processed</div>
+                <div className="text-xl font-bold text-slate-800 dark:text-white">{importedCount + failedCount} Cameras</div>
               </div>
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <div className="text-[11px] font-bold uppercase text-slate-400">Successfully Ingested</div>
-                <div className="text-xl font-bold text-emerald-600">{importedCount} Active</div>
+              <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                <div className="text-[11px] font-bold uppercase text-slate-400 dark:text-slate-500">Successfully Ingested</div>
+                <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{importedCount} Active</div>
               </div>
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <div className="text-[11px] font-bold uppercase text-slate-400">Database Status</div>
-                <div className="text-xl font-bold text-blue-600">
+              <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                <div className="text-[11px] font-bold uppercase text-slate-400 dark:text-slate-500">Database Status</div>
+                <div className="text-xl font-bold text-blue-600 dark:text-blue-400">
                   {failedCount > 0 ? `${failedCount} Failed` : "100% Validated"}
                 </div>
               </div>
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <div className="text-[11px] font-bold uppercase text-slate-400">Target State</div>
-                <div className="text-xl font-bold text-indigo-600">Gujarat Safe City</div>
+              <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                <div className="text-[11px] font-bold uppercase text-slate-400 dark:text-slate-500">Target State</div>
+                <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">Gujarat Safe City</div>
               </div>
             </div>
 
             {/* Error Log Card (Appears if any records failed) */}
             {failedCount > 0 && (
-              <div className="max-w-3xl mx-auto mb-8 rounded-2xl border border-rose-200 bg-rose-50/70 p-5 text-left animate-in fade-in slide-in-from-top-2">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-rose-200/60">
+              <div className="max-w-3xl mx-auto mb-8 rounded-2xl border border-rose-200 dark:border-rose-900/60 bg-rose-50/70 dark:bg-rose-950/40 p-5 text-left animate-in fade-in slide-in-from-top-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-rose-200/60 dark:border-rose-900/50">
                   <div className="flex items-start gap-3">
-                    <div className="rounded-xl bg-rose-100 p-2 text-rose-600 flex-shrink-0">
+                    <div className="rounded-xl bg-rose-100 dark:bg-rose-900/60 p-2 text-rose-600 dark:text-rose-300 flex-shrink-0">
                       <AlertTriangle className="h-5 w-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-rose-900 text-sm">
+                      <h4 className="font-bold text-rose-900 dark:text-rose-200 text-sm">
                         {failedCount} Camera Records Failed Validation
                       </h4>
-                      <p className="text-xs text-rose-700/80 mt-0.5">
+                      <p className="text-xs text-rose-700/80 dark:text-rose-400/80 mt-0.5">
                         These entries were rejected due to invalid coordinates, duplicate IDs, or schema mismatches.
                       </p>
                     </div>
@@ -531,7 +531,7 @@ export default function BulkImportPage() {
                   <button
                     type="button"
                     onClick={handleDownloadErrorCsv}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-600 hover:bg-rose-700 active:scale-[0.98] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-rose-600/20 transition-all flex-shrink-0"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-600 hover:bg-rose-700 active:scale-[0.98] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-rose-600/20 transition-all flex-shrink-0 cursor-pointer"
                   >
                     <Download className="h-4 w-4" />
                     Download Error Log (CSV)
@@ -539,14 +539,14 @@ export default function BulkImportPage() {
                 </div>
 
                 {/* Error Preview Table */}
-                <div className="mt-4 rounded-xl bg-white border border-rose-200 overflow-hidden shadow-sm">
-                  <div className="px-4 py-2 bg-rose-100/40 border-b border-rose-200 flex items-center justify-between text-[11px] font-bold text-rose-800">
+                <div className="mt-4 rounded-xl bg-white dark:bg-[#070e20] border border-rose-200 dark:border-rose-900/50 overflow-hidden shadow-xs">
+                  <div className="px-4 py-2 bg-rose-100/40 dark:bg-rose-950/60 border-b border-rose-200 dark:border-rose-900/50 flex items-center justify-between text-[11px] font-bold text-rose-800 dark:text-rose-300">
                     <span>Quick Error Inspection</span>
-                    <span className="font-normal text-rose-600">Showing first {Math.min(5, failedRecords.length)} failures</span>
+                    <span className="font-normal text-rose-600 dark:text-rose-400">Showing first {Math.min(5, failedRecords.length)} failures</span>
                   </div>
                   <div className="overflow-x-auto max-h-48">
                     <table className="w-full text-left text-xs">
-                      <thead className="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                      <thead className="bg-slate-50 dark:bg-slate-900/60 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
                         <tr>
                           <th className="py-2 px-3">Row #</th>
                           <th className="py-2 px-3">Camera ID</th>
@@ -554,13 +554,13 @@ export default function BulkImportPage() {
                           <th className="py-2 px-3">Suggested Fix</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 text-slate-700 font-mono text-[11px]">
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300 font-mono text-[11px]">
                         {failedRecords.slice(0, 5).map((err, i) => (
-                          <tr key={i} className="hover:bg-rose-50/30">
-                            <td className="py-2 px-3 text-rose-600 font-bold">#{err.row_number || err.index || i + 1}</td>
-                            <td className="py-2 px-3 font-semibold text-slate-900">{err.camera_id || "MISSING"}</td>
-                            <td className="py-2 px-3 text-rose-700 max-w-xs truncate" title={err.error}>{err.error}</td>
-                            <td className="py-2 px-3 text-emerald-700 font-sans text-xs">{err.suggested_fix || "Verify parameters"}</td>
+                          <tr key={i} className="hover:bg-rose-50/30 dark:hover:bg-rose-950/20">
+                            <td className="py-2 px-3 text-rose-600 dark:text-rose-400 font-bold">#{err.row_number || err.index || i + 1}</td>
+                            <td className="py-2 px-3 font-semibold text-slate-900 dark:text-white">{err.camera_id || "MISSING"}</td>
+                            <td className="py-2 px-3 text-rose-700 dark:text-rose-300 max-w-xs truncate" title={err.error}>{err.error}</td>
+                            <td className="py-2 px-3 text-emerald-700 dark:text-emerald-400 font-sans text-xs">{err.suggested_fix || "Verify parameters"}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -582,14 +582,14 @@ export default function BulkImportPage() {
               <button
                 type="button"
                 onClick={handleClear}
-                className="flex items-center gap-2 px-5 py-3 text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl transition-all shadow-sm"
+                className="flex items-center gap-2 px-5 py-3 text-xs font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-all shadow-xs cursor-pointer"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 Import Another Batch
               </button>
               <Link
                 href="/dashboard"
-                className="flex items-center gap-2 px-5 py-3 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-all"
+                className="flex items-center gap-2 px-5 py-3 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
               >
                 <LayoutDashboard className="w-3.5 h-3.5" />
                 Back to Dashboard
@@ -610,13 +610,13 @@ export default function BulkImportPage() {
             />
 
             {/* Upload Box Card */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+            <div className="bg-white dark:bg-[#0c162d] rounded-2xl border border-slate-200/80 dark:border-slate-800 p-8 shadow-xs">
               
               {/* Top Quick Actions Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/60">
                 <div>
-                  <h2 className="text-base font-bold text-[#0a1b3f]">Upload Registry Dataset</h2>
-                  <p className="text-xs text-slate-500">Provide an Excel or CSV file with coordinates and device parameters</p>
+                  <h2 className="text-base font-bold text-slate-900 dark:text-white">Upload Registry Dataset</h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Provide an Excel or CSV file with coordinates and device parameters</p>
                 </div>
 
                 {/* 1-Click Demo Button */}
@@ -624,17 +624,17 @@ export default function BulkImportPage() {
                   <button
                     type="button"
                     onClick={handleLoadDemo}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100/80 border border-indigo-200 rounded-lg transition-all shadow-sm"
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100/80 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800 rounded-lg transition-all shadow-xs cursor-pointer"
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                     Load Demo Dataset (8 Cameras)
                   </button>
                   <button
                     type="button"
                     onClick={handleDownloadTemplate}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-blue-600 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-all shadow-sm"
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-all shadow-xs cursor-pointer"
                   >
-                    <Download className="w-3.5 h-3.5 text-slate-500" />
+                    <Download className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                     Template (.CSV)
                   </button>
                 </div>
@@ -656,18 +656,18 @@ export default function BulkImportPage() {
                   onDrop={handleDrop}
                   className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all ${
                     isDragging
-                      ? "border-blue-500 bg-blue-50/50 scale-[0.99] cursor-copy"
-                      : "border-slate-200 bg-slate-50/50"
+                      ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/30 scale-[0.99] cursor-copy"
+                      : "border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40"
                   }`}
                 >
-                  <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4 shadow-inner">
+                  <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto mb-4 shadow-inner">
                     <FileSpreadsheet className="w-8 h-8" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-800 mb-1">
+                  <h3 className="text-base font-bold text-slate-800 dark:text-white mb-1">
                     {isDragging ? "Drop your file here" : "Drag & Drop Registry File"}
                   </h3>
-                  <p className="text-xs text-slate-500 mb-5 max-w-sm mx-auto">
-                    Supported formats: <strong className="text-slate-700 font-semibold">.CSV, .XLSX, .XLS, .JSON</strong> (up to 50MB)
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-5 max-w-sm mx-auto">
+                    Supported formats: <strong className="text-slate-700 dark:text-slate-300 font-semibold">.CSV, .XLSX, .XLS, .JSON</strong> (up to 50MB)
                   </p>
 
                   <div className="flex items-center justify-center gap-3">
@@ -682,18 +682,18 @@ export default function BulkImportPage() {
                 </div>
               ) : (
                 /* Selected File Card */
-                <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
+                <div className="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-5 border border-slate-200 dark:border-slate-700">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-3.5">
-                      <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center flex-shrink-0">
                         <FileText className="w-6 h-6" />
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-slate-800">{selectedFile.name}</div>
-                        <div className="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+                        <div className="text-sm font-bold text-slate-800 dark:text-white">{selectedFile.name}</div>
+                        <div className="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-2 mt-0.5">
                           <span>{selectedFile.size}</span>
                           <span>•</span>
-                          <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                          <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                             <Check className="w-3 h-3" /> Ready for verification
                           </span>
                         </div>
@@ -704,14 +704,14 @@ export default function BulkImportPage() {
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                        className="px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors cursor-pointer"
                       >
                         Change File
                       </button>
                       <button
                         type="button"
                         onClick={handleClear}
-                        className="p-2 text-rose-500 hover:text-rose-700 bg-white border border-slate-200 rounded-lg hover:bg-rose-50 transition-colors"
+                        className="p-2 text-rose-500 hover:text-rose-700 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
                         title="Remove File"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -725,61 +725,61 @@ export default function BulkImportPage() {
 
             {/* Validation & Preview Section (When Records are Ready and Animation Complete) */}
             {parsedCameras.length > 0 && !isProcessingAnimation && (
-              <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+              <div className="bg-white dark:bg-[#0c162d] rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs space-y-6">
                 
                 {/* 4 Summary Stat Cards */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  <div className="bg-blue-50/70 p-4 rounded-xl border border-blue-100">
-                    <span className="text-[10px] font-bold uppercase text-blue-500 tracking-wider">Detected Cameras</span>
-                    <div className="text-xl font-bold text-blue-900 mt-0.5">{parsedCameras.length} Units</div>
-                    <span className="text-[10px] text-blue-600 font-medium">Ready to onboard</span>
+                  <div className="bg-blue-50/70 dark:bg-blue-950/40 p-4 rounded-xl border border-blue-100 dark:border-blue-900/60">
+                    <span className="text-[10px] font-bold uppercase text-blue-500 dark:text-blue-400 tracking-wider">Detected Cameras</span>
+                    <div className="text-xl font-bold text-blue-900 dark:text-blue-100 mt-0.5">{parsedCameras.length} Units</div>
+                    <span className="text-[10px] text-blue-600 dark:text-blue-400 font-medium">Ready to onboard</span>
                   </div>
 
-                  <div className="bg-emerald-50/70 p-4 rounded-xl border border-emerald-100">
-                    <span className="text-[10px] font-bold uppercase text-emerald-500 tracking-wider">Valid Geo-Coordinates</span>
-                    <div className="text-xl font-bold text-emerald-900 mt-0.5">100% Passed</div>
-                    <span className="text-[10px] text-emerald-600 font-medium">Gujarat bounds verified</span>
+                  <div className="bg-emerald-50/70 dark:bg-emerald-950/40 p-4 rounded-xl border border-emerald-100 dark:border-emerald-900/60">
+                    <span className="text-[10px] font-bold uppercase text-emerald-500 dark:text-emerald-400 tracking-wider">Valid Geo-Coordinates</span>
+                    <div className="text-xl font-bold text-emerald-900 dark:text-emerald-100 mt-0.5">100% Passed</div>
+                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Gujarat bounds verified</span>
                   </div>
 
-                  <div className="bg-purple-50/70 p-4 rounded-xl border border-purple-100">
-                    <span className="text-[10px] font-bold uppercase text-purple-500 tracking-wider">Network Schema</span>
-                    <div className="text-xl font-bold text-purple-900 mt-0.5">IPv4 & MAC OK</div>
-                    <span className="text-[10px] text-purple-600 font-medium">RTSP standard conform</span>
+                  <div className="bg-purple-50/70 dark:bg-purple-950/40 p-4 rounded-xl border border-purple-100 dark:border-purple-900/60">
+                    <span className="text-[10px] font-bold uppercase text-purple-500 dark:text-purple-400 tracking-wider">Network Schema</span>
+                    <div className="text-xl font-bold text-purple-900 dark:text-purple-100 mt-0.5">IPv4 & MAC OK</div>
+                    <span className="text-[10px] text-purple-600 dark:text-purple-400 font-medium">RTSP standard conform</span>
                   </div>
 
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Duplication Check</span>
-                    <div className="text-xl font-bold text-slate-800 mt-0.5">0 Collisions</div>
-                    <span className="text-[10px] text-slate-500 font-medium">All IDs unique</span>
+                  <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+                    <span className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 tracking-wider">Duplication Check</span>
+                    <div className="text-xl font-bold text-slate-800 dark:text-white mt-0.5">0 Collisions</div>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">All IDs unique</span>
                   </div>
                 </div>
 
                 {/* Search in Preview Table */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-bold text-[#0a1b3f]">Pre-Import Inspection</h3>
-                    <span className="px-2 py-0.5 text-[10px] font-bold bg-slate-100 text-slate-600 rounded-full">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">Pre-Import Inspection</h3>
+                    <span className="px-2 py-0.5 text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-full">
                       Showing {previewList.length} of {parsedCameras.length}
                     </span>
                   </div>
 
                   <div className="relative w-full sm:w-72">
-                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       placeholder="Search camera ID, IP, location..."
                       value={searchFilter}
                       onChange={(e) => setSearchFilter(e.target.value)}
-                      className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition-colors"
+                      className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-lg outline-none text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:border-blue-500 transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* Table Preview */}
-                <div className="rounded-xl border border-slate-200 overflow-hidden">
+                <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 overflow-hidden">
                   <div className="overflow-x-auto max-h-80">
                     <table className="w-full text-left text-xs">
-                      <thead className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider sticky top-0 z-10">
+                      <thead className="bg-slate-50 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider sticky top-0 z-10">
                         <tr>
                           <th className="py-3 px-4">Camera ID</th>
                           <th className="py-3 px-4">Type</th>
@@ -789,26 +789,26 @@ export default function BulkImportPage() {
                           <th className="py-3 px-4">Validation</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 text-slate-700">
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
                         {previewList.map((cam) => (
-                          <tr key={cam.camera_id} className="hover:bg-slate-50/70 transition-colors">
-                            <td className="py-3 px-4 font-mono font-bold text-blue-600">{cam.camera_id}</td>
+                          <tr key={cam.camera_id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/30 transition-colors">
+                            <td className="py-3 px-4 font-mono font-bold text-blue-600 dark:text-blue-400">{cam.camera_id}</td>
                             <td className="py-3 px-4">
-                              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">
+                              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                                 {cam.camera_type}
                               </span>
                             </td>
                             <td className="py-3 px-4 max-w-xs truncate" title={cam.address}>
                               {cam.address}
                             </td>
-                            <td className="py-3 px-4 font-mono text-[11px] text-slate-500">
+                            <td className="py-3 px-4 font-mono text-[11px] text-slate-500 dark:text-slate-400">
                               {cam.latitude.toFixed(4)}, {cam.longitude.toFixed(4)}
                             </td>
-                            <td className="py-3 px-4 font-mono text-[11px] text-slate-800 font-semibold">
+                            <td className="py-3 px-4 font-mono text-[11px] text-slate-800 dark:text-slate-200 font-semibold">
                               {cam.ip_address}
                             </td>
                             <td className="py-3 px-4">
-                              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+                              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
                                 <CheckCircle className="w-3 h-3" /> Valid
                               </span>
                             </td>
@@ -821,15 +821,15 @@ export default function BulkImportPage() {
 
                 {/* Import Progress Bar (When Actively Importing) */}
                 {isImporting && (
-                  <div className="p-5 bg-blue-50/50 rounded-xl border border-blue-100 space-y-3 animate-in fade-in">
+                  <div className="p-5 bg-blue-50/50 dark:bg-blue-950/40 rounded-xl border border-blue-100 dark:border-blue-900/60 space-y-3 animate-in fade-in">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-blue-900 flex items-center gap-2">
-                        <RefreshCw className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                      <span className="font-bold text-blue-900 dark:text-blue-200 flex items-center gap-2">
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin text-blue-600 dark:text-blue-400" />
                         {importStepText}
                       </span>
-                      <span className="font-mono font-bold text-blue-700">{importProgress}%</span>
+                      <span className="font-mono font-bold text-blue-700 dark:text-blue-300">{importProgress}%</span>
                     </div>
-                    <div className="w-full bg-blue-100 rounded-full h-2.5 overflow-hidden">
+                    <div className="w-full bg-blue-100 dark:bg-blue-900/60 rounded-full h-2.5 overflow-hidden">
                       <div
                         className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
                         style={{ width: `${importProgress}%` }}
@@ -839,9 +839,9 @@ export default function BulkImportPage() {
                 )}
 
                 {/* Bottom Execution Bar */}
-                <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="text-xs text-slate-500">
-                    Will register <strong className="text-slate-800 font-bold">{parsedCameras.length} CCTV assets</strong> into the DRISHTI SETU surveillance database.
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="text-xs text-slate-500 dark:text-slate-400">
+                    Will register <strong className="text-slate-800 dark:text-white font-bold">{parsedCameras.length} CCTV assets</strong> into the DRISHTI SETU surveillance database.
                   </div>
 
                   {/* The Active Upload / Process Button */}
@@ -850,7 +850,7 @@ export default function BulkImportPage() {
                       type="button"
                       onClick={handleClear}
                       disabled={isImporting}
-                      className="px-4 py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors disabled:opacity-50"
+                      className="px-4 py-2.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -859,7 +859,7 @@ export default function BulkImportPage() {
                       type="button"
                       onClick={handleProcessImport}
                       disabled={isImporting}
-                      className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 active:scale-[0.98] rounded-xl shadow-md shadow-blue-500/25 transition-all disabled:opacity-70"
+                      className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 active:scale-[0.98] rounded-xl shadow-md shadow-blue-500/25 transition-all disabled:opacity-70 cursor-pointer"
                     >
                       {isImporting ? (
                         <>

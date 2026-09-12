@@ -81,7 +81,6 @@ export default function GisMap() {
     fetchData();
   }, []);
 
-  // Compute camera count per zone
   const getCameraCountForZone = (zoneId?: string, zoneCode?: string) => {
     if (!zoneId && !zoneCode) return 0;
     const targetId = (zoneId || "").toLowerCase();
@@ -120,16 +119,16 @@ export default function GisMap() {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-700/60 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 tracking-wider uppercase mb-1">
-            <MapPin className="w-4 h-4 text-cyan-400" />
+          <div className="flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-cyan-400 tracking-wider uppercase mb-1">
+            <MapPin className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
             Gujarat Police Spatial Intelligence & GIS Grid
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             GIS Map & Surveillance Corridors
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
             Real-time geospatial boundaries, CCTV surveillance corridors, and PostGIS polygon geometries across Gujarat.
           </p>
         </div>
@@ -137,69 +136,69 @@ export default function GisMap() {
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard"
-            className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition-colors flex items-center gap-1.5"
+            className="px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs transition-colors flex items-center gap-1.5"
           >
-            <Layers className="w-3.5 h-3.5 text-cyan-400" />
-            Live Tactical Grid
+            <Layers className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
+            <span>Live Tactical Grid</span>
           </Link>
           <button
             onClick={fetchData}
             disabled={loading}
-            className="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition-colors"
+            className="p-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs transition-colors cursor-pointer"
             title="Refresh Data"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-cyan-400" : ""}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-blue-600 dark:text-cyan-400" : ""}`} />
           </button>
         </div>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-[#0d1527] border border-slate-800 rounded-xl p-4">
-          <div className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
-            <Globe className="w-3.5 h-3.5 text-cyan-400" /> SURVEILLANCE ZONES
+        <div className="bg-white dark:bg-[#0c162d] border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-xs">
+          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+            <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" /> SURVEILLANCE ZONES
           </div>
-          <div className="text-2xl font-extrabold text-white mt-1 font-mono">{zones.length}</div>
+          <div className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1 font-mono">{zones.length}</div>
         </div>
-        <div className="bg-[#0d1527] border border-slate-800 rounded-xl p-4">
-          <div className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
-            <Video className="w-3.5 h-3.5 text-blue-400" /> TOTAL GIS CAMERAS
+        <div className="bg-white dark:bg-[#0c162d] border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-xs">
+          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+            <Video className="w-3.5 h-3.5 text-blue-500" /> TOTAL GIS CAMERAS
           </div>
-          <div className="text-2xl font-extrabold text-cyan-400 mt-1 font-mono">{cameras.length}</div>
+          <div className="text-2xl font-extrabold text-blue-600 dark:text-cyan-400 mt-1 font-mono">{cameras.length}</div>
         </div>
-        <div className="bg-[#0d1527] border border-emerald-500/20 rounded-xl p-4">
-          <div className="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
-            <Activity className="w-3.5 h-3.5 text-emerald-400" /> ONLINE GPS FIXES
+        <div className="bg-white dark:bg-[#0c162d] border border-emerald-200 dark:border-emerald-500/20 rounded-2xl p-4 shadow-xs">
+          <div className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+            <Activity className="w-3.5 h-3.5 text-emerald-500" /> ONLINE GPS FIXES
           </div>
-          <div className="text-2xl font-extrabold text-white mt-1 font-mono">{onlineCamerasCount}</div>
+          <div className="text-2xl font-extrabold text-emerald-600 dark:text-white mt-1 font-mono">{onlineCamerasCount}</div>
         </div>
-        <div className="bg-[#0d1527] border border-slate-800 rounded-xl p-4">
-          <div className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
-            <Shield className="w-3.5 h-3.5 text-indigo-400" /> POSTGIS SPATIAL REPLICATION
+        <div className="bg-white dark:bg-[#0c162d] border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-xs">
+          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+            <Shield className="w-3.5 h-3.5 text-indigo-500" /> POSTGIS REPLICATION
           </div>
-          <div className="text-sm font-extrabold text-emerald-400 mt-2 font-mono">100% SYNCHRONIZED</div>
+          <div className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 mt-2 font-mono">100% SYNCHRONIZED</div>
         </div>
       </div>
 
       {/* Controls: Search & Tabs */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#0d1527] border border-slate-800 p-3.5 rounded-xl">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-[#0c162d] border border-slate-200/80 dark:border-slate-800 p-3.5 rounded-2xl shadow-xs">
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <button
             onClick={() => setActiveTab("zones")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === "zones"
-                ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40"
-                : "bg-slate-800 text-slate-400 hover:text-white border border-transparent"
+                ? "bg-blue-600 text-white shadow-xs"
+                : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             Surveillance Corridors ({zones.length})
           </button>
           <button
             onClick={() => setActiveTab("cameras")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === "cameras"
-                ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40"
-                : "bg-slate-800 text-slate-400 hover:text-white border border-transparent"
+                ? "bg-blue-600 text-white shadow-xs"
+                : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             Spatial Camera Grid ({cameras.length})
@@ -207,7 +206,7 @@ export default function GisMap() {
         </div>
 
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder={
@@ -217,38 +216,38 @@ export default function GisMap() {
             }
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[#070d1d] border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+            className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
           />
         </div>
       </div>
 
       {/* Content Area */}
       {loading ? (
-        <div className="bg-[#0d1527] border border-slate-800 rounded-xl p-12 text-center text-slate-400">
-          <RefreshCw className="w-6 h-6 text-cyan-400 animate-spin mx-auto mb-3" />
-          <p className="text-sm font-medium">Fetching geospatial data from /zones/ and /cameras/...</p>
+        <div className="bg-white dark:bg-[#0c162d] border border-slate-200/80 dark:border-slate-800 rounded-2xl p-12 text-center text-slate-400 shadow-xs">
+          <RefreshCw className="w-6 h-6 text-blue-500 animate-spin mx-auto mb-3" />
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Fetching geospatial data from /zones/ and /cameras/...</p>
         </div>
       ) : error || (zones.length === 0 && cameras.length === 0) ? (
-        <div className="bg-[#0d1527] border border-slate-800 rounded-xl p-12 text-center text-slate-400">
-          <Shield className="w-8 h-8 text-rose-400 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-white mb-1">No geospatial data available</h3>
+        <div className="bg-white dark:bg-[#0c162d] border border-slate-200/80 dark:border-slate-800 rounded-2xl p-12 text-center text-slate-400 shadow-xs">
+          <Shield className="w-8 h-8 text-rose-500 mx-auto mb-3" />
+          <h3 className="text-base font-bold text-slate-800 dark:text-white mb-1">No geospatial data available</h3>
           <p className="text-xs text-slate-500">
             Could not retrieve zone geometries or camera spatial coordinates. Ensure the backend is online.
           </p>
           <button
             onClick={fetchData}
-            className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow"
+            className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors cursor-pointer"
           >
             Retry Fetch
           </button>
         </div>
       ) : activeTab === "zones" ? (
         /* Zones Table */
-        <div className="bg-[#0d1527] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+        <div className="bg-white dark:bg-[#0c162d] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-[#070d1d] text-slate-400 font-semibold border-b border-slate-800 uppercase tracking-wider">
+                <tr className="bg-slate-50/80 dark:bg-slate-900/60 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200/80 dark:border-slate-800 uppercase tracking-wider">
                   <th className="py-3 px-4">Zone ID</th>
                   <th className="py-3 px-4">Zone Name</th>
                   <th className="py-3 px-4">Corridor Code</th>
@@ -258,7 +257,7 @@ export default function GisMap() {
                   <th className="py-3 px-4 text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {filteredZones.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-8 text-center text-slate-500">
@@ -269,11 +268,11 @@ export default function GisMap() {
                   filteredZones.map((zone, idx) => {
                     const camCount = getCameraCountForZone(zone.zone_id || (zone.id ? String(zone.id) : undefined), zone.code);
                     return (
-                      <tr key={zone.id || zone.zone_id || idx} className="hover:bg-slate-800/30 transition-colors">
-                        <td className="py-3.5 px-4 font-mono font-bold text-cyan-400">
+                      <tr key={zone.id || zone.zone_id || idx} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                        <td className="py-3.5 px-4 font-mono font-bold text-blue-600 dark:text-cyan-400">
                           {zone.zone_id || zone.id || `Z${idx + 1}`}
                         </td>
-                        <td className="py-3.5 px-4 font-bold text-white">
+                        <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
                           <div className="flex items-center gap-2">
                             <span
                               className="w-2.5 h-2.5 rounded-full"
@@ -282,24 +281,24 @@ export default function GisMap() {
                             {zone.name}
                           </div>
                         </td>
-                        <td className="py-3.5 px-4 font-mono text-slate-300">
+                        <td className="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-300">
                           {zone.code || "GUJ-SURV"}
                         </td>
-                        <td className="py-3.5 px-4 text-slate-300 max-w-xs">
+                        <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 max-w-xs">
                           {zone.description || zone.location || "Gujarat Police high-security coverage perimeter"}
                         </td>
                         <td className="py-3.5 px-4">
-                          <span className="px-2 py-0.5 text-[11px] font-semibold rounded bg-cyan-950/60 text-cyan-300 border border-cyan-800/60">
+                          <span className="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-blue-50 text-blue-700 border border-blue-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800/60">
                             {camCount > 0 ? `${camCount} Cameras Deployed` : "Coverage Active"}
                           </span>
                         </td>
-                        <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400">
+                        <td className="py-3.5 px-4 font-mono text-[11px] text-slate-500 dark:text-slate-400">
                           {zone.latlngs && Array.isArray(zone.latlngs)
                             ? `${zone.latlngs.length} polygon vertices`
                             : "Polygon WKT (PostGIS)"}
                         </td>
                         <td className="py-3.5 px-4 text-right">
-                          <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700">
+                          <span className="px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-700">
                             ACTIVE CORRIDOR
                           </span>
                         </td>
@@ -313,11 +312,11 @@ export default function GisMap() {
         </div>
       ) : (
         /* Spatial Cameras Grid */
-        <div className="bg-[#0d1527] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+        <div className="bg-white dark:bg-[#0c162d] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-[#070d1d] text-slate-400 font-semibold border-b border-slate-800 uppercase tracking-wider">
+                <tr className="bg-slate-50/80 dark:bg-slate-900/60 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200/80 dark:border-slate-800 uppercase tracking-wider">
                   <th className="py-3 px-4">Camera ID</th>
                   <th className="py-3 px-4">Deployment Address / Location</th>
                   <th className="py-3 px-4">Corridor Zone</th>
@@ -326,7 +325,7 @@ export default function GisMap() {
                   <th className="py-3 px-4 text-right">Module Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {filteredCameras.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="py-8 text-center text-slate-500">
@@ -339,33 +338,33 @@ export default function GisMap() {
                     const lng = cam.longitude ?? cam.lng;
                     const isOnline = (cam.status || "").toLowerCase() === "active" || (cam.status || "").toLowerCase() === "online";
                     return (
-                      <tr key={cam.camera_id} className="hover:bg-slate-800/30 transition-colors">
-                        <td className="py-3.5 px-4 font-mono font-bold text-cyan-400">
+                      <tr key={cam.camera_id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                        <td className="py-3.5 px-4 font-mono font-bold text-blue-600 dark:text-cyan-400">
                           {cam.camera_id}
                         </td>
-                        <td className="py-3.5 px-4 text-white font-medium max-w-sm">
+                        <td className="py-3.5 px-4 text-slate-800 dark:text-white font-medium max-w-sm">
                           {cam.address || cam.location || "Gujarat Metropolitan Surveillance Corridor"}
                         </td>
-                        <td className="py-3.5 px-4 font-mono text-slate-300">
-                          <span className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[11px]">
+                        <td className="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-300">
+                          <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px]">
                             {cam.zone_id || "Z01"}
                           </span>
                         </td>
-                        <td className="py-3.5 px-4 font-mono text-slate-400">
+                        <td className="py-3.5 px-4 font-mono text-slate-500 dark:text-slate-400">
                           {lat !== undefined && lng !== undefined ? (
-                            <span className="text-cyan-300/90">{lat.toFixed(4)}, {lng.toFixed(4)}</span>
+                            <span className="text-blue-600 dark:text-cyan-300/90">{lat.toFixed(4)}, {lng.toFixed(4)}</span>
                           ) : (
-                            <span className="text-slate-500">GPS Calibrating</span>
+                            <span className="text-slate-400">GPS Calibrating</span>
                           )}
                         </td>
                         <td className="py-3.5 px-4">
                           <span
-                            className={`px-2 py-0.5 text-[10px] font-bold rounded-full border ${
+                            className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full border ${
                               isOnline
-                                ? "bg-emerald-950 text-emerald-300 border-emerald-700"
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-700"
                                 : (cam.status || "").toLowerCase().includes("maint")
-                                ? "bg-amber-950 text-amber-300 border-amber-700"
-                                : "bg-rose-950 text-rose-300 border-rose-700"
+                                ? "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-700"
+                                : "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950 dark:text-rose-300 dark:border-rose-700"
                             }`}
                           >
                             {(cam.status || "ACTIVE").toUpperCase()}
@@ -375,7 +374,7 @@ export default function GisMap() {
                           <div className="flex items-center justify-end gap-2">
                             <Link
                               href="/camera-feed"
-                              className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 rounded text-xs font-semibold border border-slate-700 transition-colors inline-flex items-center gap-1"
+                              className="px-2.5 py-1 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-blue-600 dark:text-cyan-400 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 shadow-xs transition-colors inline-flex items-center gap-1"
                               title="View Live Stream"
                             >
                               <Eye className="w-3 h-3" />
@@ -383,7 +382,7 @@ export default function GisMap() {
                             </Link>
                             <Link
                               href="/health-monitoring"
-                              className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-blue-400 hover:text-blue-300 rounded text-xs font-semibold border border-slate-700 transition-colors inline-flex items-center gap-1"
+                              className="px-2.5 py-1 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-emerald-600 dark:text-emerald-400 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 shadow-xs transition-colors inline-flex items-center gap-1"
                               title="Health Status"
                             >
                               <Activity className="w-3 h-3" />
@@ -399,7 +398,7 @@ export default function GisMap() {
             </table>
           </div>
           {filteredCameras.length > 100 && (
-            <div className="p-3 text-center text-xs text-slate-400 bg-[#070d1d] border-t border-slate-800">
+            <div className="p-3 text-center text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-[#070d1d] border-t border-slate-200 dark:border-slate-800">
               Showing top 100 of {filteredCameras.length} cameras. Use search above to locate specific camera IDs or sectors.
             </div>
           )}
@@ -408,4 +407,3 @@ export default function GisMap() {
     </div>
   );
 }
-

@@ -73,34 +73,34 @@ export default function CameraFeedPage() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-100 font-sans">
+    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-800 dark:text-slate-100 font-sans">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-700/60 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-blue-400 tracking-wider uppercase mb-1">
+          <div className="flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wider uppercase mb-1">
             <Shield className="w-3.5 h-3.5" />
             <span>Gujarat Police Surveillance Command Grid</span>
           </div>
-          <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-3">
-            <Video className="w-7 h-7 text-blue-500" />
+          <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+            <Video className="w-7 h-7 text-blue-600 dark:text-blue-500" />
             Live CCTV Camera Feed with Model
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
             Real-time video inference pipeline powered by YOLOv5 / CNN detection engine with live bounding box annotations.
           </p>
         </div>
 
         {/* Status indicators */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg text-xs">
-            <Cpu className="w-4 h-4 text-emerald-400" />
-            <span className="text-slate-300">Model:</span>
-            <span className="font-semibold text-emerald-400">YOLOv5 / CNN Active</span>
+          <div className="flex items-center gap-2 bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-lg text-xs shadow-xs">
+            <Cpu className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span className="text-slate-600 dark:text-slate-300">Model:</span>
+            <span className="font-semibold text-emerald-600 dark:text-emerald-400">YOLOv5 / CNN Active</span>
           </div>
 
-          <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg text-xs">
-            <Radio className={`w-3.5 h-3.5 ${!feedError ? "text-emerald-400 animate-pulse" : "text-rose-400"}`} />
-            <span className={!feedError ? "text-emerald-400 font-medium" : "text-rose-400 font-medium"}>
+          <div className="flex items-center gap-2 bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-lg text-xs shadow-xs">
+            <Radio className={`w-3.5 h-3.5 ${!feedError ? "text-emerald-500 animate-pulse" : "text-rose-500"}`} />
+            <span className={!feedError ? "text-emerald-600 dark:text-emerald-400 font-medium" : "text-rose-600 dark:text-rose-400 font-medium"}>
               {!feedError ? "LIVE STREAMING" : "FEED OFFLINE"}
             </span>
           </div>
@@ -108,24 +108,24 @@ export default function CameraFeedPage() {
       </div>
 
       {/* Stream Controls & Camera Selector */}
-      <div className="bg-[#0d152a] border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+      <div className="bg-white dark:bg-[#0d152a] border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-xs dark:shadow-lg">
         <div className="flex flex-wrap items-center gap-2">
           {/* Unified Camera Selector */}
-          <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5">
-            <CameraIcon className="w-3.5 h-3.5 text-blue-400" />
+          <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5">
+            <CameraIcon className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <select
               value={selectedCameraId}
               onChange={handleCameraChange}
-              className="bg-transparent text-xs text-white focus:outline-none cursor-pointer max-w-[200px] sm:max-w-[260px] truncate"
+              className="bg-transparent text-xs text-slate-900 dark:text-white focus:outline-none cursor-pointer max-w-[200px] sm:max-w-[260px] truncate"
             >
               {cameras.length > 0 ? (
                 cameras.map((c) => (
-                  <option key={c.camera_id} value={c.camera_id} className="bg-slate-900 text-white">
+                  <option key={c.camera_id} value={c.camera_id} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
                     {c.camera_id} — {c.address?.slice(0, 30) || "Surveillance Post"}
                   </option>
                 ))
               ) : (
-                <option value="CAM001" className="bg-slate-900 text-white">CAM001 — SG Highway Junction</option>
+                <option value="CAM001" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">CAM001 — SG Highway Junction</option>
               )}
             </select>
           </div>
@@ -135,7 +135,7 @@ export default function CameraFeedPage() {
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
               useDemo
                 ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700"
+                : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700"
             }`}
           >
             <Play className="w-3.5 h-3.5" />
@@ -144,7 +144,7 @@ export default function CameraFeedPage() {
 
           <button
             onClick={handleRetry}
-            className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 flex items-center gap-1.5 transition-all"
+            className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 shadow-xs flex items-center gap-1.5 transition-all"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Reconnect
@@ -158,11 +158,11 @@ export default function CameraFeedPage() {
             value={customSource}
             onChange={(e) => setCustomSource(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleRetry()}
-            className="bg-slate-900 border border-slate-700 text-xs px-3 py-1.5 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-72"
+            className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs px-3 py-1.5 rounded-lg text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-72"
           />
           <button
             onClick={handleRetry}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded-lg transition-colors whitespace-nowrap"
+            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded-lg transition-colors whitespace-nowrap shadow-xs"
           >
             Load
           </button>
@@ -170,17 +170,17 @@ export default function CameraFeedPage() {
       </div>
 
       {/* Selected Camera Banner */}
-      <div className="bg-slate-900/60 border border-slate-800 rounded-lg px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-slate-300">
-            <span className="font-semibold text-blue-400">{selectedCam.camera_id}</span>
-            <span className="text-slate-600">|</span>
+          <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+            <span className="font-semibold text-blue-600 dark:text-blue-400">{selectedCam.camera_id}</span>
+            <span className="text-slate-300 dark:text-slate-600">|</span>
             <span>{selectedCam.address}</span>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-slate-400">Zone: <span className="text-slate-200 font-mono">{selectedCam.zone_id || "Z01"}</span></span>
-          <span className="text-slate-400">Status: <span className="text-emerald-400 font-semibold">{selectedCam.status || "Active"}</span></span>
+          <span className="text-slate-500 dark:text-slate-400">Zone: <span className="text-slate-900 dark:text-slate-200 font-mono font-semibold">{selectedCam.zone_id || "Z01"}</span></span>
+          <span className="text-slate-500 dark:text-slate-400">Status: <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{selectedCam.status || "Active"}</span></span>
         </div>
       </div>
 
@@ -238,22 +238,22 @@ export default function CameraFeedPage() {
 
       {/* Model Detection Specs Card */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-[#0d152a] border border-slate-800 rounded-xl p-4">
-          <div className="text-slate-400 text-xs font-medium">Model Architecture</div>
-          <div className="text-base font-bold text-white mt-1">YOLOv5 / Custom CNN</div>
-          <div className="text-[11px] text-slate-500 mt-1">Single-stage deep convolutional neural network for real-time edge CCTV inference.</div>
+        <div className="bg-white dark:bg-[#0d152a] border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs">
+          <div className="text-slate-500 dark:text-slate-400 text-xs font-medium">Model Architecture</div>
+          <div className="text-base font-bold text-slate-900 dark:text-white mt-1">YOLOv5 / Custom CNN</div>
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Single-stage deep convolutional neural network for real-time edge CCTV inference.</div>
         </div>
 
-        <div className="bg-[#0d152a] border border-slate-800 rounded-xl p-4">
-          <div className="text-slate-400 text-xs font-medium">Annotation Stream</div>
-          <div className="text-base font-bold text-emerald-400 mt-1">MJPEG (multipart/x-mixed-replace)</div>
-          <div className="text-[11px] text-slate-500 mt-1">In-memory OpenCV hardware JPEG compression yielding zero-latency video rendering.</div>
+        <div className="bg-white dark:bg-[#0d152a] border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs">
+          <div className="text-slate-500 dark:text-slate-400 text-xs font-medium">Annotation Stream</div>
+          <div className="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-1">MJPEG (multipart/x-mixed-replace)</div>
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">In-memory OpenCV hardware JPEG compression yielding zero-latency video rendering.</div>
         </div>
 
-        <div className="bg-[#0d152a] border border-slate-800 rounded-xl p-4">
-          <div className="text-slate-400 text-xs font-medium">Gujarat Sentinel Guard</div>
-          <div className="text-base font-bold text-blue-400 mt-1">Watchlist & Vehicle ANPR</div>
-          <div className="text-[11px] text-slate-500 mt-1">Real-time matching against Gujarat Police crime bureau and danger-action watchlist.</div>
+        <div className="bg-white dark:bg-[#0d152a] border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs">
+          <div className="text-slate-500 dark:text-slate-400 text-xs font-medium">Gujarat Sentinel Guard</div>
+          <div className="text-base font-bold text-blue-600 dark:text-blue-400 mt-1">Watchlist & Vehicle ANPR</div>
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Real-time matching against Gujarat Police crime bureau and danger-action watchlist.</div>
         </div>
       </div>
     </div>

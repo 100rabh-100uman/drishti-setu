@@ -113,40 +113,40 @@ export default function ResourcesPage() {
       </div>
 
       {/* ── SECTION 1: WHAT YOU ARE CONNECTING TO & LIVE CATALOGUE ── */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+      <div className="bg-white dark:bg-[#0c162d] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold font-mono">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold font-mono">
               §1
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900">What You Are Connecting To</h2>
-              <p className="text-xs text-slate-500">Live RTP/RTSP Streams & Dynamic Catalogue Contract</p>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">What You Are Connecting To</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Live RTP/RTSP Streams & Dynamic Catalogue Contract</p>
             </div>
           </div>
           
           <button
             onClick={fetchCatalogue}
             disabled={loadingCatalog}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loadingCatalog ? 'animate-spin text-blue-600' : ''}`} />
             <span>Refresh Catalogue</span>
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600">
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
-            <span className="font-bold text-slate-800 block text-sm">Real-Time Cadence</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600 dark:text-slate-400">
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/60 space-y-1.5">
+            <span className="font-bold text-slate-800 dark:text-slate-200 block text-sm">Real-Time Cadence</span>
             <p className="leading-relaxed">Every camera is published as a live RTP/RTSP stream. One second of video takes one second to arrive. Frames carry monotonic presentation timestamps (PTS).</p>
           </div>
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
-            <span className="font-bold text-slate-800 block text-sm">No Seeking / No Local File</span>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/60 space-y-1.5">
+            <span className="font-bold text-slate-800 dark:text-slate-200 block text-sm">No Seeking / No Local File</span>
             <p className="leading-relaxed">There is no seeking, no byte-range fetching, and no running ahead of real time. Build against live stream capture from the start rather than local file copies.</p>
           </div>
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
-            <span className="font-bold text-slate-800 block text-sm">Catalogue Contract</span>
-            <p className="leading-relaxed">Always start from the catalogue endpoint <code className="bg-slate-200 px-1 py-0.5 rounded font-mono text-slate-800">/api/ingest</code> rather than hard-coding URLs. Camera IDs and sets can change dynamically.</p>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/60 space-y-1.5">
+            <span className="font-bold text-slate-800 dark:text-slate-200 block text-sm">Catalogue Contract</span>
+            <p className="leading-relaxed">Always start from the catalogue endpoint <code className="bg-slate-200 dark:bg-slate-700 px-1 py-0.5 rounded font-mono text-slate-800 dark:text-slate-200">/api/ingest</code> rather than hard-coding URLs. Camera IDs and sets can change dynamically.</p>
           </div>
         </div>
 
@@ -180,14 +180,14 @@ export default function ResourcesPage() {
       </div>
 
       {/* ── SECTION 2: CONNECTING CODE SNIPPETS ────────────────── */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
-        <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold font-mono">
+      <div className="bg-white dark:bg-[#0c162d] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-5">
+        <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold font-mono">
             §2
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Connecting to the Live Grid</h2>
-            <p className="text-xs text-slate-500">Official Python OpenCV, GStreamer, and FFplay implementations</p>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Connecting to the Live Grid</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Official Python OpenCV, GStreamer, and FFplay implementations</p>
           </div>
         </div>
 
@@ -251,54 +251,54 @@ ffplay -rtsp_transport tcp rtsp://localhost:8554/stream/1`}
       </div>
 
       {/* ── SECTION 3: DO'S AND DON'TS ─────────────────────────── */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
-        <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold font-mono">
+      <div className="bg-white dark:bg-[#0c162d] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-5">
+        <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold font-mono">
             §3
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Do&apos;s and Don&apos;ts (Protocol Best Practices)</h2>
-            <p className="text-xs text-slate-500">Avoiding common integration errors causing client-side pipeline crashes</p>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Do&apos;s and Don&apos;ts (Protocol Best Practices)</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Avoiding common integration errors causing client-side pipeline crashes</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-100 space-y-2">
-            <span className="font-bold text-rose-900 flex items-center gap-1.5">
-              <AlertTriangle className="w-4 h-4 text-rose-600" />
+          <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/40 space-y-2">
+            <span className="font-bold text-rose-900 dark:text-rose-300 flex items-center gap-1.5">
+              <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
               Do NOT Rely on UDP Transport
             </span>
-            <p className="text-rose-800 leading-relaxed">
-              UDP fails across NAT and firewalls, producing corrupted frames that look like model bugs. Set <code className="bg-white px-1 py-0.5 rounded font-mono">rtsp_transport=tcp</code> in every client.
+            <p className="text-rose-800 dark:text-rose-200 leading-relaxed">
+              UDP fails across NAT and firewalls, producing corrupted frames that look like model bugs. Set <code className="bg-white dark:bg-slate-800 px-1 py-0.5 rounded font-mono">rtsp_transport=tcp</code> in every client.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-100 space-y-2">
-            <span className="font-bold text-emerald-900 flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40 space-y-2">
+            <span className="font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               Use Monotonic PTS (CAP_PROP_POS_MSEC)
             </span>
-            <p className="text-emerald-800 leading-relaxed">
-              OpenCV&apos;s <code className="bg-white px-1 py-0.5 rounded font-mono">CAP_PROP_FPS</code> often does not match delivery rate. Do not use wall-clock time at frame read; use buffer PTS or monotonic timestamps.
+            <p className="text-emerald-800 dark:text-emerald-200 leading-relaxed">
+              OpenCV&apos;s <code className="bg-white dark:bg-slate-800 px-1 py-0.5 rounded font-mono">CAP_PROP_FPS</code> often does not match delivery rate. Do not use wall-clock time at frame read; use buffer PTS or monotonic timestamps.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-blue-50 border border-blue-100 space-y-2">
-            <span className="font-bold text-blue-900 flex items-center gap-1.5">
-              <RefreshCw className="w-4 h-4 text-blue-600" />
+          <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 space-y-2">
+            <span className="font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">
+              <RefreshCw className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               Reconnect with Exponential Backoff
             </span>
-            <p className="text-blue-800 leading-relaxed">
+            <p className="text-blue-800 dark:text-blue-200 leading-relaxed">
               Feeds are supervised and may restart. Reconnect with exponential backoff (start at ~2 s, cap at ~30 s). Do not reconnect in a tight loop.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-purple-50 border border-purple-100 space-y-2">
-            <span className="font-bold text-purple-900 flex items-center gap-1.5">
-              <Video className="w-4 h-4 text-purple-600" />
+          <div className="p-4 rounded-xl bg-purple-50 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/40 space-y-2">
+            <span className="font-bold text-purple-900 dark:text-purple-300 flex items-center gap-1.5">
+              <Video className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               Handle Mixed H.264 / H.265 & Looping Cuts
             </span>
-            <p className="text-purple-800 leading-relaxed">
+            <p className="text-purple-800 dark:text-purple-200 leading-relaxed">
               Decoder warnings on join (e.g. Error constructing frame RPS) are normal and self-correct when the first IDR frame arrives. Handle scene cuts smoothly at loop points.
             </p>
           </div>
@@ -306,14 +306,14 @@ ffplay -rtsp_transport tcp rtsp://localhost:8554/stream/1`}
       </div>
 
       {/* ── SECTION 4: PRE-SUBMISSION CHECKLIST ─────────────────── */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
-        <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold font-mono">
+      <div className="bg-white dark:bg-[#0c162d] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-5">
+        <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold font-mono">
             §4
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Pre-Submission Checklist</h2>
-            <p className="text-xs text-slate-500">Official 8-point verification matrix for hackathon evaluation</p>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Pre-Submission Checklist</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Official 8-point verification matrix for hackathon evaluation</p>
           </div>
         </div>
 
@@ -335,12 +335,12 @@ ffplay -rtsp_transport tcp rtsp://localhost:8554/stream/1`}
                 onClick={() => toggleCheck(item.id as keyof typeof checklist)}
                 className={`p-3 rounded-xl border flex items-center gap-3 cursor-pointer transition-all ${
                   isChecked 
-                    ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900' 
-                    : 'bg-slate-50 border-slate-200 text-slate-500'
+                    ? 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/80 text-emerald-900 dark:text-emerald-200' 
+                    : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400'
                 }`}
               >
                 <div className={`w-5 h-5 rounded-md flex items-center justify-center border transition-colors ${
-                  isChecked ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-white border-slate-300'
+                  isChecked ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600'
                 }`}>
                   {isChecked && <Check className="w-3.5 h-3.5" />}
                 </div>

@@ -117,11 +117,11 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
 
   return (
     <aside 
-      className={`bg-white rounded-2xl border border-slate-200/90 shadow-sm flex flex-col overflow-hidden ${maxHeight} ${className}`}
+      className={`bg-white dark:bg-[#0c162d] rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm flex flex-col overflow-hidden ${maxHeight} ${className}`}
       aria-label="Incident Activity Need Corner"
     >
       {/* Header Section */}
-      <div className="p-4 border-b border-slate-100 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white shrink-0">
+      <div className="p-4 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-400">
@@ -178,20 +178,20 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
       </div>
 
       {/* Feed Body — Scrollable Timeline */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-5 divide-y divide-slate-100/80">
+      <div className="flex-1 overflow-y-auto p-4 space-y-5 divide-y divide-slate-100/80 dark:divide-slate-800">
         {loading ? (
           <div className="py-12 flex flex-col items-center justify-center text-center">
             <RefreshCw className="w-6 h-6 animate-spin text-blue-600 mb-2" />
-            <p className="text-xs font-semibold text-slate-600">Retrieving operational incidents...</p>
-            <p className="text-[11px] text-slate-400">Connecting to Gujarat Police Sentinel Grid</p>
+            <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">Retrieving operational incidents...</p>
+            <p className="text-[11px] text-slate-400 dark:text-slate-500">Connecting to Gujarat Police Sentinel Grid</p>
           </div>
         ) : error || filteredIncidents.length === 0 ? (
           <div className="py-12 flex flex-col items-center justify-center text-center p-4">
-            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-2">
-              <AlertTriangle className="w-5 h-5 text-slate-400" />
+            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500 mb-2">
+              <AlertTriangle className="w-5 h-5 text-slate-400 dark:text-slate-500" />
             </div>
-            <p className="text-xs font-bold text-slate-700">No incidents available.</p>
-            <p className="text-[11px] text-slate-400 mt-0.5">
+            <p className="text-xs font-bold text-slate-700 dark:text-slate-300">No incidents available.</p>
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
               {filterQuery ? "Try clearing search filters to see older records." : "All operational corridors report normal status."}
             </p>
           </div>
@@ -199,18 +199,18 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
           Object.entries(groupedIncidents).map(([dateLabel, items]) => (
             <div key={dateLabel} className="pt-3 first:pt-0 space-y-3">
               {/* Timeline Date Header */}
-              <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm py-1 flex items-center justify-between">
-                <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase flex items-center gap-1.5">
-                  <Clock className="w-3 h-3 text-slate-400" />
+              <div className="sticky top-0 z-10 bg-white/95 dark:bg-[#0c162d]/95 backdrop-blur-sm py-1 flex items-center justify-between">
+                <span className="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase flex items-center gap-1.5">
+                  <Clock className="w-3 h-3 text-slate-400 dark:text-slate-500" />
                   {dateLabel}
                 </span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 font-medium text-slate-600">
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 font-medium text-slate-600 dark:text-slate-300">
                   {items.length} {items.length === 1 ? "event" : "events"}
                 </span>
               </div>
 
               {/* Timeline Items */}
-              <div className="space-y-3 border-l-2 border-slate-200 ml-1.5 pl-3.5">
+              <div className="space-y-3 border-l-2 border-slate-200 dark:border-slate-800 ml-1.5 pl-3.5">
                 {items.map((incident) => {
                   const timeString = new Date(incident.timestamp).toLocaleTimeString("en-IN", {
                     hour: "2-digit",
@@ -224,11 +224,11 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
                   return (
                     <article
                       key={incident.id}
-                      className="group relative bg-slate-50/80 hover:bg-white p-3 rounded-xl border border-slate-200/80 hover:border-slate-300 hover:shadow-sm transition-all duration-200"
+                      className="group relative bg-slate-50/80 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800/90 p-3 rounded-xl border border-slate-200/80 dark:border-slate-700/60 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-sm transition-all duration-200"
                     >
                       {/* Timeline Bullet Node */}
                       <span 
-                        className={`absolute -left-[21px] top-3.5 w-2.5 h-2.5 rounded-full border-2 border-white ring-1 ring-slate-300 ${
+                        className={`absolute -left-[21px] top-3.5 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 ring-1 ring-slate-300 dark:ring-slate-700 ${
                           isCritical ? "bg-red-600" : isHigh ? "bg-amber-500" : "bg-blue-600"
                         }`} 
                       />
@@ -236,16 +236,16 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
                       {/* Top Row: Timestamp + Crime Tag */}
                       <div className="flex items-start justify-between gap-2 mb-1.5">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-[10px] font-mono font-bold text-slate-600">
+                          <span className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400">
                             {timeString}
                           </span>
                           <span
                             className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                               isCritical
-                                ? "bg-red-100 text-red-700 border border-red-200"
+                                ? "bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/50"
                                 : isHigh
-                                ? "bg-amber-100 text-amber-800 border border-amber-200"
-                                : "bg-blue-100 text-blue-700 border border-blue-200"
+                                ? "bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900/50"
+                                : "bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/50"
                             }`}
                           >
                             {incident.crime_type}
@@ -253,20 +253,20 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
                         </div>
 
                         {incident.severity && (
-                          <span className="text-[10px] font-semibold text-slate-400 shrink-0">
+                          <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 shrink-0">
                             {incident.severity}
                           </span>
                         )}
                       </div>
 
                       {/* Incident Description */}
-                      <p className="text-xs text-slate-700 leading-relaxed font-normal mb-2">
+                      <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-normal mb-2">
                         {incident.description}
                       </p>
 
                       {/* Location & Department Metadata */}
-                      <div className="flex items-center gap-3 text-[11px] text-slate-500 flex-wrap">
-                        <div className="flex items-center gap-1 text-slate-600 font-medium">
+                      <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400 flex-wrap">
+                        <div className="flex items-center gap-1 text-slate-600 dark:text-slate-300 font-medium">
                           <MapPin className="w-3 h-3 text-red-500 shrink-0" />
                           <span className="truncate max-w-[200px]" title={incident.location_name || incident.location_id}>
                             {incident.location_name || incident.location_id}
@@ -274,7 +274,7 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
                         </div>
 
                         {incident.department_name && (
-                          <div className="flex items-center gap-1 text-slate-500">
+                          <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
                             <Building2 className="w-3 h-3 text-slate-400 shrink-0" />
                             <span className="truncate max-w-[140px]" title={incident.department_name}>
                               {incident.department_name}
@@ -285,7 +285,7 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
 
                       {/* Crime Bureau Suspect Dossier Card (if matched in dataset) */}
                       {incident.person && (
-                        <div className="mt-2.5 p-2 rounded-lg bg-red-50/70 border border-red-200/90 flex items-start gap-2.5">
+                        <div className="mt-2.5 p-2 rounded-lg bg-red-50/70 dark:bg-red-950/40 border border-red-200/90 dark:border-red-900/50 flex items-start gap-2.5">
                           <div className="relative w-10 h-10 rounded-md overflow-hidden bg-slate-200 border border-red-300 shrink-0">
                             {incident.person.photo ? (
                               <img
@@ -302,7 +302,7 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
 
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-1">
-                              <span className="text-xs font-bold text-red-900 truncate">
+                              <span className="text-xs font-bold text-red-900 dark:text-red-200 truncate">
                                 {incident.person.name}
                               </span>
                               <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-red-600 text-white tracking-wider uppercase shrink-0">
@@ -310,11 +310,11 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
                               </span>
                             </div>
 
-                            <p className="text-[11px] text-red-800/90 leading-tight line-clamp-2 mt-0.5">
+                            <p className="text-[11px] text-red-800/90 dark:text-red-300 leading-tight line-clamp-2 mt-0.5">
                               {incident.person.record_summary || incident.person.crime_type || "Crime Bureau Record"}
                             </p>
 
-                            <div className="flex items-center gap-2 mt-1 text-[10px] text-red-700/80">
+                            <div className="flex items-center gap-2 mt-1 text-[10px] text-red-700/80 dark:text-red-400">
                               <span>ID: {incident.person.id || incident.person.person_id}</span>
                               <span>•</span>
                               <span>Status: {incident.person.status || "WANTED"}</span>
@@ -332,9 +332,9 @@ export default function IncidentCorner({ className = "", maxHeight = "h-[620px]"
       </div>
 
       {/* Footer Info Strip */}
-      <div className="px-4 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 shrink-0">
+      <div className="px-4 py-2 bg-slate-50 dark:bg-[#080f20] border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 shrink-0">
         <span>Total Logged: <strong>{incidents.length}</strong></span>
-        <span className="text-blue-600 font-semibold hover:underline cursor-pointer" onClick={handleManualRefresh}>
+        <span className="text-blue-600 dark:text-blue-400 font-semibold hover:underline cursor-pointer" onClick={handleManualRefresh}>
           Live Sync Active
         </span>
       </div>

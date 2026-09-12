@@ -26,8 +26,8 @@ export function CameraHealthCard({ data }: CameraHealthCardProps) {
   const activeData = activeCategory ? categories[activeCategory] : null;
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-2 flex flex-col h-[520px] col-span-1 lg:col-span-1">
-      <h2 className="text-[13px] font-bold text-slate-800 mb-1">Camera Health Overview</h2>
+    <div className="bg-white dark:bg-[#0c162d] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-2 flex flex-col h-[520px] col-span-1 lg:col-span-1">
+      <h2 className="text-[13px] font-bold text-slate-800 dark:text-white mb-1">Camera Health Overview</h2>
       
       {/* Donut Chart and Legend */}
       <div className="flex flex-col items-center justify-center gap-1 mb-1 px-0">
@@ -36,7 +36,7 @@ export function CameraHealthCard({ data }: CameraHealthCardProps) {
         <div className="relative w-42 h-32 mb-5 flex-shrink-0">
           <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
             {/* Background ring */}
-            <path className="text-slate-100" strokeWidth="4" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path className="text-slate-100 dark:text-slate-800" strokeWidth="4" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
             {/* Online (Green) */}
             <path 
               onMouseEnter={() => setActiveCategory('Online')}
@@ -76,14 +76,14 @@ export function CameraHealthCard({ data }: CameraHealthCardProps) {
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             {activeData ? (
               <>
-                <span className="text-[25px] font-black text-slate-800 leading-none">{activeData.value.toLocaleString()}</span>
-                <span className="text-[10px] font-semibold text-slate-500 mt-0.5">{activeData.label}</span>
+                <span className="text-[25px] font-black text-slate-800 dark:text-white leading-none">{activeData.value.toLocaleString()}</span>
+                <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">{activeData.label}</span>
                 <span className={`text-[10px] font-bold mt-0.5 ${activeData.percentColor}`}>{getPercentage(activeData.value)}%</span>
               </>
             ) : (
               <>
-                <span className="text-[25px] font-black text-slate-800 leading-none">{total.toLocaleString()}</span>
-                <span className="text-[10px] font-semibold text-slate-500 mt-1">Total Cameras</span>
+                <span className="text-[25px] font-black text-slate-800 dark:text-white leading-none">{total.toLocaleString()}</span>
+                <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-1">Total Cameras</span>
               </>
             )}
           </div>
@@ -93,12 +93,12 @@ export function CameraHealthCard({ data }: CameraHealthCardProps) {
 
       {/* Trend Graph Mock */}
       <div className="mt-6 flex flex-col flex-1">
-         <h3 className="text-[11px] font-bold text-slate-700 mb-4">Health Trend (Last 7 Days)</h3>
+         <h3 className="text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-4">Health Trend (Last 7 Days)</h3>
          
-         <div className="relative flex-1 min-h-[140px] ml-7 w-[calc(100%-28px)] border-b border-l border-slate-200">
+         <div className="relative flex-1 min-h-[140px] ml-7 w-[calc(100%-28px)] border-b border-l border-slate-200 dark:border-slate-800">
            
            {/* Y Axis labels */}
-           <div className="absolute -left-7 bottom-0 top-0 flex flex-col justify-between text-[8px] text-slate-400 py-1 w-6 text-right pr-1">
+           <div className="absolute -left-7 bottom-0 top-0 flex flex-col justify-between text-[8px] text-slate-400 dark:text-slate-500 py-1 w-6 text-right pr-1">
               <span>100%</span>
               <span>75%</span>
               <span>50%</span>
@@ -107,10 +107,10 @@ export function CameraHealthCard({ data }: CameraHealthCardProps) {
            
            {/* Grid lines */}
            <div className="absolute inset-0 flex flex-col justify-between">
-             <div className="w-full h-px bg-slate-100"></div>
-             <div className="w-full h-px bg-slate-100"></div>
-             <div className="w-full h-px bg-slate-100"></div>
-             <div className="w-full h-px bg-slate-100"></div>
+             <div className="w-full h-px bg-slate-100 dark:bg-slate-800/80"></div>
+             <div className="w-full h-px bg-slate-100 dark:bg-slate-800/80"></div>
+             <div className="w-full h-px bg-slate-100 dark:bg-slate-800/80"></div>
+             <div className="w-full h-px bg-slate-100 dark:bg-slate-800/80"></div>
            </div>
 
            {/* Trend Line (SVG) */}
@@ -142,7 +142,7 @@ export function CameraHealthCard({ data }: CameraHealthCardProps) {
                 
              </svg>
              {/* Tooltip on last point */}
-             <div className="absolute right-0 top-1 text-[9px] font-bold text-green-600 bg-white border border-green-200 px-1 rounded transform -translate-y-full translate-x-2">
+             <div className="absolute right-0 top-1 text-[9px] font-bold text-green-600 dark:text-green-400 bg-white dark:bg-slate-800 border border-green-200 dark:border-green-800 px-1 rounded transform -translate-y-full translate-x-2">
                 92.9%
              </div>
            </div>

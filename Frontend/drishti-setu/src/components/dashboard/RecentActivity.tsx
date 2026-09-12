@@ -14,13 +14,13 @@ export function RecentActivity({ items }: { items: ActivityItem[] }) {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 h-full flex flex-col">
+    <div className="bg-white dark:bg-[#0c162d] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 h-full flex flex-col">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <h2 className="text-[15px] font-bold text-slate-800">Recent Activity</h2>
-          <span className="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded-full border border-green-100">Live Feed</span>
+          <h2 className="text-[15px] font-bold text-slate-800 dark:text-white">Recent Activity</h2>
+          <span className="text-[10px] font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/40 px-2 py-0.5 rounded-full border border-green-100 dark:border-green-900/50">Live Feed</span>
         </div>
-        <button className="text-xs font-semibold text-blue-600 hover:text-blue-800">View All</button>
+        <button className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">View All</button>
       </div>
 
       <div className="flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar flex-1">
@@ -30,10 +30,10 @@ export function RecentActivity({ items }: { items: ActivityItem[] }) {
               {getIcon(item.icon)}
             </div>
             <div className="flex flex-col flex-1">
-              <span className="text-xs font-bold text-slate-800 leading-tight">{item.title}</span>
-              <span className="text-[10px] text-slate-500 mt-0.5 font-medium">{item.subtitle}</span>
+              <span className="text-xs font-bold text-slate-800 dark:text-white leading-tight">{item.title}</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">{item.subtitle}</span>
             </div>
-            <span className="text-[10px] text-slate-400 font-medium whitespace-nowrap">{item.time}</span>
+            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">{item.time}</span>
           </div>
         ))}
       </div>

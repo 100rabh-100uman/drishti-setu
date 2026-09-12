@@ -5,22 +5,22 @@ export function HealthMaintenanceTrend({ data }: { data: HealthTrendPoint[] }) {
   // In a real implementation, you'd use a charting library like Recharts or Chart.js here.
   
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 h-full flex flex-col">
+    <div className="bg-white dark:bg-[#0c162d] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[12px] font-bold text-slate-800">Health & Maintenance Trend <span className="text-[10px] text-slate-400 font-normal ml-1">(Last 7 Days)</span></h2>
-        <button className="text-xs font-semibold text-blue-600 hover:text-blue-800">View Details</button>
+        <h2 className="text-[12px] font-bold text-slate-800 dark:text-white">Health & Maintenance Trend <span className="text-[10px] text-slate-400 dark:text-slate-500 font-normal ml-1">(Last 7 Days)</span></h2>
+        <button className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">View Details</button>
       </div>
 
       <div className="flex items-center gap-4 mb-4">
-        <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-green-500"></div><span className="text-[10px] font-medium text-slate-600">Online</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-red-500"></div><span className="text-[10px] font-medium text-slate-600">Offline</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-amber-500"></div><span className="text-[10px] font-medium text-slate-600">Maintenance</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500"></div><span className="text-[10px] font-medium text-slate-600">Degraded</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-green-500"></div><span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">Online</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-red-500"></div><span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">Offline</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-amber-500"></div><span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">Maintenance</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500"></div><span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">Degraded</span></div>
       </div>
 
-      <div className="flex-1 relative border-b border-l border-slate-200 mt-2 min-h-[140px]">
+      <div className="flex-1 relative border-b border-l border-slate-200 dark:border-slate-800 mt-2 min-h-[140px]">
         {/* Y-axis Labels */}
-        <div className="absolute -left-6 bottom-0 top-0 flex flex-col justify-between text-[8px] text-slate-400 py-2">
+        <div className="absolute -left-6 bottom-0 top-0 flex flex-col justify-between text-[8px] text-slate-400 dark:text-slate-500 py-2">
           <span>16K</span>
           <span>12K</span>
           <span>8K</span>
@@ -30,10 +30,10 @@ export function HealthMaintenanceTrend({ data }: { data: HealthTrendPoint[] }) {
         
         {/* Grid lines */}
         <div className="absolute inset-0 flex flex-col justify-between pt-3 pb-3">
-          <div className="w-full h-px bg-slate-50"></div>
-          <div className="w-full h-px bg-slate-50"></div>
-          <div className="w-full h-px bg-slate-50"></div>
-          <div className="w-full h-px bg-slate-50"></div>
+          <div className="w-full h-px bg-slate-50 dark:bg-slate-800/60"></div>
+          <div className="w-full h-px bg-slate-50 dark:bg-slate-800/60"></div>
+          <div className="w-full h-px bg-slate-50 dark:bg-slate-800/60"></div>
+          <div className="w-full h-px bg-slate-50 dark:bg-slate-800/60"></div>
         </div>
 
         {/* SVG Chart lines (Mocked paths based on reference visual) */}
@@ -85,7 +85,7 @@ export function HealthMaintenanceTrend({ data }: { data: HealthTrendPoint[] }) {
       </div>
 
       {/* X-axis Labels */}
-      <div className="flex justify-between mt-2 pl-1 pr-1 text-[8px] font-medium text-slate-500">
+      <div className="flex justify-between mt-2 pl-1 pr-1 text-[8px] font-medium text-slate-500 dark:text-slate-400">
         {data.map((point, idx) => (
           <span key={idx}>{point.date}</span>
         ))}

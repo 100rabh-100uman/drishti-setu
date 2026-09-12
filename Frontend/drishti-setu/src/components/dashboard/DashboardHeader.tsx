@@ -27,27 +27,27 @@ export function DashboardHeader() {
   return (
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
       <div>
-        <h1 className="text-2xl md:text-[28px] font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+        <h1 className="text-2xl md:text-[28px] font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
           {greeting}, {userName} <span className="text-2xl">👋</span>
         </h1>
-        <p className="text-slate-500 font-medium mt-1">CCTV Infrastructure Overview</p>
+        <p className="text-slate-500 dark:text-slate-400 font-medium mt-1">CCTV Infrastructure Overview</p>
       </div>
       
       <div className="flex flex-col items-end gap-1.5">
-        <div className="flex items-center gap-4 text-sm font-semibold text-slate-700 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm min-w-[300px] justify-center">
+        <div className="flex items-center gap-4 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-[#0c162d] px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm min-w-[300px] justify-center">
           <div className="flex items-center gap-1.5">
-            <Calendar className="w-4 h-4 text-slate-400" />
+            <Calendar className="w-4 h-4 text-slate-400 dark:text-slate-500" />
             <span>{time ? format(time, "dd MMM yyyy, eeee") : "Loading date..."}</span>
           </div>
-          <div className="w-px h-4 bg-slate-300"></div>
+          <div className="w-px h-4 bg-slate-300 dark:bg-slate-700"></div>
           <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-slate-400" />
+            <Clock className="w-4 h-4 text-slate-400 dark:text-slate-500" />
             <span className="min-w-[65px] text-right">{time ? format(time, "hh:mm a") : "--:--"}</span>
           </div>
         </div>
-        <div className="flex items-center gap-1 text-[11px] text-slate-500 font-medium mr-1">
+        <div className="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium mr-1">
           <span>Last updated: just now</span>
-          <RotateCw className="w-3 h-3 cursor-pointer hover:text-slate-800 transition-colors" />
+          <RotateCw className="w-3 h-3 cursor-pointer hover:text-slate-800 dark:hover:text-slate-200 transition-colors" />
         </div>
       </div>
     </div>

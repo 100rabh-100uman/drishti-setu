@@ -192,9 +192,9 @@ export default function DangerActionsPage() {
   }, [alerts, crimePeople]);
 
   return (
-    <div className="min-h-screen bg-[#070e1f] text-slate-100 p-6 space-y-6">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-[#070e1f] text-slate-800 dark:text-slate-100 p-6 space-y-6">
       {/* Page Title & Breadcrumb */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-rose-500 tracking-wider uppercase mb-1">
             <span className="flex h-2 w-2 relative">
@@ -203,11 +203,11 @@ export default function DangerActionsPage() {
             </span>
             Real-Time Threat Detection Grid
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
             <AlertOctagon className="w-8 h-8 text-rose-500" />
             Danger Actions & Crime Bureau
           </h1>
-          <p className="text-sm text-slate-400 mt-0.5">
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-0.5">
             Automated OpenCV neural face recognition matched against Gujarat Police State Wanted Registry.
           </p>
         </div>
@@ -217,7 +217,7 @@ export default function DangerActionsPage() {
           <button
             onClick={() => handleSimulateDetection('CAM001')}
             disabled={simulating}
-            className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-bold py-2.5 px-4 rounded-lg flex items-center gap-2 shadow-lg shadow-rose-600/30 transition-all active:scale-95 disabled:opacity-50"
+            className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-bold py-2.5 px-4 rounded-lg flex items-center gap-2 shadow-md shadow-rose-600/30 transition-all active:scale-95 disabled:opacity-50"
           >
             <Sparkles className="w-4 h-4 animate-spin-slow" />
             {simulating ? 'Simulating...' : 'Simulate CCTV Match'}
@@ -225,91 +225,91 @@ export default function DangerActionsPage() {
 
           <Link
             href="/dashboard"
-            className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-2.5 px-3.5 rounded-lg flex items-center gap-1.5 border border-slate-700 transition-colors"
+            className="bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold py-2.5 px-3.5 rounded-lg flex items-center gap-1.5 border border-slate-200 dark:border-slate-700 shadow-xs transition-colors"
           >
-            <MapPin className="w-4 h-4 text-cyan-400" />
+            <MapPin className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
             GIS Threat Map
           </Link>
 
           <button
             onClick={fetchData}
             disabled={refreshing}
-            className="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition-colors"
+            className="p-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-700 shadow-xs transition-colors"
             title="Refresh Feed"
           >
-            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-rose-400' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-rose-500' : ''}`} />
           </button>
         </div>
       </div>
 
       {/* KPI Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-slate-900/90 border border-rose-500/40 rounded-xl p-4 shadow-lg shadow-rose-950/20 relative overflow-hidden">
+        <div className="bg-white dark:bg-slate-900/90 border border-rose-200 dark:border-rose-500/40 rounded-xl p-4 shadow-xs dark:shadow-lg dark:shadow-rose-950/20 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-rose-500"></div>
-          <div className="flex items-center justify-between text-slate-400 text-xs font-semibold">
+          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-semibold">
             <span>ACTIVE INCIDENTS</span>
             <span className="flex h-2 w-2 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
             </span>
           </div>
-          <div className="text-3xl font-extrabold text-white mt-2 font-mono">
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2 font-mono">
             {stats.active}
           </div>
-          <p className="text-[11px] text-rose-400 mt-1">Requires immediate response unit</p>
+          <p className="text-[11px] text-rose-600 dark:text-rose-400 mt-1 font-medium">Requires immediate response unit</p>
         </div>
 
-        <div className="bg-slate-900/90 border border-amber-500/30 rounded-xl p-4 shadow-lg shadow-amber-950/20 relative overflow-hidden">
+        <div className="bg-white dark:bg-slate-900/90 border border-amber-200 dark:border-amber-500/30 rounded-xl p-4 shadow-xs dark:shadow-lg dark:shadow-amber-950/20 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
-          <div className="flex items-center justify-between text-slate-400 text-xs font-semibold">
+          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-semibold">
             <span>QRU DISPATCHED</span>
-            <Send className="w-3.5 h-3.5 text-amber-400" />
+            <Send className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
           </div>
-          <div className="text-3xl font-extrabold text-white mt-2 font-mono">
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2 font-mono">
             {stats.dispatched}
           </div>
-          <p className="text-[11px] text-amber-400 mt-1">Units en route to junction</p>
+          <p className="text-[11px] text-amber-600 dark:text-amber-400 mt-1 font-medium">Units en route to junction</p>
         </div>
 
-        <div className="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-4 shadow-lg shadow-emerald-950/20 relative overflow-hidden">
+        <div className="bg-white dark:bg-slate-900/90 border border-emerald-200 dark:border-emerald-500/30 rounded-xl p-4 shadow-xs dark:shadow-lg dark:shadow-emerald-950/20 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
-          <div className="flex items-center justify-between text-slate-400 text-xs font-semibold">
+          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-semibold">
             <span>RESOLVED TODAY</span>
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
           </div>
-          <div className="text-3xl font-extrabold text-white mt-2 font-mono">
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2 font-mono">
             {stats.resolved}
           </div>
-          <p className="text-[11px] text-emerald-400 mt-1">Suspects apprehended / cleared</p>
+          <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">Suspects apprehended / cleared</p>
         </div>
 
-        <div className="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4 shadow-lg shadow-blue-950/20 relative overflow-hidden">
+        <div className="bg-white dark:bg-slate-900/90 border border-blue-200 dark:border-blue-500/30 rounded-xl p-4 shadow-xs dark:shadow-lg dark:shadow-blue-950/20 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
-          <div className="flex items-center justify-between text-slate-400 text-xs font-semibold">
+          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-semibold">
             <span>BUREAU WATCHLIST</span>
-            <Users className="w-3.5 h-3.5 text-blue-400" />
+            <Users className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
           </div>
-          <div className="text-3xl font-extrabold text-white mt-2 font-mono">
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2 font-mono">
             {stats.watchlistCount}
           </div>
-          <p className="text-[11px] text-blue-400 mt-1">High-priority targets indexed</p>
+          <p className="text-[11px] text-blue-600 dark:text-blue-400 mt-1 font-medium">High-priority targets indexed</p>
         </div>
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex items-center justify-between border-b border-slate-800">
+      <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-4">
           <button
             onClick={() => setActiveTab('alerts')}
             className={`pb-3 text-sm font-bold flex items-center gap-2 border-b-2 transition-colors ${
               activeTab === 'alerts'
-                ? 'border-rose-500 text-rose-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-rose-500 text-rose-600 dark:text-rose-400'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
             }`}
           >
             <AlertOctagon className="w-4 h-4" />
             Live Danger Actions
-            <span className="px-1.5 py-0.5 text-[10px] rounded-full bg-rose-950 text-rose-300 border border-rose-700">
+            <span className="px-1.5 py-0.5 text-[10px] rounded-full bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-700 font-bold">
               {alerts.length}
             </span>
           </button>
@@ -318,13 +318,13 @@ export default function DangerActionsPage() {
             onClick={() => setActiveTab('bureau')}
             className={`pb-3 text-sm font-bold flex items-center gap-2 border-b-2 transition-colors ${
               activeTab === 'bureau'
-                ? 'border-blue-500 text-blue-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
             }`}
           >
             <Users className="w-4 h-4" />
             Crime People Bureau
-            <span className="px-1.5 py-0.5 text-[10px] rounded-full bg-blue-950 text-blue-300 border border-blue-700">
+            <span className="px-1.5 py-0.5 text-[10px] rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 font-bold">
               {crimePeople.length}
             </span>
           </button>
@@ -342,17 +342,17 @@ export default function DangerActionsPage() {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 shadow-xs">
         <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
           {/* Search Box */}
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder={activeTab === 'alerts' ? "Search suspect, camera ID, crime..." : "Search name, ID, crime type..."}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500"
             />
           </div>
 
@@ -360,7 +360,7 @@ export default function DangerActionsPage() {
           <select
             value={selectedDept}
             onChange={(e) => setSelectedDept(e.target.value)}
-            className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500"
+            className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500"
           >
             <option value="ALL">All Departments</option>
             {DEPARTMENTS.map(d => (
@@ -372,7 +372,7 @@ export default function DangerActionsPage() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500"
+            className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500"
           >
             <option value="ALL">All Statuses</option>
             {activeTab === 'alerts' ? (
@@ -396,7 +396,7 @@ export default function DangerActionsPage() {
             <select
               value={selectedZone}
               onChange={(e) => setSelectedZone(e.target.value)}
-              className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500"
+              className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-500"
             >
               <option value="ALL">All Zones</option>
               <option value="Z01">Z01 - SG Highway & West</option>
@@ -407,18 +407,18 @@ export default function DangerActionsPage() {
           )}
         </div>
 
-        <div className="text-xs text-slate-400">
-          Showing <span className="text-white font-bold">{activeTab === 'alerts' ? filteredAlerts.length : filteredCrimePeople.length}</span> records
+        <div className="text-xs text-slate-500 dark:text-slate-400">
+          Showing <span className="text-slate-900 dark:text-white font-bold">{activeTab === 'alerts' ? filteredAlerts.length : filteredCrimePeople.length}</span> records
         </div>
       </div>
 
       {/* TAB 1: Live Danger Actions Feed */}
       {activeTab === 'alerts' && (
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+        <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xs dark:shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-slate-950/80 text-slate-400 font-semibold border-b border-slate-800 uppercase tracking-wider">
+                <tr className="bg-slate-50 dark:bg-slate-950/80 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800 uppercase tracking-wider">
                   <th className="py-3 px-4">Suspect</th>
                   <th className="py-3 px-4">Crime Category</th>
                   <th className="py-3 px-4">Camera & Location</th>
@@ -428,10 +428,10 @@ export default function DangerActionsPage() {
                   <th className="py-3 px-4 text-right">Operational Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {filteredAlerts.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-8 text-center text-slate-500">
+                    <td colSpan={7} className="py-8 text-center text-slate-500 dark:text-slate-400">
                       No danger action alerts match current filters.
                     </td>
                   </tr>
@@ -441,14 +441,14 @@ export default function DangerActionsPage() {
                     return (
                       <tr 
                         key={alert.id}
-                        className={`hover:bg-slate-800/40 transition-colors ${
-                          isUrgent ? 'bg-rose-950/20 border-l-4 border-l-rose-500' : ''
+                        className={`hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors ${
+                          isUrgent ? 'bg-rose-50/70 dark:bg-rose-950/20 border-l-4 border-l-rose-500' : ''
                         }`}
                       >
                         {/* Suspect Photo & Name */}
                         <td className="py-3.5 px-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-11 h-11 rounded-lg overflow-hidden border border-slate-700 bg-slate-800 flex-shrink-0 relative">
+                            <div className="w-11 h-11 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex-shrink-0 relative">
                               {alert.person_photo ? (
                                 <img 
                                   src={alert.person_photo} 
@@ -456,19 +456,19 @@ export default function DangerActionsPage() {
                                   className="w-full h-full object-cover" 
                                 />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center text-rose-400">
+                                <div className="w-full h-full flex items-center justify-center text-rose-500">
                                   <ShieldAlert className="w-5 h-5" />
                                 </div>
                               )}
                             </div>
                             <div>
-                              <div className="font-bold text-white text-sm leading-tight flex items-center gap-1.5">
+                              <div className="font-bold text-slate-900 dark:text-white text-sm leading-tight flex items-center gap-1.5">
                                 {alert.person_name || 'Unidentified Suspect'}
                                 {isUrgent && (
                                   <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
                                 )}
                               </div>
-                              <span className="text-[11px] font-mono text-slate-400">
+                              <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
                                 {alert.person_id}
                               </span>
                             </div>
@@ -477,11 +477,11 @@ export default function DangerActionsPage() {
 
                         {/* Crime Category */}
                         <td className="py-3.5 px-4">
-                          <span className="text-slate-300 font-medium block">
+                          <span className="text-slate-800 dark:text-slate-300 font-medium block">
                             {alert.crime_type || 'Dangerous Person Identified'}
                           </span>
                           {alert.metadata?.confidence && (
-                            <span className="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800 px-1.5 py-0.5 rounded">
+                            <span className="text-[10px] text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-1.5 py-0.5 rounded font-semibold">
                               {Math.round(alert.metadata.confidence * 100)}% Match
                             </span>
                           )}
@@ -489,33 +489,33 @@ export default function DangerActionsPage() {
 
                         {/* Camera & Location */}
                         <td className="py-3.5 px-4">
-                          <div className="font-mono text-cyan-400 font-bold flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5 text-cyan-500 flex-shrink-0" />
+                          <div className="font-mono text-blue-600 dark:text-cyan-400 font-bold flex items-center gap-1">
+                            <MapPin className="w-3.5 h-3.5 text-blue-500 dark:text-cyan-500 flex-shrink-0" />
                             {alert.camera_id}
                           </div>
-                          <span className="text-[11px] text-slate-400 block max-w-xs truncate">
+                          <span className="text-[11px] text-slate-500 dark:text-slate-400 block max-w-xs truncate">
                             {alert.camera_address || (alert.metadata?.junction || 'Surveillance Junction')}
                           </span>
                         </td>
 
                         {/* Timestamp */}
-                        <td className="py-3.5 px-4 text-slate-300">
+                        <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">
                           <div className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5 text-slate-400" />
                             <span>{new Date(alert.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                           </div>
-                          <span className="text-[10px] text-slate-500 block">
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500 block">
                             {new Date(alert.timestamp).toLocaleDateString()}
                           </span>
                         </td>
 
                         {/* Department */}
                         <td className="py-3.5 px-4">
-                          <span className="text-slate-300 font-medium">
+                          <span className="text-slate-800 dark:text-slate-300 font-medium">
                             {DEPARTMENTS.find(d => d.id === alert.department_id)?.name || 'Gujarat Police'}
                           </span>
                           {alert.metadata?.zone && (
-                            <span className="text-[10px] text-slate-400 block">
+                            <span className="text-[10px] text-slate-500 dark:text-slate-400 block">
                               Zone: {alert.metadata.zone}
                             </span>
                           )}
@@ -524,19 +524,19 @@ export default function DangerActionsPage() {
                         {/* Alert Status */}
                         <td className="py-3.5 px-4">
                           {alert.alert_status === 'ACTIVE' && (
-                            <span className="px-2.5 py-1 text-[11px] font-bold rounded-md bg-rose-950 text-rose-300 border border-rose-600 flex items-center gap-1.5 w-max">
+                            <span className="px-2.5 py-1 text-[11px] font-bold rounded-md bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-600 flex items-center gap-1.5 w-max">
                               <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
                               ACTIVE ALERT
                             </span>
                           )}
                           {alert.alert_status === 'DISPATCHED' && (
-                            <span className="px-2.5 py-1 text-[11px] font-bold rounded-md bg-amber-950 text-amber-300 border border-amber-600 flex items-center gap-1.5 w-max">
+                            <span className="px-2.5 py-1 text-[11px] font-bold rounded-md bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-600 flex items-center gap-1.5 w-max">
                               <Send className="w-3 h-3" />
                               DISPATCHED
                             </span>
                           )}
                           {alert.alert_status === 'RESOLVED' && (
-                            <span className="px-2.5 py-1 text-[11px] font-bold rounded-md bg-emerald-950 text-emerald-300 border border-emerald-600 flex items-center gap-1.5 w-max">
+                            <span className="px-2.5 py-1 text-[11px] font-bold rounded-md bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-600 flex items-center gap-1.5 w-max">
                               <CheckCircle2 className="w-3 h-3" />
                               RESOLVED
                             </span>
@@ -568,7 +568,7 @@ export default function DangerActionsPage() {
 
                             <Link
                               href="/dashboard"
-                              className="p-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded border border-slate-700 transition-colors"
+                              className="p-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-blue-600 dark:text-cyan-400 rounded border border-slate-200 dark:border-slate-700 transition-colors shadow-xs"
                               title="Locate on GIS Map"
                             >
                               <MapPin className="w-3.5 h-3.5" />
@@ -576,7 +576,7 @@ export default function DangerActionsPage() {
 
                             <Link
                               href={`/cameras?id=${alert.camera_id}`}
-                              className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition-colors"
+                              className="p-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 transition-colors shadow-xs"
                               title="View Camera Stream"
                             >
                               <Eye className="w-3.5 h-3.5" />
@@ -599,11 +599,11 @@ export default function DangerActionsPage() {
           {filteredCrimePeople.map((person) => (
             <div 
               key={person.person_id}
-              className="bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-xl overflow-hidden shadow-lg transition-all"
+              className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-xl overflow-hidden shadow-xs dark:shadow-lg transition-all"
             >
               <div className="p-4 flex items-start gap-3.5">
                 {/* Photo with status badge */}
-                <div className="relative w-20 h-24 rounded-lg overflow-hidden border border-slate-700 bg-slate-950 flex-shrink-0">
+                <div className="relative w-20 h-24 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-950 flex-shrink-0">
                   <img 
                     src={person.photo} 
                     alt={person.name} 
@@ -621,33 +621,33 @@ export default function DangerActionsPage() {
                 {/* Suspect details */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-1">
-                    <h3 className="font-bold text-white text-base leading-tight truncate">
+                    <h3 className="font-bold text-slate-900 dark:text-white text-base leading-tight truncate">
                       {person.name}
                     </h3>
                     <button
                       onClick={() => handleDeleteSuspect(person.person_id)}
-                      className="text-slate-500 hover:text-rose-400 p-1 transition-colors"
+                      className="text-slate-400 hover:text-rose-500 p-1 transition-colors"
                       title="Delete suspect"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
-                  <span className="text-[11px] font-mono text-slate-400 block mt-0.5">
+                  <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 block mt-0.5">
                     {person.person_id}
                   </span>
 
-                  <p className="text-xs text-rose-400 font-medium mt-2 line-clamp-2">
+                  <p className="text-xs text-rose-600 dark:text-rose-400 font-medium mt-2 line-clamp-2">
                     {person.crime_type}
                   </p>
 
-                  <div className="mt-3 text-[11px] text-slate-400 flex items-center justify-between border-t border-slate-800/80 pt-2">
+                  <div className="mt-3 text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80 pt-2">
                     <span>
                       {DEPARTMENTS.find(d => d.id === person.department_id)?.name.replace('Department', '') || 'Police'}
                     </span>
                     <button
                       onClick={() => handleSimulateDetection('CAM001')}
-                      className="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1"
+                      className="text-blue-600 dark:text-cyan-400 hover:underline font-semibold flex items-center gap-1"
                     >
                       Test Match <ChevronRight className="w-3 h-3" />
                     </button>
@@ -661,16 +661,16 @@ export default function DangerActionsPage() {
 
       {/* Modal: Register Suspect */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in duration-200">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <Users className="w-5 h-5 text-blue-500" />
+        <div className="fixed inset-0 z-50 bg-black/60 dark:bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in duration-200">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Users className="w-5 h-5 text-blue-600 dark:text-blue-500" />
                 Add Wanted Suspect to Bureau
               </h3>
               <button 
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-white"
+                className="text-slate-400 hover:text-slate-700 dark:hover:text-white"
               >
                 ✕
               </button>
@@ -678,7 +678,7 @@ export default function DangerActionsPage() {
 
             <form onSubmit={handleAddSuspect} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Full Name of Suspect *
                 </label>
                 <input
@@ -687,12 +687,12 @@ export default function DangerActionsPage() {
                   placeholder="e.g., Jagdish Patel"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Crime Classification *
                 </label>
                 <input
@@ -701,19 +701,19 @@ export default function DangerActionsPage() {
                   placeholder="e.g., Organized Extortion, Armed Robbery"
                   value={formData.crime_type}
                   onChange={(e) => setFormData({ ...formData, crime_type: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Department
                   </label>
                   <select
                     value={formData.department_id}
                     onChange={(e) => setFormData({ ...formData, department_id: Number(e.target.value) })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                   >
                     {DEPARTMENTS.map(d => (
                       <option key={d.id} value={d.id}>{d.name}</option>
@@ -722,13 +722,13 @@ export default function DangerActionsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Alert Status
                   </label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                   >
                     <option value="WANTED">WANTED</option>
                     <option value="HIGH_ALERT">HIGH_ALERT</option>
@@ -739,42 +739,42 @@ export default function DangerActionsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Suspect Photo (Preset or Direct URL)
                 </label>
                 <select
                   value={formData.photo}
                   onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 mb-2"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 mb-2"
                 >
                   {SAMPLE_PHOTO_PRESETS.map((p, i) => (
                     <option key={i} value={p.url}>{p.label}</option>
                   ))}
                 </select>
 
-                <div className="flex items-center gap-3 bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+                <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800">
                   <img 
                     src={formData.photo} 
                     alt="Preview" 
-                    className="w-12 h-12 object-cover rounded border border-slate-700" 
+                    className="w-12 h-12 object-cover rounded border border-slate-200 dark:border-slate-700" 
                   />
-                  <div className="text-[11px] text-slate-400">
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
                     Neural embeddings will be generated automatically for facial matching.
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold"
+                  className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold shadow-sm transition-colors"
                 >
                   Register in Watchlist
                 </button>

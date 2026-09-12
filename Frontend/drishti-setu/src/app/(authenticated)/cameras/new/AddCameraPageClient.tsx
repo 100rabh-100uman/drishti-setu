@@ -42,7 +42,7 @@ export default function AddCameraPageClient() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-20">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-transparent pb-20">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <AddCameraHeader />
         
@@ -55,7 +55,7 @@ export default function AddCameraPageClient() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Form Area */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 min-h-[600px]">
+            <div className="bg-white dark:bg-[#0c162d] rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 p-8 min-h-[600px]">
               <form onSubmit={(e) => e.preventDefault()}>
                 {currentStep === 1 && <CameraIdentityStep form={form} />}
                 {currentStep === 2 && (
