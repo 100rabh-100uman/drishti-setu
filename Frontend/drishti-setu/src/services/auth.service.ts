@@ -55,13 +55,21 @@ class AuthService {
       departmentId: userRaw.department_id,
     };
 
+    const isUserAdmin = user.role === 'Admin' || user.employee_id === 'EMP001' || user.employee_id?.toLowerCase() === 'admin';
+    const deptName = user.department_name && user.department_name !== 'Gujarat Police'
+      ? user.department_name
+      : (isUserAdmin ? 'Department of Home Affairs' : (user.department_name || 'Gujarat Police Department'));
+
     const department: Department = {
-      id: user.department_id ?? 1,
-      name: user.department_name || 'Gujarat Police',
+      id: user.department_id ?? (isUserAdmin ? 0 : 1),
+      name: deptName,
     };
 
     const session: AuthSession = {
-      user,
+      user: {
+        ...user,
+        department_name: deptName,
+      },
       department,
       token: res.access_token,
       token_type: res.token_type || 'bearer',
@@ -74,6 +82,7 @@ class AuthService {
 
     if (typeof window !== 'undefined') {
       localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+      window.dispatchEvent(new CustomEvent('drishti:department_changed', { detail: session }));
     }
 
     return session;
@@ -125,14 +134,25 @@ class AuthService {
         departmentId: profile.department_id,
       };
 
+      const isUserAdmin = user.role === 'Admin' || user.employee_id === 'EMP001' || user.employee_id?.toLowerCase() === 'admin';
+      const existingSession = this.getCurrentSession();
+      // Keep existing switched department if officer switched it interactively
+      const activeDeptName = existingSession?.department?.name || (
+        user.department_name && user.department_name !== 'Gujarat Police'
+          ? user.department_name
+          : (isUserAdmin ? 'Department of Home Affairs' : (user.department_name || 'Gujarat Police Department'))
+      );
+
       const department: Department = {
-        id: user.department_id ?? 1,
-        name: user.department_name || 'Gujarat Police',
+        id: user.department_id ?? (isUserAdmin ? 0 : 1),
+        name: activeDeptName,
       };
 
-      const existingSession = this.getCurrentSession();
       const updatedSession: AuthSession = {
-        user,
+        user: {
+          ...user,
+          department_name: activeDeptName,
+        },
         department,
         token,
         token_type: existingSession?.token_type || 'bearer',
@@ -160,6 +180,34 @@ class AuthService {
       this.logout();
       return null;
     }
+  }
+
+  /**
+   * Switches the active departmental context and persists it to session.
+   * Dispatches 'drishti:department_changed' event across windows/components.
+   */
+  switchDepartment(deptName: string, deptId?: number): AuthSession | null {
+    const session = this.getCurrentSession();
+    if (!session) return null;
+
+    session.department = {
+      id: deptId ?? session.department?.id ?? 1,
+      name: deptName,
+    };
+
+    if (session.user) {
+      session.user.department_name = deptName;
+      if (deptId !== undefined) {
+        session.user.department_id = deptId;
+      }
+    }
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+      window.dispatchEvent(new CustomEvent('drishti:department_changed', { detail: session }));
+    }
+
+    return session;
   }
 
   /**

@@ -12,7 +12,7 @@ interface ApiOnboardingWizardProps {
 
 export function ApiOnboardingWizard({ currentStep, completedSteps, onStepClick }: ApiOnboardingWizardProps) {
   return (
-    <div className="bg-white/80 backdrop-blur-sm border border-white/60 rounded-2xl p-5 px-8 shadow-sm mb-8">
+    <div className="bg-white/80 dark:bg-[#0c162d]/90 backdrop-blur-sm border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 px-8 shadow-sm mb-8">
       <div className="flex items-center justify-between">
         {API_ONBOARDING_STEPS.map((step, idx) => {
           const isCompleted = completedSteps.has(step.id);
@@ -35,9 +35,9 @@ export function ApiOnboardingWizard({ currentStep, completedSteps, onStepClick }
                 <div
                   className={cn(
                     "w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300",
-                    isCompleted && "bg-emerald-600 text-white shadow-md shadow-emerald-200",
-                    isActive && "bg-blue-600 text-white shadow-md shadow-blue-200 ring-4 ring-blue-100",
-                    isPending && "bg-slate-100 text-slate-400 border-2 border-slate-200"
+                    isCompleted && "bg-emerald-600 text-white shadow-md shadow-emerald-200 dark:shadow-none",
+                    isActive && "bg-blue-600 text-white shadow-md shadow-blue-200 dark:shadow-none ring-4 ring-blue-100 dark:ring-blue-900/40",
+                    isPending && "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-2 border-slate-200 dark:border-slate-700"
                   )}
                 >
                   {isCompleted ? <Check className="w-4 h-4 stroke-[2.5]" /> : step.id}
@@ -45,9 +45,9 @@ export function ApiOnboardingWizard({ currentStep, completedSteps, onStepClick }
                 <span
                   className={cn(
                     "text-[11px] font-bold transition-colors whitespace-nowrap",
-                    isCompleted && "text-emerald-700",
-                    isActive && "text-blue-700",
-                    isPending && "text-slate-400"
+                    isCompleted && "text-emerald-700 dark:text-emerald-400",
+                    isActive && "text-blue-700 dark:text-blue-400",
+                    isPending && "text-slate-400 dark:text-slate-500"
                   )}
                 >
                   {step.label}
@@ -60,8 +60,8 @@ export function ApiOnboardingWizard({ currentStep, completedSteps, onStepClick }
                   <div
                     className={cn(
                       "h-0.5 rounded-full transition-all duration-500",
-                      completedSteps.has(step.id) ? "bg-emerald-400" :
-                      isActive ? "bg-blue-300" : "bg-slate-200"
+                      completedSteps.has(step.id) ? "bg-emerald-400 dark:bg-emerald-600" :
+                      isActive ? "bg-blue-300 dark:bg-blue-600" : "bg-slate-200 dark:bg-slate-700"
                     )}
                   />
                 </div>

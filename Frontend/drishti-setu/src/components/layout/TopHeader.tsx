@@ -18,9 +18,49 @@ import {
   ArrowRight,
   ExternalLink
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { authService } from "@/services/auth.service";
 import { AuthSession } from "@/types/auth";
 import { useTheme } from "@/context/ThemeContext";
+
+const AVAILABLE_DEPARTMENTS = [
+  {
+    id: 1,
+    name: "Department of Home Affairs",
+    subtext: "Govt. of Gujarat • Apex State Command",
+    logo: "/gov_of_guj_logo.svg",
+  },
+  {
+    id: 2,
+    name: "Gujarat Police Department",
+    subtext: "Law Enforcement & Public Safety",
+    logo: "/gpolicelogo.png",
+  },
+  {
+    id: 3,
+    name: "Traffic Management Department",
+    subtext: "Traffic & Transit Monitoring",
+    logo: "/gpolicelogo.png",
+  },
+  {
+    id: 4,
+    name: "Health & Family Welfare",
+    subtext: "Hospital & Emergency Feeds",
+    logo: "/gov_of_guj_logo.svg",
+  },
+  {
+    id: 5,
+    name: "Roads & Buildings Department",
+    subtext: "Highways & Toll Infrastructure",
+    logo: "/gov_of_guj_logo.svg",
+  },
+  {
+    id: 6,
+    name: "Disaster Management Authority",
+    subtext: "State Emergency Response",
+    logo: "/gov_of_guj_logo.svg",
+  },
+];
 
 export function TopHeader() {
   const router = useRouter();
@@ -28,13 +68,26 @@ export function TopHeader() {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showDeptMenu, setShowDeptMenu] = useState(false);
   const [unreadCount, setUnreadCount] = useState(3);
 
   const notifRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
+  const deptRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setSession(authService.getCurrentSession());
+
+    // Listen for department changes across app
+    const handleDeptChange = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail) {
+        setSession(customEvent.detail);
+      } else {
+        setSession(authService.getCurrentSession());
+      }
+    };
+    window.addEventListener('drishti:department_changed', handleDeptChange);
 
     // Close popups on click outside
     const handleClickOutside = (e: MouseEvent) => {
@@ -44,14 +97,30 @@ export function TopHeader() {
       if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
         setShowProfileMenu(false);
       }
+      if (deptRef.current && !deptRef.current.contains(e.target as Node)) {
+        setShowDeptMenu(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener('drishti:department_changed', handleDeptChange);
+    };
   }, []);
 
-  const departmentName = session?.department?.name || session?.user?.department_name || "Department";
+  const departmentName = session?.department?.name || session?.user?.department_name || (session?.user?.role === 'Admin' ? 'Department of Home Affairs' : 'Gujarat Police Department');
   const userName = session?.user?.username || session?.user?.name || "Officer";
   const userRole = session?.user?.role || "Authorized User";
+  const isAdmin = userRole === 'Admin' || session?.user?.role === 'Admin' || departmentName.toLowerCase().includes('home') || session?.user?.employee_id === 'EMP001';
+
+  // Determine logo and subtitle dynamically
+  const isPolice = departmentName.toLowerCase().includes('police');
+  const departmentLogo = (isAdmin || !isPolice) ? "/gov_of_guj_logo.svg" : "/gpolicelogo.png";
+  const departmentSubtitle = isAdmin 
+    ? "Govt. of Gujarat • State Command Portal" 
+    : isPolice 
+      ? "Law Enforcement Command"
+      : "Multi-Department Portal";
 
   const handleLogout = () => {
     authService.logout();
@@ -64,16 +133,95 @@ export function TopHeader() {
 
   return (
     <header className="h-16 bg-white dark:bg-[#091124] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-40 transition-colors duration-200">
-      {/* Context Selection */}
-      <div className="flex items-center gap-3">
-        <Image src="/gpolicelogo.png" alt="Department Logo" width={32} height={32} className="object-contain" />
-        <div className="flex flex-col">
-          <div className="flex items-center gap-1 cursor-pointer">
-            <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">{departmentName}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
+      {/* Context Selection with Dropdown */}
+      <div className="relative" ref={deptRef}>
+        <button
+          type="button"
+          onClick={() => setShowDeptMenu((prev) => !prev)}
+          className="flex items-center gap-3 p-1.5 -ml-1.5 rounded-xl hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors text-left group cursor-pointer"
+          title="Switch Department Context"
+        >
+          <div className="relative w-9 h-9 rounded-lg bg-slate-50 dark:bg-slate-800/80 p-1 flex items-center justify-center border border-slate-200/80 dark:border-slate-700/80 flex-shrink-0 group-hover:border-blue-400 transition-colors">
+            <Image 
+              src={departmentLogo} 
+              alt={`${departmentName} Logo`} 
+              width={30} 
+              height={30} 
+              className="object-contain" 
+            />
           </div>
-          <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">Command Portal</span>
-        </div>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                {departmentName}
+              </span>
+              <ChevronDown className={cn("w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-transform duration-200", showDeptMenu && "rotate-180")} />
+            </div>
+            <span className="text-[11px] text-blue-600 dark:text-blue-400 font-medium">
+              {departmentSubtitle}
+            </span>
+          </div>
+        </button>
+
+        {/* Department Switcher Dropdown Menu */}
+        {showDeptMenu && (
+          <div className="absolute left-0 mt-2 w-76 bg-white dark:bg-[#0c162d] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+            <div className="px-3.5 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                Select Department View
+              </span>
+              {isAdmin && (
+                <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 border border-amber-200/60 dark:border-amber-800/60 px-2 py-0.5 rounded-full">
+                  Admin Mode
+                </span>
+              )}
+            </div>
+
+            <div className="p-1 space-y-0.5 max-h-72 overflow-y-auto">
+              {AVAILABLE_DEPARTMENTS.map((dept) => {
+                const isSelected = dept.name === departmentName;
+                return (
+                  <button
+                    key={dept.id}
+                    type="button"
+                    onClick={() => {
+                      authService.switchDepartment(dept.name, dept.id);
+                      setSession(authService.getCurrentSession());
+                      setShowDeptMenu(false);
+                    }}
+                    className={cn(
+                      "w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left transition-colors cursor-pointer",
+                      isSelected
+                        ? "bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-semibold"
+                        : "hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-200"
+                    )}
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-white dark:bg-slate-800 p-0.5 border border-slate-200 dark:border-slate-700 flex items-center justify-center flex-shrink-0">
+                      <Image
+                        src={dept.logo}
+                        alt={dept.name}
+                        width={22}
+                        height={22}
+                        className="object-contain"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-bold truncate">
+                        {dept.name}
+                      </div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                        {dept.subtext}
+                      </div>
+                    </div>
+                    {isSelected && (
+                      <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Global Search */}

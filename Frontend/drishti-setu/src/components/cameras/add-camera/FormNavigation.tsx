@@ -20,23 +20,23 @@ export function FormNavigation({
   onSubmit,
 }: FormNavigationProps) {
   return (
-    <div className="bg-white border-t border-slate-200 px-6 py-4 sticky bottom-0 z-20 flex items-center justify-between shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
+    <div className="bg-white dark:bg-[#091124] border-t border-slate-200 dark:border-slate-800 px-6 py-4 sticky bottom-0 z-20 flex items-center justify-between shadow-[0_-4px_20px_rgba(0,0,0,0.03)] dark:shadow-none">
       {/* Left - Back Button on EVERY step */}
       <div>
         <button
           type="button"
           onClick={onBack}
           disabled={isSubmitting}
-          className="flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 px-4 py-2.5 rounded-xl hover:bg-slate-100 active:scale-[0.98] transition-all disabled:opacity-50"
+          className="flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white px-4 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-[0.98] transition-all disabled:opacity-50"
         >
           {currentStep === 1 ? (
             <>
-              <ArrowLeft className="w-4 h-4 text-slate-500" />
+              <ArrowLeft className="w-4 h-4 text-slate-500 dark:text-slate-400" />
               <span>Back to Dashboard</span>
             </>
           ) : (
             <>
-              <ArrowLeft className="w-4 h-4 text-slate-500" />
+              <ArrowLeft className="w-4 h-4 text-slate-500 dark:text-slate-400" />
               <span>Back</span>
             </>
           )}
@@ -49,9 +49,9 @@ export function FormNavigation({
           type="button"
           onClick={onSaveDraft}
           disabled={isSubmitting}
-          className="flex items-center gap-2 text-sm font-bold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 active:scale-[0.98] px-5 py-2.5 rounded-xl transition-all shadow-sm disabled:opacity-50"
+          className="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-[0.98] px-5 py-2.5 rounded-xl transition-all shadow-sm disabled:opacity-50"
         >
-          <Save className="w-4 h-4 text-slate-500" />
+          <Save className="w-4 h-4 text-slate-500 dark:text-slate-400" />
           <span>Save Draft</span>
         </button>
 

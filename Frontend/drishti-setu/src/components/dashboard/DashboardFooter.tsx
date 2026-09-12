@@ -17,7 +17,7 @@ export function DashboardFooter() {
       <div className="flex items-center gap-4 text-slate-400 dark:text-slate-500">
         <span>© 2025 DRISHTI SETU - Government of Gujarat</span>
         <span>|</span>
-        <span className="text-blue-600 dark:text-blue-400">Gujarat Police</span>
+        <span className="text-blue-600 dark:text-blue-400">Unified State Surveillance Grid</span>
       </div>
 
       <div className="flex items-center gap-6">

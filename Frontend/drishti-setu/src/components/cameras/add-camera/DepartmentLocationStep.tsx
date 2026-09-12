@@ -32,24 +32,24 @@ export function DepartmentLocationStep({ form, departments, zones, loadingZones,
   };
 
   const inputClass = (field: keyof CameraFormData) =>
-    `block w-full px-4 py-3 text-sm rounded-lg border ${errors[field] ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500/20'} focus:ring-2 outline-none transition-all bg-white`;
+    `block w-full px-4 py-3 text-sm rounded-lg border ${errors[field] ? 'border-red-300 dark:border-red-500/50 focus:border-red-500 focus:ring-red-500/20' : 'border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-500/20'} focus:ring-2 outline-none transition-all bg-white dark:bg-slate-900/90 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500`;
 
   return (
     <div className="space-y-6">
       {/* Section header */}
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-          <MapPin className="w-4 h-4 text-blue-600" />
+        <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 flex items-center justify-center">
+          <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
         </div>
         <div>
-          <h3 className="text-base font-bold text-[#0a1b3f]">Department & Location</h3>
-          <p className="text-xs text-slate-500">Assign department, zone, and physical location</p>
+          <h3 className="text-base font-bold text-[#0a1b3f] dark:text-white">Department & Location</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Assign department, zone, and physical location</p>
         </div>
       </div>
 
       {/* Department */}
       <div className="space-y-1.5">
-        <label htmlFor="department" className="flex items-center gap-2 text-sm font-semibold text-[#0a1b3f]">
+        <label htmlFor="department" className="flex items-center gap-2 text-sm font-semibold text-[#0a1b3f] dark:text-slate-200">
           <Building2 className="w-3.5 h-3.5 text-slate-400" />
           Department <span className="text-red-500">*</span>
         </label>
@@ -57,11 +57,11 @@ export function DepartmentLocationStep({ form, departments, zones, loadingZones,
           id="department"
           value={selectedDept}
           onChange={handleDepartmentChange}
-          className={inputClass("department") + " appearance-none"}
+          className={inputClass("department") + " appearance-none cursor-pointer"}
         >
-          <option value="">Select Department</option>
+          <option value="" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100">Select Department</option>
           {departments.map((dept) => (
-            <option key={dept.id} value={dept.name}>{dept.name}</option>
+            <option key={dept.id} value={dept.name} className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100">{dept.name}</option>
           ))}
         </select>
         {errors.department && <p className="text-xs text-red-500 font-medium">{errors.department.message}</p>}
@@ -69,7 +69,7 @@ export function DepartmentLocationStep({ form, departments, zones, loadingZones,
 
       {/* Zone */}
       <div className="space-y-1.5">
-        <label htmlFor="zone" className="flex items-center gap-2 text-sm font-semibold text-[#0a1b3f]">
+        <label htmlFor="zone" className="flex items-center gap-2 text-sm font-semibold text-[#0a1b3f] dark:text-slate-200">
           <Navigation className="w-3.5 h-3.5 text-slate-400" />
           Zone <span className="text-red-500">*</span>
         </label>
@@ -77,11 +77,11 @@ export function DepartmentLocationStep({ form, departments, zones, loadingZones,
           id="zone"
           {...register("zone")}
           disabled={!selectedDept || loadingZones}
-          className={inputClass("zone") + " appearance-none disabled:bg-slate-50 disabled:text-slate-400"}
+          className={inputClass("zone") + " appearance-none cursor-pointer disabled:bg-slate-50 dark:disabled:bg-slate-950 disabled:text-slate-400"}
         >
-          <option value="">{loadingZones ? "Loading zones..." : !selectedDept ? "Select department first" : "Select Zone"}</option>
+          <option value="" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100">{loadingZones ? "Loading zones..." : !selectedDept ? "Select department first" : "Select Zone"}</option>
           {zones.map((z) => (
-            <option key={z.id} value={z.name}>{z.name}</option>
+            <option key={z.id} value={z.name} className="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100">{z.name}</option>
           ))}
         </select>
         {errors.zone && <p className="text-xs text-red-500 font-medium">{errors.zone.message}</p>}
@@ -89,7 +89,7 @@ export function DepartmentLocationStep({ form, departments, zones, loadingZones,
 
       {/* Address */}
       <div className="space-y-1.5">
-        <label htmlFor="address" className="flex items-center gap-2 text-sm font-semibold text-[#0a1b3f]">
+        <label htmlFor="address" className="flex items-center gap-2 text-sm font-semibold text-[#0a1b3f] dark:text-slate-200">
           <MapPin className="w-3.5 h-3.5 text-slate-400" />
           Address <span className="text-red-500">*</span>
         </label>
@@ -106,7 +106,7 @@ export function DepartmentLocationStep({ form, departments, zones, loadingZones,
       {/* Coordinates */}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label htmlFor="latitude" className="flex items-center gap-2 text-sm font-semibold text-[#0a1b3f]">
+          <label htmlFor="latitude" className="flex items-center gap-2 text-sm font-semibold text-[#0a1b3f] dark:text-slate-200">
             <Globe className="w-3.5 h-3.5 text-slate-400" />
             Latitude <span className="text-red-500">*</span>
           </label>
@@ -120,7 +120,7 @@ export function DepartmentLocationStep({ form, departments, zones, loadingZones,
           {errors.latitude && <p className="text-xs text-red-500 font-medium">{errors.latitude.message}</p>}
         </div>
         <div className="space-y-1.5">
-          <label htmlFor="longitude" className="flex items-center gap-2 text-sm font-semibold text-[#0a1b3f]">
+          <label htmlFor="longitude" className="flex items-center gap-2 text-sm font-semibold text-[#0a1b3f] dark:text-slate-200">
             <Globe className="w-3.5 h-3.5 text-slate-400" />
             Longitude <span className="text-red-500">*</span>
           </label>

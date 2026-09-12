@@ -12,7 +12,7 @@ interface CameraFormStepperProps {
 
 export function CameraFormStepper({ currentStep, completedSteps, onStepClick }: CameraFormStepperProps) {
   return (
-    <div className="bg-white/70 backdrop-blur-sm border border-white/50 rounded-xl p-4 px-8 shadow-sm mb-6">
+    <div className="bg-white dark:bg-[#0c162d] border border-slate-200/80 dark:border-slate-800 rounded-xl p-4 px-8 shadow-sm mb-6">
       <div className="flex items-center justify-between">
         {FORM_STEPS.map((step, idx) => {
           const isCompleted = completedSteps.has(step.id);
@@ -35,9 +35,9 @@ export function CameraFormStepper({ currentStep, completedSteps, onStepClick }: 
                 <div
                   className={cn(
                     "w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300",
-                    isCompleted && "bg-green-500 text-white shadow-md shadow-green-200",
-                    isActive && "bg-blue-600 text-white shadow-md shadow-blue-200 ring-4 ring-blue-100",
-                    isPending && "bg-slate-100 text-slate-400 border-2 border-slate-200"
+                    isCompleted && "bg-green-500 text-white shadow-md shadow-green-200 dark:shadow-none",
+                    isActive && "bg-blue-600 text-white shadow-md shadow-blue-200 dark:shadow-none ring-4 ring-blue-100 dark:ring-blue-900/40",
+                    isPending && "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-2 border-slate-200 dark:border-slate-700"
                   )}
                 >
                   {isCompleted ? <Check className="w-4 h-4" /> : step.id}
@@ -45,9 +45,9 @@ export function CameraFormStepper({ currentStep, completedSteps, onStepClick }: 
                 <span
                   className={cn(
                     "text-[11px] font-bold transition-colors whitespace-nowrap",
-                    isCompleted && "text-green-600",
-                    isActive && "text-blue-600",
-                    isPending && "text-slate-400"
+                    isCompleted && "text-green-600 dark:text-green-400",
+                    isActive && "text-blue-600 dark:text-blue-400",
+                    isPending && "text-slate-400 dark:text-slate-500"
                   )}
                 >
                   {step.label}
@@ -60,8 +60,8 @@ export function CameraFormStepper({ currentStep, completedSteps, onStepClick }: 
                   <div
                     className={cn(
                       "h-0.5 rounded-full transition-all duration-500",
-                      completedSteps.has(step.id) ? "bg-green-400" :
-                      isActive ? "bg-blue-300" : "bg-slate-200"
+                      completedSteps.has(step.id) ? "bg-green-400 dark:bg-green-500" :
+                      isActive ? "bg-blue-300 dark:bg-blue-500" : "bg-slate-200 dark:bg-slate-800"
                     )}
                   />
                 </div>

@@ -109,9 +109,12 @@ def login(user: UserLogin):
             # Query department name
             try:
                 dept_res = supabase.table("departments").select("id, name").eq("id", user_record.get("department_id", 1)).execute()
-                dept_name = dept_res.data[0]["name"] if dept_res.data else "Gujarat Police Department"
+                dept_name = dept_res.data[0]["name"] if dept_res.data else ("Department of Home Affairs" if user_role == "Admin" else "Gujarat Police Department")
             except Exception:
-                dept_name = "Gujarat Police Department"
+                dept_name = "Department of Home Affairs" if user_role == "Admin" else "Gujarat Police Department"
+
+            if user_role == "Admin" and dept_name == "Gujarat Police Department":
+                dept_name = "Department of Home Affairs"
 
             access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
             access_token = create_access_token(
@@ -155,7 +158,7 @@ def login(user: UserLogin):
     if valid_demo:
         is_admin = "admin" in emp_id.lower() or emp_id.upper() in ["EMP001", "GP001"]
         user_role = "Admin" if is_admin else "Inspector"
-        dept_name = "Gujarat Police Department"
+        dept_name = "Department of Home Affairs" if is_admin else "Gujarat Police Department"
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data={"sub": emp_id.upper(), "id": 1, "role": user_role},

@@ -12,10 +12,10 @@ interface ApiFieldMappingTableProps {
 
 export function ApiFieldMappingTable({ mappings, onUpdateMapping }: ApiFieldMappingTableProps) {
   return (
-    <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+    <div className="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
       <div className="overflow-x-auto max-h-[460px]">
         <table className="w-full text-left text-xs">
-          <thead className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider sticky top-0 z-10">
+          <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider sticky top-0 z-10">
             <tr>
               <th className="py-3.5 px-4">External Source Field</th>
               <th className="py-3.5 px-4">Sample Value</th>
@@ -25,27 +25,27 @@ export function ApiFieldMappingTable({ mappings, onUpdateMapping }: ApiFieldMapp
               <th className="py-3.5 px-4">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 text-slate-700 font-medium">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-200 font-medium">
             {mappings.map((row) => {
               const isMapped = Boolean(row.drishti_field);
 
               return (
-                <tr key={row.external_field} className="hover:bg-slate-50/70 transition-colors">
+                <tr key={row.external_field} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors">
                   {/* External Field Name */}
-                  <td className="py-3 px-4 font-mono font-bold text-slate-800">
+                  <td className="py-3 px-4 font-mono font-bold text-slate-800 dark:text-slate-100">
                     {row.external_field}
                   </td>
 
                   {/* Sample Value */}
                   <td className="py-3 px-4">
-                    <span className="font-mono text-[11px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded truncate max-w-[160px] inline-block">
+                    <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded truncate max-w-[160px] inline-block">
                       {row.sample_value || "—"}
                     </span>
                   </td>
 
                   {/* Mapping Arrow */}
                   <td className="py-3 px-2 text-center">
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-300 mx-auto" />
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 mx-auto" />
                   </td>
 
                   {/* DRISHTI SETU Target Field Dropdown */}
@@ -58,13 +58,13 @@ export function ApiFieldMappingTable({ mappings, onUpdateMapping }: ApiFieldMapp
                       className={cn(
                         "w-full px-3 py-1.5 text-xs rounded-lg border outline-none font-medium transition-all",
                         isMapped
-                          ? "bg-blue-50/40 border-blue-200 text-blue-900 focus:border-blue-500"
-                          : "bg-white border-amber-300 text-amber-900 focus:border-amber-500"
+                          ? "bg-blue-50/40 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-200 focus:border-blue-500"
+                          : "bg-white dark:bg-slate-900/90 border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200 focus:border-amber-500"
                       )}
                     >
-                      <option value="">-- Unmapped / Ignore Field --</option>
+                      <option value="" className="dark:bg-slate-900">-- Unmapped / Ignore Field --</option>
                       {DRISHTI_TARGET_FIELDS.map((target) => (
-                        <option key={target.value} value={target.value}>
+                        <option key={target.value} value={target.value} className="dark:bg-slate-900">
                           {target.label} {target.required ? "*" : ""}
                         </option>
                       ))}
@@ -74,11 +74,11 @@ export function ApiFieldMappingTable({ mappings, onUpdateMapping }: ApiFieldMapp
                   {/* Required / Optional Tag */}
                   <td className="py-3 px-4">
                     {row.required ? (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 text-red-700 border border-red-200">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800">
                         Required
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-500">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
                         Optional
                       </span>
                     )}
@@ -87,15 +87,15 @@ export function ApiFieldMappingTable({ mappings, onUpdateMapping }: ApiFieldMapp
                   {/* Mapping Status */}
                   <td className="py-3 px-4">
                     {isMapped ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
                         <CheckCircle2 className="w-3.5 h-3.5" /> Mapped
                       </span>
                     ) : row.required ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-red-600">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-red-600 dark:text-red-400">
                         <AlertTriangle className="w-3.5 h-3.5" /> Missing
                       </span>
                     ) : (
-                      <span className="text-[11px] text-slate-400">Ignored</span>
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500">Ignored</span>
                     )}
                   </td>
                 </tr>

@@ -60,7 +60,7 @@ export function CameraLocationMap({ latitude, longitude, onLocationSelect }: Cam
 
   return (
     <div className="space-y-2">
-      <div className="rounded-lg overflow-hidden border border-slate-200 h-[250px] relative">
+      <div className="rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 h-[250px] relative">
         <Map
           ref={mapRef}
           initialViewState={{
@@ -85,26 +85,26 @@ export function CameraLocationMap({ latitude, longitude, onLocationSelect }: Cam
           <button
             type="button"
             onClick={handleReset}
-            className="w-8 h-8 bg-white rounded-lg shadow-md border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors"
+            className="w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-md border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             title="Reset to Gujarat"
           >
-            <RotateCw className="w-3.5 h-3.5 text-slate-600" />
+            <RotateCw className="w-3.5 h-3.5 text-slate-600 dark:text-slate-300" />
           </button>
         </div>
 
         {/* Instructions overlay */}
         {!hasValidCoords && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm border border-slate-200">
-              <div className="flex items-center gap-2 text-sm text-slate-600">
-                <MapPin className="w-4 h-4 text-blue-600" />
+            <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 <span className="font-medium">Click on the map to set location</span>
               </div>
             </div>
           </div>
         )}
       </div>
-      <p className="text-xs text-slate-500 pl-1">Click on the map to set camera location, or enter coordinates above</p>
+      <p className="text-xs text-slate-500 dark:text-slate-400 pl-1">Click on the map to set camera location, or enter coordinates above</p>
     </div>
   );
 }
