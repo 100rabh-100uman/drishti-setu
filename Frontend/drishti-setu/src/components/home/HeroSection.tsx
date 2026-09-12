@@ -11,6 +11,7 @@ export function HeroSection() {
           src="/herobackground.png"
           alt="DRISHTI SETU Command Center"
           fill
+          sizes="100vw"
           className="object-cover object-right"
           priority
         />

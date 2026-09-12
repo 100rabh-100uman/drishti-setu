@@ -14,14 +14,15 @@ import {
   Plug,
   Activity,
   FileText,
-  MapPin
+  MapPin,
+  Video
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { BulkImportChoiceDialog } from "@/components/cameras/onboarding/BulkImportChoiceDialog";
 
 interface AttentionRequiredProps {
   items: AttentionItem[];
   actions: QuickAction[];
+  className?: string;
 }
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -47,6 +48,7 @@ const textMap: Record<string, string> = {
 
 const actionIconMap: Record<string, React.ReactNode> = {
   'camera-plus': <PlusCircle className="w-6 h-6" />,
+  'video': <Video className="w-6 h-6" />,
   'upload': <UploadCloud className="w-6 h-6" />,
   'api-onboarding': <Plug className="w-6 h-6" />,
   'activity': <Activity className="w-6 h-6" />,
@@ -55,11 +57,9 @@ const actionIconMap: Record<string, React.ReactNode> = {
   'map': <MapPin className="w-6 h-6" />,
 };
 
-export function AttentionRequired({ items, actions }: AttentionRequiredProps) {
-  const [isChoiceOpen, setIsChoiceOpen] = useState(false);
-
+export function AttentionRequired({ items, actions, className }: AttentionRequiredProps) {
   return (
-    <div className="flex flex-col gap-6 col-span-1 lg:col-span-2 h-[520px]">
+    <div className={cn("flex flex-col gap-6 col-span-1 lg:col-span-2 h-[520px]", className)}>
       
       {/* Attention Required Panel */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex-1 overflow-hidden flex flex-col">
@@ -103,45 +103,20 @@ export function AttentionRequired({ items, actions }: AttentionRequiredProps) {
         </div>
 
         <div className="grid grid-cols-3 gap-2 flex-1">
-          {actions.map((action) => {
-            if (action.id === 'import') {
-              return (
-                <button
-                  key={action.id}
-                  type="button"
-                  onClick={() => setIsChoiceOpen(true)}
-                  className="flex flex-col items-center justify-center gap-2 p-2 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all text-center group cursor-pointer"
-                >
-                  <div className={cn("p-2 rounded-lg bg-white shadow-sm border border-slate-100 group-hover:scale-110 transition-transform", action.color)}>
-                    {actionIconMap[action.icon]}
-                  </div>
-                  <span className="text-[9px] font-bold text-slate-600 leading-tight group-hover:text-blue-700">{action.label}</span>
-                </button>
-              );
-            }
-
-            return (
-              <Link
-                key={action.id}
-                href={action.link}
-                className="flex flex-col items-center justify-center gap-2 p-2 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all text-center group"
-              >
-                <div className={cn("p-2 rounded-lg bg-white shadow-sm border border-slate-100 group-hover:scale-110 transition-transform", action.color)}>
-                  {actionIconMap[action.icon]}
-                </div>
-                <span className="text-[9px] font-bold text-slate-600 leading-tight group-hover:text-blue-700">{action.label}</span>
-              </Link>
-            );
-          })}
+          {actions.map((action) => (
+            <Link
+              key={action.id}
+              href={action.link}
+              className="flex flex-col items-center justify-center gap-2 p-2 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all text-center group"
+            >
+              <div className={cn("p-2 rounded-lg bg-white shadow-sm border border-slate-100 group-hover:scale-110 transition-transform", action.color)}>
+                {actionIconMap[action.icon] || <Activity className="w-6 h-6" />}
+              </div>
+              <span className="text-[9px] font-bold text-slate-600 leading-tight group-hover:text-blue-700">{action.label}</span>
+            </Link>
+          ))}
         </div>
       </div>
-
-      {/* Choice Modal for Bulk Import */}
-      <BulkImportChoiceDialog
-        isOpen={isChoiceOpen}
-        onClose={() => setIsChoiceOpen(false)}
-      />
-
     </div>
   );
 }

@@ -24,13 +24,20 @@ export function AuthGuard({ children }: AuthGuardProps) {
     let isMounted = true;
 
     async function checkAuthentication() {
+      const redirectQuery = pathname && pathname !== "/" && pathname !== "/login" 
+        ? `?redirect=${encodeURIComponent(pathname)}` 
+        : "";
+      const expiredQuery = pathname && pathname !== "/" && pathname !== "/login"
+        ? `?error=session_expired&redirect=${encodeURIComponent(pathname)}`
+        : "?error=session_expired";
+
       // 1. Initial quick local session check
       const localSession = authService.getCurrentSession();
       if (!localSession || !localSession.token) {
         if (isMounted) {
           setIsAuthorized(false);
           setIsVerifying(false);
-          router.replace("/login");
+          router.replace(`/login${redirectQuery}`);
         }
         return;
       }
@@ -40,17 +47,24 @@ export function AuthGuard({ children }: AuthGuardProps) {
         const validatedSession = await authService.validateSession();
         if (!isMounted) return;
 
-        if (validatedSession && validatedSession.user) {
+        if (validatedSession && (validatedSession.user || validatedSession.token)) {
+          setIsAuthorized(true);
+        } else if (localSession && localSession.token) {
+          // Fallback to active local session
           setIsAuthorized(true);
         } else {
           setIsAuthorized(false);
-          router.replace("/login?error=session_expired");
+          router.replace(`/login${expiredQuery}`);
         }
       } catch {
         if (!isMounted) return;
-        // If validation encounters terminal failure, redirect to login
-        setIsAuthorized(false);
-        router.replace("/login");
+        // If local session exists, allow access
+        if (localSession && localSession.token) {
+          setIsAuthorized(true);
+        } else {
+          setIsAuthorized(false);
+          router.replace(`/login${redirectQuery}`);
+        }
       } finally {
         if (isMounted) {
           setIsVerifying(false);

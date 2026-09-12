@@ -21,22 +21,38 @@ import {
   Users, 
   Building2, 
   Settings,
-  ChevronLeft
+  ChevronLeft,
+  BookOpen,
+  AlertOctagon,
+  Film
 } from "lucide-react";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
 import { cn } from "@/lib/utils";
+
+interface NavItem {
+  label: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge?: string;
+}
+
+interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
 
 const navGroups = [
   {
     label: "MAIN",
     items: [
       { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+      { label: "Sentinel Resources", href: "/resources", icon: BookOpen },
     ]
   },
   {
     label: "CCTV REGISTRY",
     items: [
+      { label: "Live Camera Feed", href: "/camera-feed", icon: Video },
+      { label: "Recordings", href: "/recordings", icon: Film },
       { label: "All Cameras", href: "/cameras", icon: Video },
       { label: "Add Camera", href: "/cameras/new", icon: PlusCircle },
       { label: "Bulk Import", href: "/cameras/import", icon: UploadCloud },
@@ -47,32 +63,33 @@ const navGroups = [
   {
     label: "OPERATIONS",
     items: [
-      { label: "GIS Map", href: "/gis", icon: MapIcon },
-      { label: "Health Monitoring", href: "/health", icon: Activity },
+      { label: "Danger Actions", href: "/danger-actions", icon: AlertOctagon, badge: "ACTIVE" },
+      { label: "GIS Map", href: "/gis-map", icon: MapIcon },
+      { label: "Health Monitoring", href: "/health-monitoring", icon: Activity },
       { label: "Maintenance", href: "/maintenance", icon: Wrench },
-      { label: "Gap Analysis", href: "/analysis/gaps", icon: BarChart3 },
+      { label: "Gap Analysis", href: "/gap-analysis", icon: BarChart3 },
     ]
   },
   {
     label: "REPORTS & AUDIT",
     items: [
       { label: "Reports", href: "/reports", icon: FileText },
-      { label: "Audit Trail", href: "/audit", icon: ShieldCheck },
+      { label: "Audit Trail", href: "/audit-trail", icon: ShieldCheck },
     ]
   },
   {
     label: "INTEGRATIONS",
     items: [
       { label: "Integrations", href: "/integrations", icon: Network },
-      { label: "Registry API", href: "/api-docs", icon: Database },
+      { label: "Registry API", href: "/registry-api", icon: Database },
     ]
   },
   {
     label: "ADMINISTRATION",
     items: [
-      { label: "Users & Roles", href: "/admin/users", icon: Users },
-      { label: "Departments", href: "/admin/departments", icon: Building2 },
-      { label: "Settings", href: "/admin/settings", icon: Settings },
+      { label: "Users & Roles", href: "/users-roles", icon: Users },
+      { label: "Departments", href: "/departments", icon: Building2 },
+      { label: "Settings", href: "/settings", icon: Settings },
     ]
   }
 ];
@@ -115,7 +132,13 @@ export function Sidebar() {
                       )}
                     >
                       <item.icon className={cn("w-4 h-4", isActive ? "text-white" : "text-slate-400")} />
-                      {item.label}
+                      <span className="flex-1">{item.label}</span>
+                      {item.badge && (
+                        <span className="px-1.5 py-0.5 text-[9px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/40 rounded-full flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+                          {item.badge}
+                        </span>
+                      )}
                     </Link>
                   </li>
                 );

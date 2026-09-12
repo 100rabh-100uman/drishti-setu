@@ -33,3 +33,10 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
+
+# Scratch directory
+scratch/
+
+# CCTV Local Storage recordings
+backend/storage/
+

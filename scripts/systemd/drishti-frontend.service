@@ -1,0 +1,19 @@
+[Unit]
+Description=DRISHTI SETU Next.js Frontend Command Dashboard
+After=network.target drishti-backend.service
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/opt/drishti-setu/Frontend/drishti-setu
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=NEXT_PUBLIC_API_URL=http://localhost:8000
+ExecStart=/usr/bin/npm run start:prod
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/drishti-frontend.log
+StandardError=append:/var/log/drishti-frontend.error.log
+
+[Install]
+WantedBy=multi-user.target

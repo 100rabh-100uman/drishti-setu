@@ -16,11 +16,14 @@ export interface Camera {
   status: CameraStatus;
   latitude: number;
   longitude: number;
+  lat?: number;
+  lng?: number;
   mac_address: string;
   serial_number: string;
-  device_uuid: string;
+  device_uuid?: string;
   ip_address: string;
   needs_review: boolean;
+  department_name?: string;
   created_at?: string;
   updated_at?: string;
 }
