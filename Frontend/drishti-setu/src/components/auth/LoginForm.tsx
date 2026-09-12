@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, Loader2, Lock, Moon, Sun, ShieldCheck, Network, User2, AlertTriangle, KeyRound } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Moon, Sun, Network, User2, AlertTriangle, KeyRound } from "lucide-react";
 import { authService } from "@/services/auth.service";
 import { ApiError } from "@/services/api";
 import { SecureLoginOverlay } from "@/components/auth/SecureLoginOverlay";
@@ -320,32 +320,28 @@ export function LoginForm() {
       </div>
 
       {/* Bottom Features Container */}
-      <div className="absolute bottom-3 w-full px-5 flex justify-center z-10 hidden sm:flex">
-        <div className="flex flex-wrap items-center justify-center gap-3 bg-white px-6 py-3.5 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-100">
+      <div className="absolute bottom-3 w-full px-4 flex justify-center z-10 hidden sm:flex">
+        <div className="flex items-center justify-center gap-4 bg-white/95 px-5 py-2.5 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-slate-100">
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
               <User2 className="w-3 h-3 text-[#2563eb]" />
             </div>
-            <span className="text-[11px] font-bold text-[#0a1b3f]">
-              Role-Based Access (Admin / Inspector / Viewer)
-            </span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] font-bold text-[#0a1b3f] whitespace-nowrap">
+                Role-Based Access
+              </span>
+              <span className="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full whitespace-nowrap border border-slate-200/60">
+                Admin / Inspector / Viewer
+              </span>
+            </div>
           </div>
-          <div className="h-4 w-px bg-slate-200 mx-2"></div>
+          <div className="h-4 w-px bg-slate-200"></div>
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
               <Network className="w-3 h-3 text-[#2563eb]" />
             </div>
-            <span className="text-[11px] font-bold text-[#0a1b3f]">
+            <span className="text-[11px] font-bold text-[#0a1b3f] whitespace-nowrap">
               Multi-Department Architecture
-            </span>
-          </div>
-          <div className="h-4 w-px bg-slate-200 mx-2"></div>
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
-              <ShieldCheck className="w-3 h-3 text-[#2563eb]" />
-            </div>
-            <span className="text-[11px] font-bold text-[#0a1b3f]">
-              PostgreSQL Verified Credentials
             </span>
           </div>
         </div>

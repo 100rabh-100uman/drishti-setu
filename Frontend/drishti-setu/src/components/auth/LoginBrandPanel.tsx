@@ -102,28 +102,9 @@ export function LoginBrandPanel() {
               </div>
             </div>
             
-            <div className="h-6 w-px bg-slate-600/60"></div>
-            
-            {/* Police Logo */}
-            <div className="flex items-center gap-3">
-              <div className="relative h-10 w-10">
-                <Image 
-                  src="/gpolicelogo.png" 
-                  alt="Gujarat Police" 
-                  fill 
-                  sizes="40px"
-                  className="object-contain" 
-                />
-              </div>
-              <div>
-                <div className="text-xs font-bold text-slate-200">GUJARAT POLICE</div>
-                <div className="text-[10px] font-medium text-slate-400">સેવા • સુરક્ષા • શાંતિ</div>
-              </div>
-            </div>
+             <div className="h-6 w-px bg-slate-600/60"></div>
 
-            <div className="h-6 w-px bg-slate-600/60"></div>
-
-            {/* Drishti Setu Logo */}
+             {/* Drishti Setu Logo */}
             <div className="flex items-center gap-2">
                <div className="relative h-7 w-7">
                  <Image 
