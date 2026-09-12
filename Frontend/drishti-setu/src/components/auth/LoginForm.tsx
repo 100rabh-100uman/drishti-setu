@@ -27,6 +27,16 @@ export function LoginForm() {
   } | null>(null);
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
+  const [isNavigatingToRequestAccess, setIsNavigatingToRequestAccess] = useState(false);
+
+  const handleNavigateToRequestAccess = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isNavigatingToRequestAccess || isLoading) return;
+    setIsNavigatingToRequestAccess(true);
+    setTimeout(() => {
+      router.push("/request-access");
+    }, 280);
+  };
 
   const handleAuth = async (id: string, pass: string) => {
     setError("");
@@ -118,7 +128,13 @@ export function LoginForm() {
       </div>
 
       {/* Main Content */}
-      <div className="w-full max-w-[400px] mx-auto px-6 py-4 relative z-10 flex flex-col justify-center h-full pb-20">
+      <div
+        className={`w-full max-w-[400px] mx-auto px-6 py-4 relative z-10 flex flex-col justify-center h-full pb-20 transition-all duration-300 ease-out ${
+          isNavigatingToRequestAccess
+            ? "opacity-0 -translate-y-3 scale-[0.985] blur-[0.5px] pointer-events-none"
+            : "opacity-100 translate-y-0 scale-100"
+        }`}
+      >
         {/* Headings */}
         <div className="flex flex-col items-center text-center mb-6 mt-2">
           <h2 className="text-[32px] font-extrabold text-[#0a1b3f] tracking-wide mb-1.5">
@@ -309,12 +325,24 @@ export function LoginForm() {
 
           <div className="pt-2 text-center">
             <span className="text-xs text-slate-500 font-medium">Need platform credentials? </span>
-            <Link
-              href="/request-access"
-              className="text-xs font-bold text-[#2563eb] hover:text-blue-800 hover:underline transition-colors"
+            <button
+              type="button"
+              onClick={handleNavigateToRequestAccess}
+              disabled={isNavigatingToRequestAccess || isLoading}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2563eb] hover:text-blue-800 hover:underline transition-colors cursor-pointer group disabled:opacity-60"
             >
-              Request Access
-            </Link>
+              {isNavigatingToRequestAccess ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                  <span>Opening Portal...</span>
+                </>
+              ) : (
+                <>
+                  <span>Request Access</span>
+                  <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+                </>
+              )}
+            </button>
           </div>
         </form>
       </div>

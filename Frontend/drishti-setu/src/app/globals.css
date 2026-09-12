@@ -32,11 +32,22 @@ body {
 @keyframes pageEnter {
   0% {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(14px) scale(0.992);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pageExit {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.988);
   }
 }
 
@@ -50,12 +61,18 @@ body {
 }
 
 .animate-page-enter {
-  animation: pageEnter 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: pageEnter 0.34s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
+.animate-page-exit {
+  animation: pageExit 0.24s cubic-bezier(0.4, 0, 1, 1) forwards;
   will-change: opacity, transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-page-enter {
+  .animate-page-enter,
+  .animate-page-exit {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

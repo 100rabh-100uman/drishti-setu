@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -60,6 +61,20 @@ const ROLE_DESCRIPTIONS: Record<
 };
 
 export default function RequestAccessPage() {
+  const router = useRouter();
+  const [isExiting, setIsExiting] = useState(false);
+  const [exitTarget, setExitTarget] = useState<string | null>(null);
+
+  const handleReturnToLogin = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isExiting) return;
+    setIsExiting(true);
+    setExitTarget("login");
+    setTimeout(() => {
+      router.push("/login");
+    }, 250);
+  };
+
   // Theme state: default is LIGHT per design specifications
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [departments, setDepartments] = useState<DepartmentOption[]>([]);
@@ -198,7 +213,12 @@ export default function RequestAccessPage() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col justify-between transition-colors duration-200 ${
+      data-page-container
+      className={`min-h-screen flex flex-col justify-between transition-all duration-260 ease-out ${
+        isExiting
+          ? "opacity-0 -translate-y-3 scale-[0.99] blur-[0.5px] pointer-events-none"
+          : "animate-page-enter"
+      } ${
         isDark ? "bg-slate-950 text-slate-100" : "bg-slate-50 text-slate-800"
       }`}
     >
@@ -211,15 +231,26 @@ export default function RequestAccessPage() {
         }`}
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Link
-            href="/login"
-            className={`flex items-center gap-2 text-xs font-semibold transition-colors group ${
+          <button
+            type="button"
+            onClick={handleReturnToLogin}
+            disabled={isExiting}
+            className={`flex items-center gap-2 text-xs font-semibold transition-colors group cursor-pointer disabled:opacity-60 ${
               isDark ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-[#0a1b3f]"
             }`}
           >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-            <span>Return to Login</span>
-          </Link>
+            {isExiting && exitTarget === "login" ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+                <span>Returning to Login...</span>
+              </>
+            ) : (
+              <>
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                <span>Return to Login</span>
+              </>
+            )}
+          </button>
 
           {/* Branding */}
           <div className="flex items-center gap-2.5">
@@ -239,7 +270,7 @@ export default function RequestAccessPage() {
                 DRISHTI SETU
               </span>
               <span className="text-[9px] font-semibold tracking-widest text-amber-600 uppercase mt-0.5">
-                Gujarat Police
+                Government of Gujarat
               </span>
             </div>
           </div>
@@ -418,13 +449,24 @@ export default function RequestAccessPage() {
 
             {/* Return Button */}
             <div className="flex justify-center">
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-600/25 transition-all"
+              <button
+                type="button"
+                onClick={handleReturnToLogin}
+                disabled={isExiting}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-600/25 transition-all cursor-pointer disabled:opacity-70"
               >
-                <KeyRound className="w-4 h-4" />
-                <span>Return to Secure Login</span>
-              </Link>
+                {isExiting && exitTarget === "login" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Returning to Login...</span>
+                  </>
+                ) : (
+                  <>
+                    <KeyRound className="w-4 h-4" />
+                    <span>Return to Secure Login</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         ) : (
@@ -443,7 +485,7 @@ export default function RequestAccessPage() {
               <div className="flex items-center gap-2 mb-2">
                 <div className="h-1 w-6 bg-amber-500 rounded-full"></div>
                 <span className="text-xs font-bold tracking-widest text-amber-600 uppercase">
-                  GUJARAT POLICE • STATE SURVEILLANCE GRID
+                  GOVERNMENT OF GUJARAT • STATE SURVEILLANCE GRID
                 </span>
               </div>
               <h1
@@ -991,16 +1033,18 @@ export default function RequestAccessPage() {
                 </div>
 
                 <div className="flex items-center gap-3 w-full sm:w-auto">
-                  <Link
-                    href="/login"
-                    className={`flex-1 sm:flex-initial px-4 py-2.5 rounded-lg border text-xs font-semibold transition-colors text-center ${
+                  <button
+                    type="button"
+                    onClick={handleReturnToLogin}
+                    disabled={isExiting || isSubmitting}
+                    className={`flex-1 sm:flex-initial px-5 py-2.5 rounded-lg border text-xs font-semibold transition-all text-center cursor-pointer disabled:opacity-50 ${
                       isDark
                         ? "border-slate-800 hover:bg-slate-800 text-slate-300"
                         : "border-slate-300 hover:bg-slate-100 text-slate-700"
                     }`}
                   >
-                    Cancel
-                  </Link>
+                    {isExiting && exitTarget === "login" ? "Returning..." : "Cancel"}
+                  </button>
 
                   <button
                     type="submit"
@@ -1035,7 +1079,7 @@ export default function RequestAccessPage() {
         }`}
       >
         <div className="max-w-5xl mx-auto px-4">
-          DRISHTI SETU • Government of Gujarat • State Police Hackathon Intelligence Grid
+          DRISHTI SETU • Government of Gujarat • Unified Departmental Intelligence Grid
         </div>
       </footer>
     </div>

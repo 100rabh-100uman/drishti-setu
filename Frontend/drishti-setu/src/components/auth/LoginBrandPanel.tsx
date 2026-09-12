@@ -82,8 +82,8 @@ export function LoginBrandPanel() {
 
       </div>
 
-      <div className="relative z-10 w-full lg:w-[48%] xl:w-[50%] mt-5 bg-[#050b14]/70 backdrop-blur-md border border-slate-700/50 p-4 rounded-2xl pr-4">
-        <div className="flex items-center justify-between gap-2">
+      <div className="relative z-10 w-fit mt-5 bg-[#050b14]/70 backdrop-blur-md border border-slate-700/50 px-5 py-3 rounded-2xl shadow-lg">
+        <div className="flex items-center gap-4 sm:gap-5">
            
            {/* Govt Logo */}
            <div className="flex items-center gap-3">
@@ -102,10 +102,10 @@ export function LoginBrandPanel() {
               </div>
             </div>
             
-             <div className="h-6 w-px bg-slate-600/60"></div>
+            <div className="h-6 w-px bg-slate-600/60"></div>
 
-             {/* Drishti Setu Logo */}
-            <div className="flex items-center gap-2">
+            {/* Drishti Setu Logo */}
+            <div className="flex items-center gap-2.5">
                <div className="relative h-7 w-7">
                  <Image 
                     src="/drishti_setu_logo.svg" 
@@ -116,8 +116,8 @@ export function LoginBrandPanel() {
                  />
                </div>
                <div>
-                  <div className="text-[10px] font-bold text-slate-300 uppercase tracking-wider">DRISHTI SETU</div>
-                  <div className="text-[8px] text-slate-500 uppercase tracking-widest mt-0.5">Secure • Reliable • Future Ready</div>
+                  <div className="text-[11px] font-bold text-slate-200 uppercase tracking-wider">DRISHTI SETU</div>
+                  <div className="text-[9px] text-slate-400 uppercase tracking-widest mt-0.5">Secure • Reliable • Future Ready</div>
                </div>
             </div>
 

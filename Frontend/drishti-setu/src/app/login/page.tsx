@@ -10,7 +10,10 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <main className="flex min-h-screen bg-slate-50 relative overflow-hidden">
+    <main
+      data-page-container
+      className="flex min-h-screen bg-slate-50 relative overflow-hidden animate-page-enter"
+    >
       <LoginBrandPanel />
       <Suspense fallback={<div className="flex-1 flex items-center justify-center min-h-screen">Loading...</div>}>
         <LoginForm />
