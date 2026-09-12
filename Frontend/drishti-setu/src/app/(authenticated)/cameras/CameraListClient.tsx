@@ -187,8 +187,11 @@ export default function CameraListClient() {
                 </div>
 
                 <div className="pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
-                  <div className="text-[10px] font-mono text-slate-400 dark:text-slate-500 font-semibold">
-                    {cam.camera_type} • {cam.ip_address}
+                  <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono text-slate-400 dark:text-slate-500 font-semibold">
+                    <span>{cam.camera_type} • {cam.ip_address}</span>
+                    <span className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-sans font-bold">
+                      {cam.storage_type || (cam.camera_type === "Analog" ? "Local" : "Cloud")} ({cam.storage_days || (cam.camera_type === "Analog" ? 30 : 60)}d)
+                    </span>
                   </div>
 
                   <Link

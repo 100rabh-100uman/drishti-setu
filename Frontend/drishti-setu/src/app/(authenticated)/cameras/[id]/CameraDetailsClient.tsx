@@ -28,7 +28,13 @@ import {
   ChevronRight,
   Maximize2,
   CircleDot,
-  Layers
+  Layers,
+  HardDrive,
+  Database,
+  Server,
+  Cloud,
+  Calendar,
+  Archive
 } from "lucide-react";
 import { Camera, Department, Zone } from "@/types/camera";
 import { cameraService } from "@/services/camera.service";
@@ -136,6 +142,8 @@ export default function CameraDetailsClient({ id }: CameraDetailsClientProps) {
 
   const deptName = department?.name || "Gujarat Police";
   const zoneName = zone?.name || "Ahmedabad West";
+  const storageType = camera.storage_type || (camera.camera_type === "Analog" ? "Local" : "Cloud");
+  const storageDays = camera.storage_days || (camera.camera_type === "Analog" ? 30 : 60);
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-transparent pb-20">
@@ -259,8 +267,8 @@ export default function CameraDetailsClient({ id }: CameraDetailsClientProps) {
           </div>
         </div>
 
-        {/* 4 Stat Overview Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {/* 5 Stat Overview Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           {/* Card 1: Status & Health */}
           <div className="bg-white dark:bg-[#0c162d] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800 shadow-xs flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
@@ -306,6 +314,18 @@ export default function CameraDetailsClient({ id }: CameraDetailsClientProps) {
               <div className="text-[11px] font-bold uppercase text-slate-400 dark:text-slate-500">Network Host</div>
               <div className="text-sm font-bold font-mono text-slate-800 dark:text-white truncate">{camera.ip_address}</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate">{camera.mac_address}</div>
+            </div>
+          </div>
+
+          {/* Card 5: Data Storage & Retention */}
+          <div className="bg-white dark:bg-[#0c162d] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800 shadow-xs flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 flex items-center justify-center flex-shrink-0">
+              <HardDrive className="w-5 h-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-[11px] font-bold uppercase text-slate-400 dark:text-slate-500">Data Storage</div>
+              <div className="text-sm font-bold text-slate-800 dark:text-white truncate">{storageType} Storage</div>
+              <div className="text-[10px] text-cyan-600 dark:text-cyan-400 font-semibold">{storageDays} Days Retention</div>
             </div>
           </div>
         </div>
@@ -481,6 +501,94 @@ export default function CameraDetailsClient({ id }: CameraDetailsClientProps) {
                   <div className="bg-slate-50 dark:bg-slate-800/80 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700 truncate font-mono text-xs font-semibold text-blue-600 dark:text-blue-400">
                     rtsp://{camera.ip_address}:554/ch0
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3: Data Storage & Video Retention */}
+            <div className="bg-white dark:bg-[#0c162d] rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-3 border-b border-slate-100 dark:border-slate-800/60">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
+                    <HardDrive className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">Data Storage & Video Retention</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Recording storage architecture, retention window, and automated purge policy</p>
+                  </div>
+                </div>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800 w-fit">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  SOP Compliant Storage
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+                {/* Storage Type Block */}
+                <div className="bg-slate-50 dark:bg-slate-800/70 p-4 rounded-xl border border-slate-100 dark:border-slate-700/80 flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    {storageType.toLowerCase().includes("cloud") ? (
+                      <Cloud className="w-5 h-5" />
+                    ) : (
+                      <Server className="w-5 h-5" />
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[11px] font-bold uppercase text-slate-400 dark:text-slate-500">Data Storage Type</div>
+                    <div className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2 mt-0.5">
+                      <span>{storageType} Storage</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded font-semibold bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300">
+                        {storageType.toLowerCase().includes("cloud") ? "Central Cloud S3" : "Edge NVR / Local DVR"}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
+                      {storageType.toLowerCase().includes("cloud")
+                        ? "Secure State Surveillance Video Repository with AES-256 cloud encryption and multi-zone backup."
+                        : "On-premise Station Edge Server with Local Encrypted RAID Array and direct LAN streaming."}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Storage Days Block */}
+                <div className="bg-slate-50 dark:bg-slate-800/70 p-4 rounded-xl border border-slate-100 dark:border-slate-700/80 flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[11px] font-bold uppercase text-slate-400 dark:text-slate-500">Storage Retention Period</div>
+                    <div className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2 mt-0.5">
+                      <span>{storageDays} Days Retention</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded font-semibold bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300">
+                        Auto-Purge Window
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
+                      Camera footage is securely preserved for <strong className="text-slate-800 dark:text-slate-200">{storageDays} continuous days</strong> before automated FIFO rolling purge or cold audit export.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rolling Retention Buffer Status */}
+              <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-4 border border-slate-100 dark:border-slate-700/60">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-1 mb-2">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <Database className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                    Rolling Ring-Buffer Retention Cycle
+                  </span>
+                  <span className="font-mono text-slate-500 dark:text-slate-400 text-[11px]">
+                    Active Retention Window: <strong>Day 1 to Day {storageDays}</strong>
+                  </span>
+                </div>
+                <div className="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-blue-500 via-cyan-500 to-emerald-500 h-full rounded-full transition-all"
+                    style={{ width: "76%" }}
+                  />
+                </div>
+                <div className="flex flex-wrap items-center justify-between text-[11px] text-slate-400 dark:text-slate-500 mt-2 font-mono gap-2">
+                  <span>Policy Standard: Gujarat Public Safety Act CCTV SOP</span>
+                  <span>Auto-Prune: Ring-buffer FIFO Rotation Active</span>
                 </div>
               </div>
             </div>

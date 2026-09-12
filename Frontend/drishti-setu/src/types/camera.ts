@@ -22,6 +22,8 @@ export interface Camera {
   serial_number: string;
   device_uuid?: string;
   ip_address: string;
+  storage_type?: 'Cloud' | 'Local' | 'Hybrid' | string;
+  storage_days?: number;
   needs_review: boolean;
   department_name?: string;
   created_at?: string;
@@ -54,6 +56,10 @@ export interface CameraFormData {
   // Step 4 — Status
   status: CameraStatus | '';
   needs_review: boolean;
+
+  // Storage Specification
+  storage_type?: string;
+  storage_days?: string;
 }
 
 export interface Department {
@@ -80,6 +86,8 @@ export interface CameraCreatePayload {
   serial_number: string;
   device_uuid: string;
   ip_address: string;
+  storage_type?: string;
+  storage_days?: number;
   status: CameraStatus;
   needs_review: boolean;
 }

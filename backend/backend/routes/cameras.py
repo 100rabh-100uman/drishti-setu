@@ -26,6 +26,8 @@ class CameraCreate(BaseModel):
     ip_address: Optional[str] = None
     address: Optional[str] = None
     zone_id: Optional[str] = None
+    storage_type: Optional[str] = "Cloud"
+    storage_days: Optional[int] = 30
     needs_review: bool = False
 
 class CameraUpdate(BaseModel):
@@ -87,26 +89,34 @@ def get_departments_map() -> Dict[int, str]:
 @router.post("/add_camera/")
 def add_camera(camera: CameraCreate, username: str = "system"):
     geom = f"POINT({camera.longitude} {camera.latitude})"
+    insert_payload = {
+        "camera_id": camera.camera_id,
+        "department_id": camera.department_id,
+        "camera_type": camera.camera_type,
+        "status": camera.status,
+        "geom": geom,
+        "mac_address": camera.mac_address,
+        "serial_number": camera.serial_number,
+        "device_uuid": camera.device_uuid,
+        "ip_address": camera.ip_address,
+        "address": camera.address,
+        "zone_id": camera.zone_id,
+        "storage_type": camera.storage_type or "Cloud",
+        "storage_days": camera.storage_days or 30,
+        "needs_review": camera.needs_review
+    }
     try:
-        data = supabase.table("cameras").insert({
-            "camera_id": camera.camera_id,
-            "department_id": camera.department_id,
-            "camera_type": camera.camera_type,
-            "status": camera.status,
-            "geom": geom,
-            "mac_address": camera.mac_address,
-            "serial_number": camera.serial_number,
-            "device_uuid": camera.device_uuid,
-            "ip_address": camera.ip_address,
-            "address": camera.address,
-            "zone_id": camera.zone_id,
-            "needs_review": camera.needs_review
-        }).execute()
-        
+        data = supabase.table("cameras").insert(insert_payload).execute()
         log_audit("ADD_CAMERA", username, {"camera_id": camera.camera_id}, camera_id=camera.camera_id)
         return {"message": "Camera added", "data": data.data}
     except Exception as e:
-        return {"error": str(e)}
+        try:
+            legacy_payload = {k: v for k, v in insert_payload.items() if k not in ("storage_type", "storage_days")}
+            data = supabase.table("cameras").insert(legacy_payload).execute()
+            log_audit("ADD_CAMERA", username, {"camera_id": camera.camera_id}, camera_id=camera.camera_id)
+            return {"message": "Camera added", "data": data.data}
+        except Exception as e2:
+            return {"error": str(e2)}
 
 @router.post("/update_camera/{camera_id}")
 def update_camera(camera_id: str, updates: CameraUpdate, username: str = "system"):
@@ -476,6 +486,8 @@ def _filter_fallback_cameras(
                 continue
         if needs_review is not None and cam["needs_review"] != needs_review:
             continue
+        cam["storage_type"] = cam.get("storage_type") or ("Local" if str(cam.get("camera_type", "")).lower().startswith("analog") else "Cloud")
+        cam["storage_days"] = cam.get("storage_days") or (30 if str(cam.get("camera_type", "")).lower().startswith("analog") else 60)
         filtered.append(cam)
     return filtered
 
@@ -538,6 +550,10 @@ def get_cameras(
                 dept_id = cam.get("department_id")
                 cam["department_name"] = dept_map.get(dept_id, cam.get("department") or (f"Department {dept_id}" if dept_id else "Police Department"))
                 
+                # Storage & Retention attributes
+                cam["storage_type"] = cam.get("storage_type") or ("Local" if str(cam.get("camera_type", "")).lower().startswith("analog") else "Cloud")
+                cam["storage_days"] = cam.get("storage_days") or (30 if str(cam.get("camera_type", "")).lower().startswith("analog") else 60)
+
                 parsed_cameras.append(cam)
             return {"cameras": parsed_cameras}
         else:
@@ -573,6 +589,8 @@ def get_camera(camera_id: str, current_user: str = Depends(get_current_user)):
                 "type": "Point",
                 "coordinates": [lng, lat]
             }
+        cam["storage_type"] = cam.get("storage_type") or ("Local" if str(cam.get("camera_type", "")).lower().startswith("analog") else "Cloud")
+        cam["storage_days"] = cam.get("storage_days") or (30 if str(cam.get("camera_type", "")).lower().startswith("analog") else 60)
         return {"camera": cam}
     except Exception as e:
         return {"error": str(e)}

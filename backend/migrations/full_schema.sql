@@ -46,6 +46,8 @@ CREATE TABLE IF NOT EXISTS public.cameras (
     ip_address VARCHAR(50),
     address TEXT,
     zone_id VARCHAR(50) REFERENCES public.zones(zone_id) ON DELETE SET NULL,
+    storage_type VARCHAR(50) DEFAULT 'Cloud',
+    storage_days INT DEFAULT 30,
     needs_review BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
