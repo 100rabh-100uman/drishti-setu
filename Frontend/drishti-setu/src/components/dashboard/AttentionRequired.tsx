@@ -59,16 +59,16 @@ const actionIconMap: Record<string, React.ReactNode> = {
 
 export function AttentionRequired({ items, actions, className }: AttentionRequiredProps) {
   return (
-    <div className={cn("flex flex-col gap-6 col-span-1 lg:col-span-2 h-[520px]", className)}>
+    <div className={cn("flex flex-col gap-4 col-span-1 lg:col-span-2 h-[620px]", className)}>
       
       {/* Attention Required Panel */}
-      <div className="bg-white dark:bg-[#0c162d] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 flex-1 overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white dark:bg-[#0c162d] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 flex-[1.25] overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between mb-3.5">
           <h2 className="text-[15px] font-bold text-slate-800 dark:text-white">Attention Required</h2>
           <button className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">View All</button>
         </div>
         
-        <div className="flex flex-col gap-2.5 overflow-y-auto">
+        <div className="flex flex-col gap-2.5 overflow-y-auto flex-1 pr-1">
           {items.map((item) => (
             <Link 
               href={item.link} 
@@ -97,7 +97,7 @@ export function AttentionRequired({ items, actions, className }: AttentionRequir
 
       {/* Quick Actions Panel */}
       <div className="bg-white dark:bg-[#0c162d] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 flex-1 flex flex-col">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <h2 className="text-[15px] font-bold text-slate-800 dark:text-white">Quick Actions</h2>
           <button className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">Customize</button>
         </div>
